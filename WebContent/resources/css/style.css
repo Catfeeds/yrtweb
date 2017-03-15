@@ -1,0 +1,49 @@
+﻿.container {
+    width: 940px;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    *zoom: 1;
+}
+
+    .container:before,
+    .container:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+
+    .container:after {
+        clear: both;
+    }
+
+
+/*文本行为*/
+.w {
+    /*禁止换行*/
+    white-space: nowrap;
+    width: 12em;
+    overflow: hidden;
+    border: 1px solid #000000;
+    text-overflow: clip;
+}
+
+.w1 {
+    /*文本省略*/
+    white-space: nowrap;
+    width: 12em;
+    overflow: hidden;
+    border: 1px solid #000000;
+    text-overflow: ellipsis;
+}
+
+table {
+    width: 100%;
+    empty-cells: show; /*指定当表格的单元格无内容时，显示（hide隐藏）该单元格的边框*/
+    table-layout: fixed; /*列宽由表格宽度和列宽度设定，内容可能被裁切*/
+    word-break: keep-all; /*允许词断开显示*/
+    word-wrap: normal; /*允许内容顶开边界*/
+    white-space: nowrap; /*强制在一行显示，不撑破容器*/
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.ImageVideoTeamMapper">
+	<sql id="imageVideoTeam">
+		id,team_id,group_id,v_cover,if_show,role_type,src,title,status,praise_count,unpraise_count,create_time,type,no,f_size,describle 
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.ImageVideoTeam">
+		INSERT INTO t_image_video(
+			id,team_id,group_id,v_cover,if_show,role_type,src,title,status,praise_count,unpraise_count,type,no,f_size,describle,create_time  
+		)VALUES(
+			#{id},#{team_id},#{group_id},#{v_cover},2,#{role_type},#{src},#{title},1,0,0,#{type},#{no},#{f_size},#{describle},NOW() 
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.ImageVideoTeam">
+		UPDATE t_image_video
+		SET
+			team_id=#{team_id},
+			group_id=#{group_id},
+			v_cover=#{v_cover},
+			if_show=#{if_show},
+			role_type=#{role_type},
+			src=#{src},
+			title=#{title},
+			status=#{status},
+			praise_count=#{praise_count},
+			unpraise_count=#{unpraise_count},
+			type=#{type},
+			no=#{no},
+			f_size=#{f_size},
+			describle=#{describle}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM t_image_video WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.ImageVideoTeam">
+		SELECT
+		<include refid="imageVideoTeam" />
+		FROM t_image_video WHERE id = #{id}
+	</select>
+	<select id="queryByTeamId" resultType="com.yt.framework.persistent.entity.ImageVideoTeam">
+		SELECT
+		<include refid="imageVideoTeam" />
+		FROM t_image_video WHERE team_id = #{teamId}
+	</select>
+	
+	
+	<select id="searchImageVideos" parameterType="hashmap" resultType="hashmap">
+		SELECT iv.* FROM t_image_video iv WHERE iv.team_id=#{maps.team_id} AND type=#{maps.type} ORDER BY iv.if_show ASC,iv.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="searchImageVideosCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT iv.* FROM t_image_video iv WHERE iv.team_id=#{maps.team_id} AND type=#{maps.type}
+		) cot_t)
+	</select>
+</mapper>

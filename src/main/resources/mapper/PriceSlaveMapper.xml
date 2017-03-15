@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.PriceSlaveMapper">
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.PriceSlave">
+		INSERT INTO price_slave(
+			id,
+			user_id,
+			league_id,
+			s_id,
+			price,
+			role_type,
+			buy_type,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{league_id},
+			#{s_id},
+			#{price},
+			#{role_type},
+			#{buy_type},
+			NOW()
+		)
+	</insert>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.PriceSlave">
+		SELECT * FROM price_slave WHERE id = #{id}
+	</select>
+	
+	<select id="getPriceSlaveByUserAndType" resultType="com.yt.framework.persistent.entity.PriceSlave">
+		SELECT * FROM price_slave 
+			WHERE 1=1
+				AND user_id = #{user_id}
+				AND role_type = #{role_type}
+				ORDER BY create_time DESC
+				LIMIT 0,1
+	</select>
+	
+	<select id="queryForPageForMap" resultType="hashmap">
+		SELECT SUM(ps.price)AS price,u.username,u.head_icon,ps.user_id FROM price_slave AS ps 
+			LEFT JOIN m_user AS u ON u.id = ps.user_id
+		WHERE 1=1
+		AND ps.league_id = #{maps.league_id} GROUP BY ps.user_id
+		ORDER BY price DESC
+		<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT COUNT(DISTINCT(ps.user_id)) FROM price_slave AS ps 
+			LEFT JOIN m_user AS u ON u.id = ps.user_id
+		WHERE 1=1
+		AND ps.league_id = #{maps.league_id} 
+	</select>
+	
+	<select id="loadPriceSlaveSingle" resultType="hashmap">
+		SELECT MAX(ps.price)AS price,u.username,u.head_icon,ps.user_id,tp.teaminfo_id,ps.buy_type FROM price_slave AS ps 
+			LEFT JOIN m_user AS u ON u.id = ps.user_id
+			LEFT JOIN t_team_player AS tp ON tp.user_id = ps.user_id
+			WHERE 1=1
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND ps.league_id = #{maps.league_id} 
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND ps.s_id = #{maps.s_id} 
+			</if>
+			GROUP BY ps.user_id
+			ORDER BY price DESC
+			<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="loadPriceSlaveSingleCount" resultType="int">
+		SELECT COUNT(DISTINCT(ps.user_id)) FROM price_slave AS ps 
+			LEFT JOIN m_user AS u ON u.id = ps.user_id
+			LEFT JOIN t_team_player AS tp ON tp.user_id = ps.user_id
+			WHERE 1=1
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND ps.league_id = #{maps.league_id} 
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND ps.s_id = #{maps.s_id} 
+			</if>
+	</select>
+		
+</mapper>

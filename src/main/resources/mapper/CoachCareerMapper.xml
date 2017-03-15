@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.CoachCareerMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.CoachCareer" >
+			INSERT INTO c_coach_career(
+				id,
+				user_id,
+				name,
+				describle,
+				bg_time,
+				ed_time,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{name},
+				#{describle},
+				#{bg_time},
+				#{ed_time},
+				NOW()
+			)
+		</insert>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.CoachCareer">
+			UPDATE c_coach_career
+				SET
+					name = #{name},
+					describle = #{describle},
+					bg_time = #{bg_time},
+					ed_time = #{ed_time}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.CoachCareer">
+			SELECT * FROM c_coach_career WHERE id = #{id}
+		</select>
+		
+		<select id="getCoachCareerListByUserId" resultType="com.yt.framework.persistent.entity.CoachCareer">
+			SELECT * FROM c_coach_career WHERE user_id = #{user_id}
+		</select>
+		
+		<delete id="delete">
+			DELETE FROM c_coach_career WHERE id = #{id}
+		</delete>
+		
+		<select id="queryForPageForMap" resultType="hashmap">
+			SELECT ci.id,ci.in_team,u.username,u.head_icon,u.province,u.city,u.usernick,ci.user_id
+				 FROM c_coach_info AS ci 
+				 	LEFT JOIN m_user AS u ON u.id = ci.user_id
+				 WHERE 1=1
+				 	<if test="maps.province!=null and maps.province!=''">
+						AND u.province = #{maps.province}
+				 	</if>
+				 	<if test="maps.city!=null and maps.city!=''">
+						AND u.city = #{maps.city}
+				 	</if>
+				 	<if test="maps.usernick!=null and maps.usernick!=''">
+						AND u.usernick LIKE CONCAT('%',#{maps.usernick},'%') 
+				 	</if>
+				 	<if test="maps.in_team!=null and maps.in_team!=''">
+						AND ci.in_team LIKE CONCAT('%',#{maps.in_team},'%') 
+				 	</if>
+					ORDER BY ci.create_time DESC
+					<if test="maps.start!=null and maps.rows!=null">
+						LIMIT #{maps.start},#{maps.rows}
+					</if>
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT COUNT(*) 
+				FROM c_coach_info AS ci 
+				 	LEFT JOIN m_user AS u ON u.id = ci.user_id
+				 WHERE 1=1
+				 	<if test="maps.province!=null and maps.province!=''">
+						AND u.province = #{maps.province}
+				 	</if>
+				 	<if test="maps.city!=null and maps.city!=''">
+						AND u.city = #{maps.city}
+				 	</if>
+				 	<if test="maps.in_team!=null and maps.in_team!=''">
+						AND ci.in_team LIKE CONCAT('%',#{in_team},'%') 
+				 	</if>
+		</select>
+</mapper>

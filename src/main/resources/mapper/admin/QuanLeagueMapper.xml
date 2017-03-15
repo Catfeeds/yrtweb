@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.QuanLeagueMapper">
+	<insert id="saveQMatchInfo"
+		parameterType="com.yt.framework.persistent.entity.QMatchInfo">
+		INSERT INTO q_match_info(
+		id,
+		match_id,
+		create_time,
+		status
+		) VALUES(
+		#{id},
+		#{match_id},
+		#{create_time},
+		#{status}
+		)
+	</insert>
+	
+	<select id="getMatchInfoByMatchId"
+		resultType="com.yt.framework.persistent.entity.QMatchInfo">
+		SELECT * FROM q_match_info WHERE match_id = #{matchId}
+	</select>
+	
+	<update id="updateQMatchInfo"
+		parameterType="com.yt.framework.persistent.entity.QMatchInfo">
+		UPDATE q_match_info
+		SET
+		home_id=#{home_id},
+		home_name=#{home_name},
+		visit_id=#{visit_id},
+		visit_name=#{visit_name},
+		date_time=#{date_time},
+		space_name=#{space_name},
+		space_address=#{space_address},
+		league_id = #{league_id},
+		<if test="h_team_id!=null and h_team_id!=''">
+		    record_id=#{record_id},
+		</if>
+		<if test="h_team_id!=null and h_team_id!=''">
+			h_team_id=#{h_team_id},
+		</if>
+		<if test="v_team_id!=null and v_team_id!=''">
+			v_team_id=#{v_team_id},
+		</if>
+		<if test="invokeCount!=null and invokeCount!=''">
+			invokeCount = #{invokeCount},
+		</if>
+		<if test="review_status!=null and review_status!=''">
+		    review_status = #{review_status},
+		</if>
+		status=#{status}
+		WHERE
+		id = #{id}
+	</update>
+	
+	
+	<insert id="saveQSummaryInfo"
+		parameterType="com.yt.framework.persistent.entity.QSummaryInfo">
+		INSERT INTO q_summary_info(
+		id,
+		q_match_id,
+		team_id,
+		teaminfo_id,
+		control_time,
+		wulong_num,
+		jinqiu_num,
+		shemen_num,
+		shezheng_num,
+		shezheng_lv,
+		shepian_num,
+		zhugong_num,
+		renyi_num,
+		jiaoqiu_num,
+		pujiu_num,
+		qiangduan_num,
+		jiewei_num,
+		yuewei_num,
+		fangui_num,
+		hongpai_num,
+		huangpai_num,
+		lanjie_num,
+		team_status,
+		score
+		) VALUES(
+		#{id},
+		#{q_match_id},
+		#{team_id},
+		#{teaminfo_id},
+		#{control_time},
+		#{wulong_num},
+		#{jinqiu_num},
+		#{shemen_num},
+		#{shezheng_num},
+		#{shezheng_lv},
+		#{shepian_num},
+		#{zhugong_num},
+		#{renyi_num},
+		#{jiaoqiu_num},
+		#{pujiu_num},
+		#{qiangduan_num},
+		#{jiewei_num},
+		#{yuewei_num},
+		#{fangui_num},
+		#{hongpai_num},
+		#{huangpai_num},
+		#{lanjie_num},
+		#{team_status},
+		#{score}
+		)
+	</insert>	
+	
+	<insert id="saveQUserDataInfo"
+		parameterType="com.yt.framework.persistent.entity.QUserData">
+		INSERT INTO q_user_data(
+		id,
+		player_id,
+		q_match_id,
+		team_id,
+		teaminfo_id,
+		name,
+		number,
+		durtime,
+		position,
+		shemen_num,
+		shezheng_num,
+		shepian_num,
+		jinqiu_num,
+		zhugong_num,
+		qiangduan_num,
+		jiewei_num,
+		pujiu_num,
+		fangui_num,
+		hongpai_num,
+		huangpai_num,
+		shuanghuang_num,
+		team_status,
+		lanjie_num,
+		wulong_num
+		) VALUES(
+		#{id},
+		#{player_id},
+		#{q_match_id},
+		#{team_id},
+		#{teaminfo_id},
+		#{name},
+		#{number},
+		#{durtime},
+		#{position},
+		#{shemen_num},
+		#{shezheng_num},
+		#{shepian_num},
+		#{jinqiu_num},
+		#{zhugong_num},
+		#{qiangduan_num},
+		#{jiewei_num},
+		#{pujiu_num},
+		#{fangui_num},
+		#{hongpai_num},
+		#{huangpai_num},
+		#{shuanghuang_num},
+		#{team_status},
+		#{lanjie_num},
+		#{wulong_num}
+		)	
+	</insert>
+	
+	<update id="updateAllQUserData" parameterType="com.yt.framework.persistent.entity.QUserData">
+		UPDATE q_user_data SET 
+			player_id=#{player_id},
+			rel_palyer_id=#{rel_palyer_id},
+			q_match_id=#{q_match_id},
+			team_id=#{team_id},
+			name=#{name},
+			number=#{number},
+			durtime=#{durtime},
+			position=#{position},
+			shemen_num=#{shemen_num},
+			shezheng_num=#{shezheng_num},
+			shepian_num=#{shepian_num},
+			jinqiu_num=#{jinqiu_num},
+			wulong_num=#{wulong_num},
+			zhugong_num=#{zhugong_num},
+			qiangduan_num=#{qiangduan_num},
+			jiewei_num=#{jiewei_num},
+			pujiu_num=#{pujiu_num},
+			fangui_num=#{fangui_num},
+			hongpai_num=#{hongpai_num},
+			huangpai_num=#{huangpai_num},
+			shuanghuang_num=#{shuanghuang_num},
+			team_status=#{team_status},
+			lanjie_num=#{lanjie_num} 
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getMatchInfoById"
+		resultType="com.yt.framework.persistent.entity.QMatchInfo">
+		SELECT * FROM q_match_info WHERE id = #{id}
+	</select>
+	
+	<delete id="deleteQSummaryInfoByQmatchId">
+	   DELETE FROM q_summary_info 
+	      WHERE q_match_id = #{qmatchId}
+	</delete>
+	
+	<delete id="deleteQUserDataByQmatchId">
+	   DELETE FROM q_user_data 
+	      WHERE q_match_id = #{qmatchId}
+	</delete>
+	
+	<select id="queryQplayers" parameterType="hashmap" resultType="hashmap">
+		SELECT u.*,tu.username,(CASE WHEN qss.user_id IS NULL THEN 0 ELSE 1 END) if_guanlian FROM q_user_data u 
+		LEFT JOIN m_user tu ON tu.id=u.rel_palyer_id 
+		LEFT JOIN (SELECT qs.q_match_id,qs.q_user_id,qs.user_id,qs.team_id FROM q_score_info qs 
+					GROUP BY q_match_id,team_id,q_user_id) qss ON qss.q_user_id=u.id 
+		WHERE u.q_match_id=#{q_match_id}
+		AND u.teaminfo_id=#{teaminfo_id} 
+	</select>
+	
+	<select id="getQUserDataListByQmatchId" resultType="com.yt.framework.persistent.entity.QUserData">
+			SELECT * FROM q_user_data 
+				WHERE q_match_id = #{maps.q_match_id}
+				<if test="maps.team_id!=null and maps.team_id!=''">
+					AND team_id = #{maps.team_id}
+				</if>
+	</select>
+	
+	<update id="updateQUserData"
+		parameterType="com.yt.framework.persistent.entity.QUserData">
+		UPDATE q_user_data SET 
+		teaminfo_id = #{teaminfo_id} , 
+		rel_palyer_id = #{rel_palyer_id} ,
+        position = #{position}
+        WHERE
+        id = #{id}
+	</update>
+	
+	<select id="getQSummaryListByQmatchId" resultType="com.yt.framework.persistent.entity.QSummaryInfo">
+			SELECT * FROM q_summary_info 
+			WHERE q_match_id = #{qmatchId}
+			<if test="teamId!=null and teamId!=''">
+				AND team_id = #{teamId}
+			</if>
+	</select>
+	
+	<insert id="saveQScoreInfo"
+		parameterType="com.yt.framework.persistent.entity.QScoreInfo">
+		INSERT INTO q_score_info(
+		id,
+		q_match_id,
+		team_id,
+		teaminfo_id,
+		q_user_id,
+		user_id,
+		jinqiu_time,
+		is_wulong
+		) VALUES(
+		#{id},
+		#{q_match_id},
+		#{team_id},
+		#{teaminfo_id},
+		#{q_user_id},
+		#{user_id},
+		#{jinqiu_time},
+		#{is_wulong}
+		)
+	</insert>
+	
+	<select id="getQUserDataByPlayerId" resultType="com.yt.framework.persistent.entity.QUserData">
+		SELECT * FROM q_user_data 
+		WHERE player_id = #{player_id}
+		AND q_match_id = #{q_match_id}
+	</select>
+	
+	
+	<update id="updateQSummaryInfo"
+		parameterType="com.yt.framework.persistent.entity.QSummaryInfo">
+		UPDATE q_summary_info SET 
+			teaminfo_id = #{teaminfo_id},
+			control_time = #{control_time},
+			score = #{score},
+			jinqiu_num = #{jinqiu_num},
+			shemen_num = #{shemen_num},
+			wulong_num = #{wulong_num},
+			shezheng_lv = #{shezheng_lv},
+			shezheng_num = #{shezheng_num},
+			renyi_num = #{renyi_num},
+			jiaoqiu_num = #{jiaoqiu_num},
+			pujiu_num = #{pujiu_num},
+			qiangduan_num = #{qiangduan_num},
+			fangui_num = #{fangui_num},
+			hongpai_num = #{hongpai_num},
+			huangpai_num = #{huangpai_num}
+	   	WHERE
+        	id = #{id}
+	</update>
+	
+	<delete id="deleteQScoreInfoByQmatchId">
+	   DELETE FROM q_score_info 
+	      WHERE q_match_id = #{qmatchId}
+	</delete>
+	
+	
+	<select id="queryPlayerJinQiu" parameterType="hashmap" resultType="hashmap">
+		SELECT SUM(p.jinqiu_num) sum_jinqiu,m.league_id,m.record_id,p.*,
+		(CASE WHEN p.teaminfo_id=m.h_team_id THEN mt.`name` ELSE gt.`name` END) tmname,
+		(CASE WHEN p.teaminfo_id=m.h_team_id THEN gt.`name` ELSE mt.`name` END) tgname 
+		FROM q_user_data p 
+		LEFT JOIN q_match_info m ON m.id=p.q_match_id 
+		LEFT JOIN t_team_info mt ON mt.id=m.h_team_id 
+		LEFT JOIN t_team_info gt ON gt.id=m.v_team_id 
+		WHERE m.league_id=#{league_id} AND p.rel_palyer_id=#{rel_palyer_id} 
+	</select>
+	
+	<select id="getQmatchInfoList" resultType="com.yt.framework.persistent.entity.QMatchInfo">
+			SELECT * FROM q_match_info q
+				WHERE 1=1
+				<if test="maps.match_id!=null and maps.match_id!=''">
+					AND q.match_id = #{maps.match_id}
+				</if>
+				<if test="maps.home_name!=null and maps.home_name!=''">
+					AND q.home_name LIKE CONCAT('%',#{maps.home_name},'%')
+				</if>
+				<if test="maps.visit_name!=null and maps.visit_name!=''">
+					AND q.visit_name LIKE CONCAT('%',#{maps.visit_name},'%')
+				</if>
+				<if test="maps.league_id!=null and maps.league_id!=''">
+					AND q.league_id = #{maps.league_id}
+				</if>
+				 ORDER BY q.create_time desc
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+	</select>
+	
+	<select id="matchInfoListCount" resultType="int">
+	       SELECT count(q.id) FROM q_match_info q
+				WHERE 1=1
+				<if test="maps.match_id!=null and maps.match_id!=''">
+					AND q.match_id = #{maps.match_id}
+				</if>
+				<if test="maps.home_name!=null and maps.home_name!=''">
+					AND q.home_name LIKE CONCAT('%',#{maps.home_name},'%')
+				</if>
+				<if test="maps.visit_name!=null and maps.visit_name!=''">
+					AND q.visit_name LIKE CONCAT('%',#{maps.visit_name},'%')
+				</if>
+				<if test="maps.league_id!=null and maps.league_id!=''">
+					AND q.league_id = #{maps.league_id}
+				</if>
+	</select>
+	
+	<select id="getScoreInfoListByQmatchId" resultType="com.yt.framework.persistent.entity.QScoreInfo">
+		SELECT * FROM q_score_info 
+			WHERE q_match_id = #{qmatchId} AND is_wulong = 'N'
+				<if test="team_id!=null and team_id!=''">
+					AND team_id = #{team_id}
+				</if>
+				<if test="teaminfo_id!=null and teaminfo_id!=''">
+					AND teaminfo_id = #{teaminfo_id}
+				</if>
+				ORDER BY user_id, jinqiu_time
+	</select>
+	
+	<select id="queryPlayerScore" parameterType="hashmap" resultType="hashmap">
+		SELECT s.id,s.jinqiu_time,u.name,u.q_match_id,u.team_id,u.teaminfo_id,u.id q_user_id,u.rel_palyer_id user_id FROM q_user_data u
+		LEFT JOIN q_score_info s ON u.id=s.q_user_id AND s.is_wulong = 'N'
+		WHERE u.q_match_id=#{q_match_id} AND u.id=#{q_user_id} 
+	</select>
+	
+	<update id="updateQScoreInfo"
+		parameterType="com.yt.framework.persistent.entity.QScoreInfo">
+		UPDATE q_score_info SET 
+		   q_match_id = #{q_match_id},
+			team_id = #{team_id},
+			teaminfo_id = #{teaminfo_id},
+			q_user_id = #{q_user_id},
+			user_id = #{user_id},
+			jinqiu_time = #{jinqiu_time}
+		WHERE id=#{id}
+		
+	</update>
+	
+	<update id="updateQScoreUserId">
+		UPDATE q_score_info SET 
+			user_id = #{uid}
+		WHERE q_user_id=#{qid}
+	</update>
+	
+	<delete id="deleteScore">
+		DELETE FROM q_score_info WHERE id = #{id}
+	</delete>
+	
+	<select id="getMatchInfoByRecordId" resultType="com.yt.framework.persistent.entity.QMatchInfo">
+		SELECT * FROM q_match_info WHERE record_id = #{r_id} and status = 2 and review_status = 2
+	</select>
+	
+	<select id="getQUserDataCardStatics" resultType="hashmap">
+		SELECT m.id,m.username,m.head_icon,d.teaminfo_id,t.`name` tname,t.logo,sum(d.huangpai_num) AS huangpai_num,sum(d.hongpai_num) AS hongpai_num
+			FROM q_match_info q,q_user_data d 
+			LEFT JOIN t_team_info t ON t.id=d.teaminfo_id 
+			LEFT JOIN m_user m ON d.rel_palyer_id  = m.id 
+			WHERE q.id = d.q_match_id AND d.rel_palyer_id IS NOT NULL AND d.rel_palyer_id &lt;&gt; ''
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND q.league_id = #{maps.league_id}
+			</if>
+			 GROUP BY d.rel_palyer_id 
+			 ORDER BY sum(d.huangpai_num+d.hongpai_num) DESC, sum(d.hongpai_num) DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="getQUserDataCardStaticsCount" resultType="int">
+		SELECT COUNT(c.id) FROM 
+			(SELECT m.id,m.head_icon,sum(d.huangpai_num) AS huangpai_num,sum(d.hongpai_num) AS hongpai_num
+				FROM q_match_info q,q_user_data d 
+				LEFT JOIN t_team_info t ON t.id=d.teaminfo_id
+				LEFT JOIN m_user m ON d.rel_palyer_id  = m.id 
+				WHERE q.id = d.q_match_id AND d.rel_palyer_id IS NOT NULL AND d.rel_palyer_id &lt;&gt; ''
+				<if test="maps.league_id!=null and maps.league_id!=''">
+					AND q.league_id = #{maps.league_id}
+				</if>
+				 GROUP BY d.rel_palyer_id 
+				 ORDER BY sum(d.huangpai_num+d.hongpai_num) DESC, sum(d.hongpai_num) DESC
+			) AS c
+	</select>
+	
+	<select id="getWulongData" resultType="com.yt.framework.persistent.entity.QScoreInfo">
+		SELECT * FROM q_score_info
+			WHERE q_match_id = #{q_match_id} 
+				AND teaminfo_id = #{teaminfo_id} 
+				AND is_wulong = 'Y'
+	</select>
+	
+	
+	<select id="queryPlayerDatas" parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM(
+		SELECT u.usernick,u.username,u.phone,u.email,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age,t.`name` buy_teaminfo,'' loan_teaminfo,'0' if_loan,p.*  
+		FROM t_team_player tp 
+		LEFT JOIN t_team_info t ON t.id=tp.teaminfo_id 
+		LEFT JOIN p_player_info p ON p.user_id=tp.user_id 
+		LEFT JOIN m_user u ON u.id=tp.user_id 
+		WHERE 1=1 AND t.is_exist=1 
+		AND tp.teaminfo_id=#{teaminfo_id}
+		union all
+		SELECT u.usernick,u.username,u.phone,u.email,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age,t1.name buy_teaminfo,t2.name loan_teaminfo,'1' if_loan,p.*
+		FROM t_teamloan_msg tm 
+		LEFT JOIN a_marketcfg m ON tm.cfg_id=m.id
+		LEFT JOIN m_user u ON u.id=tm.user_id 
+		LEFT JOIN t_team_info t1 ON t1.id=tm.buy_teaminfo_id 
+		LEFT JOIN t_team_info t2 ON t2.id=tm.loan_teaminfo_id 
+		LEFT JOIN p_player_info p ON p.user_id=tm.user_id 
+		WHERE m.s_id=#{cfg_id} 
+		AND tm.if_ok=1 
+		AND tm.buy_teaminfo_id=#{teaminfo_id}
+		AND NOT EXISTS(SELECT 1 FROM t_teamloan_msg WHERE user_id=tm.user_id AND end_time>tm.end_time)
+		AND NOT EXISTS(SELECT 1 FROM t_team_player WHERE user_id=tm.user_id AND teaminfo_id=#{teaminfo_id})
+		) players
+		WHERE 1=1
+		<if test="username!=null and username!=''">
+			AND username LIKE CONCAT(CONCAT('%', #{username}),'%') 
+		</if>
+		<if test="usernick!=null and usernick!=''">
+			AND usernick LIKE CONCAT(CONCAT('%', #{usernick}),'%') 
+		</if>
+		<if test="phone!=null and phone!=''">
+			AND (phone LIKE CONCAT(CONCAT('%', #{phone}),'%') OR email LIKE CONCAT(CONCAT('%', #{phone}),'%')) 
+		</if>
+		<if test="if_loan!=null and if_loan!=''">
+			AND if_loan=#{if_loan} 
+		</if>
+   		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryPlayerDatasCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT * FROM(
+			SELECT u.usernick,u.username,u.phone,u.email,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age,t.`name` buy_teaminfo,'' loan_teaminfo,'0' if_loan,p.*  
+			FROM t_team_player tp 
+			LEFT JOIN t_team_info t ON t.id=tp.teaminfo_id 
+			LEFT JOIN p_player_info p ON p.user_id=tp.user_id 
+			LEFT JOIN m_user u ON u.id=tp.user_id 
+			WHERE 1=1 AND t.is_exist=1 
+			AND tp.teaminfo_id=#{teaminfo_id}
+			union all
+			SELECT u.usernick,u.username,u.phone,u.email,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age,t1.name buy_teaminfo,t2.name loan_teaminfo,'1' if_loan,p.*
+			FROM t_teamloan_msg tm 
+			LEFT JOIN m_user u ON u.id=tm.user_id 
+			LEFT JOIN t_team_info t1 ON t1.id=tm.buy_teaminfo_id 
+			LEFT JOIN t_team_info t2 ON t2.id=tm.loan_teaminfo_id 
+			LEFT JOIN p_player_info p ON p.user_id=tm.user_id 
+			WHERE tm.cfg_id=#{cfg_id} 
+			AND tm.if_ok=1 
+			AND tm.buy_teaminfo_id=#{teaminfo_id}
+			AND NOT EXISTS(SELECT 1 FROM t_teamloan_msg WHERE user_id=tm.user_id AND end_time>tm.end_time)
+			AND NOT EXISTS(SELECT 1 FROM t_team_player WHERE user_id=tm.user_id AND teaminfo_id=#{teaminfo_id})
+			) players
+			WHERE 1=1
+			<if test="username!=null and username!=''">
+				AND username LIKE CONCAT(CONCAT('%', #{username}),'%') 
+			</if>
+			<if test="usernick!=null and usernick!=''">
+				AND usernick LIKE CONCAT(CONCAT('%', #{usernick}),'%') 
+			</if>
+			<if test="phone!=null and phone!=''">
+				AND (phone LIKE CONCAT(CONCAT('%', #{phone}),'%') OR email LIKE CONCAT(CONCAT('%', #{phone}),'%')) 
+			</if>
+			<if test="if_loan!=null and if_loan!=''">
+				AND if_loan=#{if_loan} 
+			</if>
+		) cot_t)
+	</select>
+	
+	
+</mapper>

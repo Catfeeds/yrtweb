@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.ImageVideoMapper">
+		<insert id="saveImage" parameterType="com.yt.framework.persistent.entity.ImageVideo" >
+			INSERT INTO m_images(
+				id,
+				user_id,
+				title,
+				describle,
+				f_size,
+				f_status,
+				f_src,
+				click_count,
+				praise_count,
+				unpraise_count,
+				role_type,
+				if_show,
+				create_time,
+				if_send,
+				add_iv_id,
+				to_oss
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{title},
+				#{describle},
+				#{f_size},
+				#{f_status},
+				#{f_src},
+				0,
+				0,
+				0,
+				#{role_type},
+				0,
+				NOW(),
+				#{if_send},
+				#{add_iv_id},
+				0
+			)
+		</insert>
+		<insert id="saveVideo" parameterType="com.yt.framework.persistent.entity.ImageVideo" >
+			INSERT INTO m_videos(
+				id,
+				user_id,
+				title,
+				describle,
+				f_size,
+				f_status,
+				f_src,
+				v_cover,
+				click_count,
+				praise_count,
+				unpraise_count,
+				role_type,
+				if_show,
+				create_time,
+				if_send,
+				add_iv_id,
+				to_oss
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{title},
+				#{describle},
+				#{f_size},
+				#{f_status},
+				#{f_src},
+				#{v_cover},
+				0,
+				0,
+				0,
+				#{role_type},
+				0,
+				NOW(),
+				#{if_send},
+				#{add_iv_id},
+				0
+			)
+		</insert>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.ImageVideo">
+			UPDATE 
+			<if test="type!=null and type=='image'">
+				m_images 
+			</if> 
+			<if test="type!=null and type=='video'">
+				m_videos 
+			</if> 
+				SET
+					title=#{title},
+					describle=#{describle},
+					f_size=#{f_size},
+					f_status=#{f_status},
+					f_src=#{f_src},
+					<if test="type!=null and type=='video'">
+					v_cover=#{v_cover},
+					</if>
+					click_count=#{click_count},
+					praise_count=#{praise_count},
+					unpraise_count=#{unpraise_count},
+					role_type=#{role_type},
+					if_show=#{if_show},
+					user_id = #{user_id}
+					<if test="to_oss!=null and to_oss==2">
+					,to_oss=0
+					</if>
+					<if test="if_send!=null and if_send!=''">
+					,if_send=#{if_send}
+					</if>
+					<if test="add_iv_id!=null and add_iv_id!=''">
+					,add_iv_id=#{add_iv_id}
+					</if>
+				WHERE
+					id = #{id}
+		</update>
+		
+		<update id="updateImgOrVideo2OSS">
+			UPDATE 
+			<if test="type!=null and type=='image'">
+				m_images 
+			</if> 
+			<if test="type!=null and type=='video'">
+				m_videos 
+			</if> 
+				SET
+					to_oss=1
+				WHERE
+					id = #{ivId}
+		</update>
+		
+		<select id="getImageById" resultType="com.yt.framework.persistent.entity.ImageVideo">
+			SELECT * FROM m_images WHERE id = #{id}
+		</select>
+		<select id="getVideoById" resultType="com.yt.framework.persistent.entity.ImageVideo">
+			SELECT * FROM m_videos WHERE id = #{id}
+		</select>
+		
+		<delete id="deleteImage">
+			DELETE FROM m_images WHERE id = #{id}
+		</delete>
+		<delete id="deleteVideo">
+			DELETE FROM m_videos WHERE id = #{id}
+		</delete>
+		
+		<select id="searchImageVideos" parameterType="hashmap" resultType="hashmap">
+			SELECT iv.*,(CASE WHEN (iv.role_type='USER' OR iv.role_type='PLAYER' OR iv.role_type='BABY') THEN u.usernick ELSE (CASE WHEN iv.role_type='TEAM' THEN t.`name` ELSE l.`name` END) END) ivname 
+			<if test="maps.login_user_id!=null">
+			,ip.praise,ip.unpraise
+			</if>
+			<if test="maps.login_user_id==null">
+			,0 praise,0 unpraise
+			</if> 
+				<if test="maps.type!=null and maps.type=='image'">
+					FROM m_images iv
+				</if> 
+				<if test="maps.type!=null and maps.type=='video'">
+					FROM m_videos iv
+				</if> 
+				LEFT JOIN m_user u ON u.id=iv.user_id AND (iv.role_type='USER' OR iv.role_type='PLAYER' OR iv.role_type='BABY') 
+				LEFT JOIN t_team_info t ON t.id=iv.user_id AND iv.role_type='TEAM' 
+				LEFT JOIN a_league l ON l.id=iv.user_id AND iv.role_type='LEAGUE' 
+				<if test="maps.login_user_id!=null and maps.login_user_id!=''">
+					LEFT JOIN (SELECT iv_id,user_id,(CASE WHEN MAX(p_state)=2 THEN 2 ELSE 0 END) unpraise,MIN(p_state) praise,p_type FROM m_iv_praise GROUP BY iv_id,user_id) ip ON ip.iv_id=iv.id AND ip.p_type=iv.role_type AND ip.user_id=#{maps.login_user_id} 
+				</if>
+					WHERE 1=1
+				<if test="maps.role_type!=null and maps.role_type!=''">
+					AND iv.role_type = #{maps.role_type}
+				</if>
+				<if test="maps.not_role_type!=null and maps.not_role_type!=''">
+					AND iv.role_type != #{maps.not_role_type}
+				</if>
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					AND iv.user_id = #{maps.user_id}
+				</if>
+				<if test="maps.f_status!=null and maps.f_status!=''">
+					AND iv.f_status = #{maps.f_status}
+				</if>
+				<if test="maps.if_show!=null and maps.if_show!=''">
+					AND iv.if_show = #{maps.if_show}
+				</if>
+				<if test="maps.title!=null and maps.title!=''">
+					AND iv.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+				</if>
+				<if test="maps.ivname!=null and maps.ivname!=''">
+					AND (CASE WHEN (iv.role_type='USER' OR iv.role_type='PLAYER' OR iv.role_type='BABY') THEN u.usernick LIKE CONCAT(CONCAT('%', #{maps.ivname}),'%') 
+					ELSE (CASE WHEN iv.role_type='TEAM' THEN t.`name` LIKE CONCAT(CONCAT('%', #{maps.ivname}),'%') ELSE l.`name` LIKE CONCAT(CONCAT('%', #{maps.ivname}),'%') END) END)
+				</if>
+				<choose>
+					<when test="maps.orderby!=null and maps.orderby=='count'">
+					ORDER BY iv.click_count DESC
+					</when>
+					<when test="maps.orderby!=null and maps.orderby=='good'">
+					ORDER BY iv.praise_count DESC
+					</when>
+					<when test="maps.orderby!=null and maps.orderby=='index'">
+					ORDER BY iv.create_time DESC
+					</when>
+					<otherwise>
+					ORDER BY iv.if_show DESC,iv.create_time DESC
+					</otherwise>
+				</choose>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="searchImageVideosCount" parameterType="hashmap" resultType="int">
+			SELECT count(1) FROM 
+				<if test="maps.type!=null and maps.type=='image'">
+					m_images iv
+				</if> 
+				<if test="maps.type!=null and maps.type=='video'">
+					m_videos iv
+				</if> 
+				LEFT JOIN m_user u ON u.id=iv.user_id AND (iv.role_type='USER' OR iv.role_type='PLAYER' OR iv.role_type='BABY')
+				LEFT JOIN t_team_info t ON t.id=iv.user_id AND iv.role_type='TEAM' 
+				LEFT JOIN a_league l ON l.id=iv.user_id AND iv.role_type='LEAGUE' 
+					WHERE 1=1
+				<if test="maps.role_type!=null and maps.role_type!=''">
+					AND iv.role_type = #{maps.role_type}
+				</if>
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					AND iv.user_id = #{maps.user_id}
+				</if>
+				<if test="maps.f_status!=null and maps.f_status!=''">
+					AND iv.f_status = #{maps.f_status}
+				</if>
+				<if test="maps.if_show!=null and maps.if_show!=''">
+					AND iv.if_show = #{maps.if_show}
+				</if>
+				<if test="maps.title!=null and maps.title!=''">
+					AND iv.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+				</if>
+				<if test="maps.ivname!=null and maps.ivname!=''">
+					AND (CASE WHEN (iv.role_type='USER' OR iv.role_type='PLAYER' OR iv.role_type='BABY') THEN u.usernick LIKE CONCAT(CONCAT('%', #{maps.ivname}),'%') 
+					ELSE (CASE WHEN iv.role_type='TEAM' THEN t.`name` LIKE CONCAT(CONCAT('%', #{maps.ivname}),'%') ELSE l.`name` LIKE CONCAT(CONCAT('%', #{maps.ivname}),'%') END) END)
+				</if>
+		</select>
+		
+		<select id="praiseCount" parameterType="hashmap" resultType="String">
+			SELECT count(1) praise FROM m_iv_praise WHERE iv_id=#{iv_id} AND p_state=1 AND p_type=#{p_type}
+			UNION ALL
+			SELECT count(1) praise FROM m_iv_praise WHERE iv_id=#{iv_id} AND p_state=2 AND p_type=#{p_type}
+		</select>
+		
+		<select id="queryPraise" parameterType="hashmap" resultType="hashmap">
+			SELECT * FROM m_iv_praise WHERE user_id=#{user_id} AND iv_id=#{iv_id} AND p_type=#{p_type}
+			<if test="p_state!=null and p_state!=''">
+			AND p_state=#{p_state}
+			</if>
+		</select>
+		<delete id="deletePraise" parameterType="hashmap">
+			DELETE FROM m_iv_praise WHERE user_id=#{user_id} AND iv_id=#{iv_id} AND p_state=#{p_state} AND p_type=#{p_type}
+		</delete>
+		
+		<insert id="savePraise" parameterType="hashmap">
+			INSERT INTO m_iv_praise(
+				id,
+				user_id,
+				iv_id,
+				p_state,
+				p_type,
+				ip_str,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{iv_id},
+				#{p_state},
+				#{p_type},
+				#{ip_str},
+				NOW()
+			)
+		</insert>
+		
+		<select id="queryComments" parameterType="hashmap" resultType="hashmap">
+			SELECT v.*,u.usernick,u.head_icon 
+			FROM  m_iv_comments v,m_user u
+			WHERE v.user_id=u.id AND v.is_show=1 AND v.iv_id=#{maps.id} 
+			ORDER BY v.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="queryCommentsCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT v.*,u.usernick,u.head_icon 
+				FROM  m_iv_comments v,m_user u
+				WHERE v.user_id=u.id AND v.is_show=1 AND v.iv_id=#{maps.id} 
+			) cot_t)
+		</select>
+		
+		<insert id="saveImageVideoComments" parameterType="hashmap">
+					INSERT INTO m_iv_comments
+					(
+						id,
+						user_id,
+						iv_id,
+						content,
+						create_time
+					)VALUES(
+						#{maps.id},
+						#{maps.user_id},
+						#{maps.iv_id},
+						#{maps.content},
+						NOW()
+					)
+		</insert>
+		
+		<update id="updateImageVideoClickCount" parameterType="hashmap">
+			UPDATE 
+				<if test="maps.type!=null and maps.type=='image'">
+					m_images iv
+				</if> 
+				<if test="maps.type!=null and maps.type=='video'">
+					m_videos iv
+				</if> 
+				SET click_count = click_count+1 
+				<if test="maps.praise!=null and maps.praise!=''">
+				,praise_count = #{maps.praise}
+				</if>
+				<if test="maps.unpraise!=null and maps.unpraise!=''">
+				,unpraise_count = #{maps.unpraise}
+				</if>
+			WHERE
+				id = #{maps.iv_id}			
+		</update>
+		
+		<select id="queryViews" parameterType="hashmap" resultType="hashmap">
+			SELECT iv.* FROM (		
+					SELECT i.id,i.user_id,i.f_src,'' v_cover,i.f_status,i.title,i.describle,i.click_count,i.praise_count,i.unpraise_count,i.role_type,i.create_time,i.to_oss,'image' type 
+					FROM m_images i WHERE 1=1 
+					AND i.role_type != 'TEAM' 
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						AND i.user_id = #{maps.user_id}
+					</if>
+					UNION ALL
+					SELECT v.id,v.user_id,v.f_src,v.v_cover,v.f_status,v.title,v.describle,v.click_count,v.praise_count,v.unpraise_count,v.role_type,v.create_time,v.to_oss,'video' type 
+					FROM m_videos v WHERE 1=1 
+					AND v.role_type != 'TEAM' 
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						AND v.user_id = #{maps.user_id}
+					</if>
+			) iv WHERE 1=1 
+			<if test="maps.type !=null and maps.type !='' ">
+				AND iv.type=#{maps.type}
+			</if>
+			ORDER BY iv.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		<select id="queryViewsCount" parameterType="hashmap" resultType="int">
+			SELECT count(1) FROM (		
+					SELECT i.id,i.user_id,i.f_src,'' v_cover,i.f_status,i.title,i.describle,i.click_count,i.praise_count,i.unpraise_count,i.role_type,i.create_time,'image' type 
+					FROM m_images i WHERE 1=1 
+					AND i.role_type != 'TEAM' 
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						AND i.user_id = #{maps.user_id}
+					</if>
+					UNION ALL
+					SELECT v.id,v.user_id,v.f_src,v.v_cover,v.f_status,v.title,v.describle,v.click_count,v.praise_count,v.unpraise_count,v.role_type,v.create_time,'video' type 
+					FROM m_videos v WHERE 1=1 
+					AND v.role_type != 'TEAM' 
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						AND v.user_id = #{maps.user_id}
+					</if>
+			) iv WHERE 1=1 
+			<if test="maps.type !=null and maps.type !='' ">
+				AND iv.type=#{maps.type}
+			</if>
+		</select>
+		
+		<delete id="deleteAllPraise" parameterType="hashmap">
+			DELETE FROM m_iv_praise WHERE iv_id=#{ivid} 
+		</delete>
+		<delete id="deleteAllComment" parameterType="hashmap">
+			DELETE FROM m_iv_comments WHERE iv_id=#{ivid} 
+		</delete>
+</mapper>

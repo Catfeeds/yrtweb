@@ -1,0 +1,183 @@
+/*base*/
+.webuploader-container {
+	position: relative;
+}
+.webuploader-element-invisible {
+	position: absolute !important;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+/*fileUploader-toolbar*/
+.fileUploader-toolbar{
+	display:none;
+	position:absolute;
+	width:100%;
+	bottom:0;
+	left:0;
+	z-index:9;
+}
+.fileUploader-toolbar.show{
+	display:block;
+}
+.fileUploader-toolbar-type1{
+	height:20px;
+	text-align:right;
+	background: #000;
+    opacity: .8;
+    filter: alpha(opacity = 80);
+}
+.fileUploader-toolbar-type1 span{
+	display:inline-block;
+	background-repeat:no-repeat;
+	background-position:center center;
+	height:20px;
+	width:20px;
+	cursor:pointer;
+	vertical-align:top;
+}
+.fileUploader-toolbar-type1 span:hover,.fileUploader-toolbar-type1 span.hover{
+	background-color:#F93;
+}
+.fileUploader-toolbar-type1-ml{
+	background-image:url(img/l.png);
+}
+.fileUploader-toolbar-type1-mr{
+	background-image:url(img/r.png);
+}
+.fileUploader-toolbar-type1-del{
+	background-image:url(img/del.png);
+}
+.fileUploader-toolbar-type1-edit{
+	background-image:url(img/edit.png);
+}
+/*fileUploader-picker*/
+.fileUploader-picker-styleA .webuploader-container{
+	float:left;
+	border:#dddddd 1px solid;
+}
+.fileUploader-picker-styleA .webuploader-pick{
+	float:left;
+	width:100%;
+	height:100%;
+	position:relative;
+	background:url(img/addimg.png) no-repeat center center;
+	background-color:#f9f9f9;
+	overflow:hidden;
+}
+/*imgUploader*/
+.imgUploader .fileUploader-item{
+	position:relative;
+	border:#eee 1px solid;
+	float:left;
+	margin-right:5px;
+	
+	overflow:hidden;
+}
+.imgUploader .fileUploader-item img{
+	cursor:pointer;
+}
+/*processbar*/
+.fileUploader-processbar{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	z-index:20;
+	width:100%;
+	height:22px;
+	line-height:22px;
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#6F000000', endColorstr='#6Ff78015');
+	background-color: rgba(0,0,0,.5);
+	text-align:center;
+    z-index:6;
+}
+.fileUploader-processbar div{
+	position:absolute;
+	background-color:#f78015;
+	height:100%;
+	width:0;
+}
+.fileUploader-processbar span{
+	color:white;
+	font-size:12px;
+	position:relative;
+	z-index:2;
+}
+/*fileUploader-loading*/
+.fileUploader-loading {
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background:url(img/loading.gif) no-repeat center center;
+    z-index:3;
+}
+/*imageEditor*/
+.imageEditor-editpane{
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	position:relative;
+}
+.imageEditor-image{
+	position:absolute;
+	z-index:1;
+}
+.imageEditor-image-shield{
+	cursor:move;
+	position:absolute;
+	z-index:2;
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#0F000000', endColorstr='#0F000000');
+	background: rgba(0,0,0,0);
+}
+.imageEditor-toolbar{
+	position:absolute;
+	width:100%;
+	bottom:-32px;
+	left:0;
+	background-color: #f78015;
+	height:32px;
+	line-height:32px;
+	display:none;
+	font-size:12px;
+	font-family:微软雅黑;
+	z-index:3;
+}
+.imageEditor-toolbar span{
+	float:left;
+	color:white;
+	margin:0 5px;
+}
+.imageEditor-toolbar a,.imageEditor-toolbar span{
+	display:inline-block;
+	background-repeat:no-repeat;
+	background-position:10px center;
+	padding-left:30px;
+	padding-right:10px;
+	cursor:pointer;
+	vertical-align:top;
+	float:right;
+	color:white;
+}
+.imageEditor-toolbar span{
+	float:left;
+	cursor:default;
+}
+.imageEditor-toolbar a:hover{
+	background-color:#F93;
+}
+.imageEditor-toolbar a.imageEditor-toolbar-small{
+	background-image:url(img/small.png);
+}
+.imageEditor-toolbar a.imageEditor-toolbar-big{
+	background-image:url(img/big.png);
+}
+.imageEditor-toolbar a.imageEditor-toolbar-save{
+	background-image:url(img/save.png);
+}
+.imageEditor-toolbar span.imageEditor-toolbar-canScale{
+	background-image:url(img/mousewheel.png);
+}
+.imageEditor-toolbar span.imageEditor-toolbar-canDrag{
+	background-image:url(img/drag.png);
+}

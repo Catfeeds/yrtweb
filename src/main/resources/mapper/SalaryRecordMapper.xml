@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.SalaryRecordMapper">
+	
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.SalaryRecord">
+		INSERT INTO a_salary_record(
+			id,
+			league_id,
+			turn_num,
+			teaminfo_id,
+			user_id,
+			event_record_id,
+			salary,
+			create_time
+		)VALUES(
+			id=#{id},
+			league_id=#{league_id},
+			turn_num=#{turn_num},
+			teaminfo_id=#{teaminfo_id},
+			user_id=#{user_id},
+			event_record_id=#{event_record_id},
+			salary=#{salary},
+			create_time=NOW()
+		)
+	</insert>
+	
+	<insert id="updateSalaryRecord" parameterType="com.yt.framework.persistent.entity.SalaryRecord">
+	UPDATE
+	a_salary_record
+	SET
+	bonus = #{o.bonus},
+	real_salary = #{o.real_salary},
+	salary = #{o.salary}
+	WHERE id=#{o.id}
+	</insert>
+	
+	<insert id="updateSalaryMsg" parameterType="com.yt.framework.persistent.entity.SalaryMsg">
+	UPDATE
+	a_salary_msg
+	SET
+	is_send = #{o.is_send},
+	status = #{o.status},
+	send_time=NOW()
+	WHERE id=#{o.id}
+	</insert>
+	<select id="getSalaryMsg" resultType="com.yt.framework.persistent.entity.SalaryMsg" >
+		SELECT * FROM a_salary_msg WHERE teaminfo_id = #{teaminfo_id} and event_id=#{event_id}
+	</select>
+	<select id="getSalaryRecord" resultType="com.yt.framework.persistent.entity.SalaryRecord">
+		SELECT * FROM a_salary_record WHERE srmsg_id=#{srmsg_id}
+	</select>
+	<select id="getMatchInfo" resultType="com.yt.framework.persistent.entity.QMatchInfo">
+		SELECT * FROM q_match_info WHERE record_id=#{event_id}
+	</select>
+	<select id="getQuserData" resultType="com.yt.framework.persistent.entity.QUserData">
+		SELECT * FROM q_user_data WHERE q_match_id=#{q_match_id}
+	</select>
+	<select id="getSalaryMsgByID" resultType="com.yt.framework.persistent.entity.SalaryMsg" >
+		SELECT * FROM a_salary_msg WHERE id=#{id}
+	</select>
+</mapper>

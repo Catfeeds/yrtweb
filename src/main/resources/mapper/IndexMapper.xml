@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.IndexMapper">
+		<select id="queryNews" parameterType="hashmap" resultType="hashmap">	
+			SELECT * FROM m_news where 1=1 AND n_state=1 
+			<if test="maps.model_id!=null and maps.model_id!=''">
+				AND model_id =#{maps.model_id}
+			</if>
+			<if test="maps.type!=null and maps.type!=''">
+				AND type =#{maps.type}
+			</if>
+			ORDER BY show_num,create_time DESC 
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="newsCount" parameterType="hashmap" resultType="int">
+			SELECT count(1) FROM m_news where 1=1 AND n_state=1 
+			<if test="maps.model_id!=null and maps.model_id!=''">
+				AND model_id =#{maps.model_id}
+			</if>
+			<if test="maps.type!=null and maps.type!=''">
+				AND type =#{maps.type}
+			</if>
+		</select>
+		<select id="getNewsById" resultType="com.yt.framework.persistent.entity.News">
+			SELECT * FROM m_news WHERE id=#{nid}
+		</select>
+		<select id="queryImagesOrVideos" parameterType="hashmap" resultType="hashmap">
+	       	SELECT v.*,i.id iid,i.type,i.sort,(CASE WHEN (v.role_type='USER' OR v.role_type='PLAYER' OR v.role_type='BABY') THEN u.usernick ELSE (CASE WHEN v.role_type='TEAM' THEN t.`name` ELSE l.`name` END) END) ivname 
+	       	<if test="maps.userId!=null">
+			,ip.praise,ip.unpraise
+			</if>
+			<if test="maps.userId==null">
+			,0 praise,0 unpraise
+			</if> 
+			FROM m_index i 
+			<if test="maps.type!=null and maps.type=='image'">
+				LEFT JOIN m_images v ON v.id=i.oth_id 
+			</if> 
+			<if test="maps.type!=null and maps.type=='video'">
+				LEFT JOIN m_videos v ON v.id=i.oth_id 
+			</if> 
+			LEFT JOIN m_user u ON u.id=v.user_id AND (v.role_type='USER' OR v.role_type='PLAYER' OR v.role_type='BABY')
+			LEFT JOIN t_team_info t ON t.id=v.user_id AND v.role_type='TEAM' 
+			LEFT JOIN a_league l ON l.id=v.user_id AND v.role_type='LEAGUE' 
+			<if test="maps.userId!=null and maps.userId!=''">
+				LEFT JOIN (SELECT iv_id,user_id,(CASE WHEN MAX(p_state)=2 THEN 2 ELSE 0 END) unpraise,MIN(p_state) praise,p_type FROM m_iv_praise GROUP BY iv_id,user_id) ip ON ip.iv_id=v.id AND ip.p_type=v.role_type AND ip.user_id=#{maps.userId} 
+			</if>
+			WHERE i.type=#{maps.type} 
+			<if test="maps.title!=null and maps.title!=''">
+				AND v.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+			</if> 
+			ORDER BY i.sort
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		<select id="imagesOrVideosCount" parameterType="hashmap" resultType="int">
+			SELECT count(1) 
+			FROM m_index i 
+			<if test="maps.type!=null and maps.type=='image'">
+				LEFT JOIN m_images v ON v.id=i.oth_id 
+			</if> 
+			<if test="maps.type!=null and maps.type=='video'">
+				LEFT JOIN m_videos v ON v.id=i.oth_id 
+			</if> 
+			LEFT JOIN m_user u ON u.id=v.user_id AND (v.role_type='USER' OR v.role_type='PLAYER' OR v.role_type='BABY')
+			LEFT JOIN t_team_info t ON t.id=v.user_id AND v.role_type='TEAM' 
+			LEFT JOIN a_league l ON l.id=v.user_id AND v.role_type='LEAGUE' 
+			<if test="maps.userId!=null and maps.userId!=''">
+				LEFT JOIN (SELECT iv_id,user_id,(CASE WHEN MAX(p_state)=2 THEN 2 ELSE 0 END) unpraise,MIN(p_state) praise,p_type FROM m_iv_praise GROUP BY iv_id,user_id) ip ON ip.iv_id=v.id AND ip.p_type=v.role_type AND ip.user_id=#{maps.userId} 
+			</if>
+			WHERE i.type=#{maps.type} 
+			<if test="maps.title!=null and maps.title!=''">
+				AND v.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+			</if> 
+		</select>
+		<select id="getIndexBySortDesc" resultType="com.yt.framework.persistent.entity.IndexModel">
+			SELECT * FROM m_index WHERE type=#{type} ORDER BY sort DESC LIMIT 1
+		</select>
+		<insert id="saveField" parameterType="com.yt.framework.persistent.entity.IndexModel">
+			INSERT INTO m_index(
+				id,oth_id,sort,type,user_id,create_time 
+			)VALUES(
+				#{id},#{oth_id},#{sort},#{type},#{user_id},NOW()
+			)
+		</insert>
+		<delete id="deleteField">
+			DELETE FROM m_index WHERE id = #{id}
+		</delete>
+		
+		<update id="updateFieldValue" parameterType="com.yt.framework.persistent.entity.IndexModel">
+			UPDATE m_index
+				SET
+					oth_id=#{oth_id},
+					user_id=#{user_id}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<select id="queryBabys" parameterType="hashmap" resultType="hashmap">	
+			SELECT i.id iid,i.sort,i.type,b.*,u.usernick,u.phone,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age,img.f_src FROM m_index i 
+			LEFT JOIN f_baby_info b ON b.id=i.oth_id 
+			LEFT JOIN m_user u ON u.id=b.user_id 
+			LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) img ON img.user_id=b.user_id
+			WHERE i.type='baby' AND b.if_del = 0
+			GROUP BY i.id
+			ORDER BY i.sort
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="babysCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT i.id iid,i.sort,i.type,b.*,u.usernick,u.phone,img.f_src FROM m_index i 
+				LEFT JOIN f_baby_info b ON b.id=i.oth_id 
+				LEFT JOIN m_user u ON u.id=b.user_id 
+				LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) img ON img.user_id=b.user_id
+				WHERE i.type='baby' AND b.if_del = 0
+				GROUP BY i.id
+			) cot_t)
+		</select>
+		<select id="queryAllBabys" parameterType="hashmap" resultType="hashmap">	
+			SELECT b.*,u.usernick,u.phone,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age,img.f_src FROM f_baby_info b
+			LEFT JOIN m_user u ON u.id=b.user_id 
+			LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) img ON img.user_id=b.user_id 
+			WHERE 1=1 
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND u.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+			</if>
+			GROUP BY b.id 
+			ORDER BY b.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="allBabysCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT b.*,u.usernick,u.phone,img.f_src FROM f_baby_info b
+				LEFT JOIN m_user u ON u.id=b.user_id 
+				LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) img ON img.user_id=b.user_id 
+				WHERE 1=1 
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND u.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+				<if test="maps.phone!=null and maps.phone!=''">
+					AND u.phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+				</if>
+				GROUP BY b.id 
+			) cot_t)
+		</select>
+		
+		<select id="queryPlayers" parameterType="hashmap" resultType="hashmap">	
+			SELECT i.id iid,i.sort,i.type,p.*,u.usernick,u.head_icon,u.phone,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age FROM m_index i 
+			LEFT JOIN p_player_info p ON p.id=i.oth_id 
+			LEFT JOIN m_user u ON u.id=p.user_id
+			WHERE i.type='player'
+			ORDER BY i.sort
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="playersCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT i.id iid,i.sort,i.type,p.id,p.user_id,p.current_price,p.position,p.height,p.weight,u.usernick,u.phone FROM m_index i      
+				LEFT JOIN p_player_info p ON p.id=i.oth_id      
+				LEFT JOIN m_user u ON u.id=p.user_id      
+				WHERE i.type='player' 
+			) cot_t)
+		</select>
+		
+		<select id="queryAllPlayers" parameterType="hashmap" resultType="hashmap">	
+			SELECT p.*,u.usernick,u.phone,u.head_icon,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age  
+			FROM p_player_info p 
+			LEFT JOIN m_user u ON u.id=p.user_id 
+			WHERE 1=1 
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND u.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+			</if>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="allPlayersCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT p.*,u.usernick,u.phone,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age  
+				FROM p_player_info p 
+				LEFT JOIN m_user u ON u.id=p.user_id 
+				WHERE 1=1 
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND u.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+				<if test="maps.phone!=null and maps.phone!=''">
+					AND u.phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+				</if>
+			) cot_t)
+		</select>
+		
+		<select id="queryTeamPlayers" parameterType="hashmap" resultType="hashmap">	
+			SELECT tp.teaminfo_id,t.`name`,tp.player_num,tp.position tposition,p.*,u.usernick,u.username,u.phone,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age  
+			<if test="maps.lid!=null and maps.lid!=''">
+			,q_player_list.jinqiu_num 
+			</if>
+			FROM t_team_player tp 
+			LEFT JOIN t_team_info t ON t.id=tp.teaminfo_id 
+			LEFT JOIN p_player_info p ON p.user_id=tp.user_id 
+			LEFT JOIN m_user u ON u.id=tp.user_id 
+			<if test="maps.lid!=null and maps.lid!=''">
+			LEFT JOIN (SELECT m.league_id,q.teaminfo_id,q.rel_palyer_id,q.name,SUM(q.jinqiu_num) jinqiu_num,count(1) FROM q_user_data q 
+			LEFT JOIN q_match_info m ON m.id=q.q_match_id 
+			GROUP BY m.league_id,q.teaminfo_id,q.rel_palyer_id,q.name) q_player_list ON q_player_list.rel_palyer_id=u.id 
+			</if>
+			WHERE 1=1 AND t.is_exist=1 
+			<if test="maps.username!=null and maps.username!=''">
+				AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.usernick!=null and maps.usernick!=''">
+					AND u.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+			</if>
+			<if test="maps.tname!=null and maps.tname!=''">
+				AND t.`name` LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')
+			</if>
+			<if test="maps.tname!=null and maps.tname!=''">
+				AND t.`name` LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')
+			</if>
+			<if test="maps.tid!=null and maps.tid!=''">
+				AND tp.teaminfo_id=#{maps.tid} 
+			</if>
+			<if test="maps.gid!=null and maps.gid!=''">
+				AND EXISTS(SELECT g.* FROM a_group_event g WHERE g.teaminfo_id=t.id AND g.group_id=#{maps.gid}) 
+			</if>
+			<if test="maps.lid!=null and maps.lid!=''">
+			ORDER BY q_player_list.jinqiu_num DESC 
+			</if>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="teamPlayersCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT tp.teaminfo_id,t.`name`,tp.player_num,tp.position tposition,p.*,u.usernick,u.username,u.phone,u.borndate,DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age  
+				<if test="maps.lid!=null and maps.lid!=''">
+				,q_player_list.jinqiu_num 
+				</if>
+				FROM t_team_player tp 
+				LEFT JOIN t_team_info t ON t.id=tp.teaminfo_id 
+				LEFT JOIN p_player_info p ON p.user_id=tp.user_id 
+				LEFT JOIN m_user u ON u.id=tp.user_id 
+				<if test="maps.lid!=null and maps.lid!=''">
+				LEFT JOIN (SELECT m.league_id,q.teaminfo_id,q.rel_palyer_id,q.name,SUM(q.jinqiu_num) jinqiu_num,count(1) FROM q_user_data q 
+				LEFT JOIN q_match_info m ON m.id=q.q_match_id 
+				GROUP BY m.league_id,q.teaminfo_id,q.rel_palyer_id,q.name) q_player_list ON q_player_list.rel_palyer_id=u.id 
+				</if> 
+				WHERE 1=1 AND t.is_exist=1 
+				<if test="maps.username!=null and maps.username!=''">
+					AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+				</if>
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND u.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+				<if test="maps.phone!=null and maps.phone!=''">
+					AND u.phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+				</if>
+				<if test="maps.tname!=null and maps.tname!=''">
+					AND t.`name` LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')
+				</if>
+				<if test="maps.tname!=null and maps.tname!=''">
+					AND t.`name` LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')
+				</if>
+				<if test="maps.tid!=null and maps.tid!=''">
+					AND tp.teaminfo_id=#{maps.tid} 
+				</if>
+				<if test="maps.gid!=null and maps.gid!=''">
+					AND EXISTS(SELECT g.* FROM a_group_event g WHERE g.teaminfo_id=t.id AND g.group_id=#{maps.gid}) 
+				</if>
+			) cot_t)
+		</select>
+		
+		<select id="queryIndexBanners" parameterType="hashmap" resultType="hashmap">	
+			SELECT * FROM m_index_banner 
+			WHERE 1=1 
+			<if test="maps.if_use!=null and maps.if_use!=''">
+				AND if_use=#{maps.if_use}
+			</if>
+			ORDER BY sort DESC 
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if> 
+		</select>
+		
+		<select id="queryIndexBannerCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT * FROM m_index_banner 
+				WHERE 1=1 
+				<if test="maps.if_use!=null and maps.if_use!=''">
+					AND if_use=#{maps.if_use}
+				</if>
+			) cot_t)
+		</select>
+		<insert id="saveIndexBanner" parameterType="com.yt.framework.persistent.entity.IndexBanner">
+		INSERT INTO m_index_banner(
+			id,
+			title,
+			img_src,
+			img_path,
+			if_blank,
+			if_use,
+			sort,
+			create_time
+		)VALUES(
+			#{id},
+			#{title},
+			#{img_src},
+			#{img_path},
+			#{if_blank},
+			#{if_use},
+			#{sort},
+			NOW()
+		)
+	</insert>
+
+	<update id="updateIndexBanner" parameterType="com.yt.framework.persistent.entity.IndexBanner">
+		UPDATE m_index_banner
+		SET
+			title=#{title},
+			img_src=#{img_src},
+			img_path=#{img_path},
+			if_blank=#{if_blank},
+			if_use=#{if_use},
+			sort=#{sort}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="deleteIndexBanner">
+		DELETE FROM m_index_banner WHERE id = #{id}
+	</delete>
+	<select id="getIndexBannerById" resultType="com.yt.framework.persistent.entity.IndexBanner">
+		SELECT * FROM m_index_banner WHERE id = #{id}
+	</select>
+</mapper>

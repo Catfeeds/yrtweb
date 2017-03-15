@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.ActiveCodeMapper">
+
+	<insert id="saveActiveCode" parameterType="com.yt.framework.persistent.entity.ActiveCode" >
+		INSERT INTO a_active_code(
+			id,
+			league_id,
+			code_str,
+			code_count,
+			init_price,
+			create_time,
+			end_time,
+			init_capital,
+			if_loan,
+			if_transfer,
+			p_status
+		)VALUES(
+			#{id},
+			#{league_id},
+			#{code_str},
+			#{code_count},
+			#{init_price},
+			NOW(),
+			#{end_time},
+			#{init_capital},
+			#{if_loan},
+			#{if_transfer},
+			#{p_status}
+		)
+	</insert>
+	
+	<update id="updateCode" parameterType="com.yt.framework.persistent.entity.ActiveCode">
+		UPDATE a_active_code
+			SET
+				status = #{status},
+				teaminfo_id = #{teaminfo_id},
+				user_id = #{user_id},
+				code_count = #{code_count},
+				init_price = #{init_price},
+				if_loan = #{if_loan},
+				if_transfer = #{if_transfer},
+				p_status = #{p_status},
+				init_capital = #{init_capital},
+				use_time = NOW()
+			WHERE
+				id = #{id}	
+	</update>
+	
+	<select id="loadActiveCodes" resultType="hashmap">
+		SELECT ac.*,le.name,ti.name AS tname FROM a_active_code AS ac 
+			LEFT JOIN a_league AS le on le.id = ac.league_id
+			left join t_team_info AS ti ON ti.id = ac.teaminfo_id
+		WHERE 1=1
+		<if test="maps.name!=null and maps.name!=''">
+			AND le.name LIKE CONCAT('%',#{maps.name},'%')
+		</if>
+		<if test="maps.bgTime!=null and maps.bgEndTime!=''">
+			AND le.bg_time BETWEEN #{maps.bgTime} AND #{maps.bgEndTime}
+		</if>
+		<if test="maps.endTime!=null and maps.endEndTime!=''">
+			AND le.end_time BETWEEN #{maps.endTime} AND #{maps.endEndTime}
+		</if>
+		<if test="maps.status!=null and maps.status!=''">
+			AND ac.status = #{maps.status}
+		</if>
+		<if test="maps.league_id!=null and maps.league_id!=''">
+			AND ac.league_id = #{maps.league_id}
+		</if>
+		ORDER BY ac.id
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="loadActiveCodesCount" resultType="int">
+		SELECT count(*) FROM a_active_code AS ac 
+			LEFT JOIN a_league AS le on le.id = ac.league_id
+		WHERE 1=1
+		<if test="maps.name!=null and maps.name!=''">
+			AND le.name = #{maps.name}
+		</if>
+		<if test="maps.bgTime!=null and maps.bgEndTime!=''">
+			AND le.bg_time BETWEEN #{maps.bgTime} AND #{maps.bgEndTime}
+		</if>
+		<if test="maps.endTime!=null and maps.endEndTime!=''">
+			AND le.end_time BETWEEN #{maps.endTime} AND #{maps.endEndTime}
+		</if>
+		<if test="maps.status!=null and maps.status!=''">
+			AND ac.status = #{maps.status}
+		</if>
+		<if test="maps.league_id!=null and maps.league_id!=''">
+			AND ac.league_id = #{maps.league_id}
+		</if>
+	</select>
+	
+	<select id="getActiveCodeByCode" resultType="com.yt.framework.persistent.entity.ActiveCode">
+		SELECT * FROM a_active_code WHERE code_str = #{code_str} limit 0,1
+	</select>
+	<select id="getActiveCode" resultType="com.yt.framework.persistent.entity.ActiveCode">
+		SELECT * FROM a_active_code WHERE code_str = #{code_str} limit 1
+	</select>
+	<select id="getActiveCodeByTeam" resultType="com.yt.framework.persistent.entity.ActiveCode">
+		SELECT * FROM a_active_code WHERE league_id=#{league_id} AND teaminfo_id = #{teaminfo_id} limit 1
+	</select>
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.ActiveCode">
+		SELECT * FROM a_active_code WHERE id=#{id}
+	</select>
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminImageVideoLeagueMapper">
+
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT iv.*,a.`name` FROM (
+		SELECT i.id,i.user_id,i.f_src,'' v_cover,i.f_status,i.title,i.describle,i.click_count,i.praise_count,i.unpraise_count,i.role_type,i.create_time,i.to_oss,'image' type 
+		FROM m_images i 
+		WHERE i.role_type='LEAGUE' 
+		UNION ALL
+		SELECT v.id,v.user_id,v.f_src,v.v_cover,v.f_status,v.title,v.describle,v.click_count,v.praise_count,v.unpraise_count,v.role_type,v.create_time,v.to_oss,'video' type 
+		FROM m_videos v
+		WHERE v.role_type='LEAGUE' 
+		) iv
+		LEFT JOIN a_league a ON a.id=iv.user_id 
+		<where>
+			<if test="maps.user_id !=null and maps.user_id !='' ">
+				AND iv.user_id=#{maps.user_id}
+			</if>
+   		 	<if test="maps.title !=null and maps.title !='' ">
+				AND iv.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+			</if>
+			<if test="maps.type !=null and maps.type !='' ">
+				AND iv.type=#{maps.type}
+			</if>
+   		 </where>
+   		 ORDER BY iv.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT iv.*,a.`name` FROM (
+			SELECT i.id,i.user_id,i.f_src,i.f_status,i.title,i.describle,i.click_count,i.praise_count,i.unpraise_count,i.role_type,i.create_time,'image' type 
+			FROM m_images i 
+			WHERE i.role_type='LEAGUE' 
+			UNION ALL
+			SELECT v.id,v.user_id,v.f_src,v.f_status,v.title,v.describle,v.click_count,v.praise_count,v.unpraise_count,v.role_type,v.create_time,'video' type 
+			FROM m_videos v
+			WHERE v.role_type='LEAGUE' 
+			) iv
+			LEFT JOIN a_league a ON a.id=iv.user_id 
+			<where>
+				<if test="maps.user_id !=null and maps.user_id !='' ">
+					AND iv.user_id=#{maps.user_id}
+				</if>
+	   		 	<if test="maps.title !=null and maps.title !='' ">
+					AND iv.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+				</if>
+				<if test="maps.type !=null and maps.type !='' ">
+					AND iv.type=#{maps.type}
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="queryTeamInfoByIvid" resultType="hashmap">
+		SELECT ivt.*,t.`name` FROM a_iv_team ivt,t_team_info t
+		WHERE ivt.teaminfo_id=t.id AND ivt.a_iv_id= #{ivid}
+	</select>
+	
+	<select id="queryIvTids" resultType="String">
+		SELECT teaminfo_id FROM a_iv_team WHERE a_iv_id= #{ivid}
+	</select>
+	
+	<delete id="deleteIvTeam">
+		DELETE FROM a_iv_team WHERE a_iv_id = #{ivid}
+	</delete>
+	<delete id="deleteSImage">
+		DELETE FROM m_images WHERE add_iv_id = #{ivid} 
+		<if test="tid !=null and tid !='' ">
+		AND user_id=#{tid}
+		</if>
+	</delete>
+	<delete id="deleteSVideo">
+		DELETE FROM m_videos WHERE add_iv_id = #{ivid} 
+		<if test="tid !=null and tid !='' ">
+		AND user_id=#{tid}
+		</if>
+	</delete>
+	
+	<insert id="saveIvTeam" parameterType="hashmap">
+		INSERT INTO a_iv_team(
+			id,a_iv_id,teaminfo_id 
+		)VALUES(
+			#{id},#{a_iv_id},#{teaminfo_id}
+		)
+	</insert>
+</mapper>

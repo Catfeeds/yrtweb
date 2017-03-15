@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.NewsMapper">
+		<!-- 关于俱乐部新闻信息 -->
+		<select id="queryForPageForMap" resultType="hashmap">
+			SELECT ln.* FROM m_news AS ln 
+				WHERE 1=1
+					AND EXISTS(
+							SELECT nt.id FROM a_news_team AS nt WHERE nt.teaminfo_id	= (
+									SELECT ti.id FROM t_team_info AS ti WHERE ti.id =#{maps.teaminfo_id}
+								)	AND nt.news_id = ln.id AND ln.n_state=1 
+					)
+					
+				ORDER BY ln.show_num,ln.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		<!-- 关于俱乐部新闻信息条数 -->
+		<select id="count" resultType="int">
+			SELECT COUNT(*) FROM m_news AS ln 
+				WHERE 1=1
+					AND EXISTS(
+							SELECT nt.id FROM a_news_team AS nt WHERE nt.teaminfo_id	= (
+									SELECT ti.id FROM t_team_info AS ti WHERE ti.id =#{maps.teaminfo_id}
+								)	AND nt.news_id = ln.id AND ln.n_state=1		
+					)
+					
+		</select>
+		
+		<select id="loadAllNews" resultType="hashmap">
+			SELECT ln.* FROM m_news AS ln 
+				WHERE 1=1 AND ln.n_state=1 
+					<if test="maps.model_id!=null and maps.model_id!=''">
+						AND ln.model_id = #{maps.model_id}
+					</if>
+					<if test="maps.type!=null and maps.type!=''">
+						AND ln.type = #{maps.type}
+					</if>
+					ORDER BY ln.show_num,ln.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="loadAllNewsCount" resultType="int">
+			SELECT COUNT(*) FROM m_news AS ln 
+				WHERE 1=1 AND ln.n_state=1 
+				<if test="maps.model_id!=null and maps.model_id!=''">
+					AND ln.model_id = #{maps.model_id}
+				</if>
+				<if test="maps.type!=null and maps.type!=''">
+					AND ln.type = #{maps.type}
+				</if>
+		</select>
+		
+</mapper>

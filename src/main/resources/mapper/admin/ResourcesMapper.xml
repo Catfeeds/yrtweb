@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.ResourcesMapper">
+	<sql id="resources">
+		res_id,
+		res_name,
+		res_url,
+		res_parentid,
+		res_sort,
+		res_code
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.Resources">
+		INSERT INTO m_resources(
+			res_id,
+			res_name,
+			res_url,
+			res_parentid,
+			res_sort,
+			res_code
+		)VALUES(
+			#{res_id},
+			#{res_name},
+			#{res_url},
+			#{res_parentid},
+			#{res_sort},
+			#{res_code}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.Resources">
+		UPDATE m_resources
+		SET
+			res_id=#{res_id},
+			res_name=#{res_name},
+			res_url=#{res_url},
+			res_parentid=#{res_parentid},
+			res_sort=#{res_sort},
+			res_code=#{res_code}
+		WHERE
+		res_id = #{res_id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM m_resources WHERE res_id = #{id}
+	</delete>
+
+	<select id="getResources" resultType="com.yt.framework.persistent.entity.Resources">
+		SELECT
+		<include refid="resources" />
+		FROM m_resources WHERE res_id = #{id}
+	</select>
+	<select id="queryParents" resultType="com.yt.framework.persistent.entity.Resources">
+		SELECT
+		<include refid="resources" />
+		FROM m_resources WHERE res_parentid is null
+	</select>
+	<select id="getLastRes" resultType="com.yt.framework.persistent.entity.Resources">
+		SELECT
+		<include refid="resources" />
+		FROM m_resources WHERE 1=1 
+		<if test="pval!=null">
+		AND res_parentid=#{pval} 
+		</if>
+		<if test="pval==null">
+		AND res_parentid IS NULL
+		</if>
+		ORDER BY res_id+0 DESC LIMIT 1 
+	</select>
+	
+	<select id="queryResources" parameterType="hashmap" resultType="hashmap">
+		SELECT r.res_id,r.res_name,r.res_url,r.res_sort,r.res_parentid,r.res_code,rr.res_name parentName  
+		FROM m_resources r 
+		LEFT JOIN m_resources rr ON rr.res_id = r.res_parentid 
+		WHERE 1=1 
+		<if test="res_name!=null and res_name!=''">
+		AND r.res_name LIKE CONCAT(CONCAT('%', #{res_name}),'%')
+		</if>
+		<if test="res_parentid!=null and res_parentid!=''">
+		AND r.res_parentid=#{res_parentid} 
+		</if>
+		ORDER BY r.res_id+1 
+		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryResourcesCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT r.res_id,r.res_name,r.res_url,r.res_sort,r.res_parentid,r.res_code,rr.res_name parentName 
+			FROM m_resources r 
+			LEFT JOIN m_resources rr ON rr.res_id = r.res_parentid 
+			WHERE 1=1 
+			<if test="res_name!=null and res_name!=''">
+			AND r.res_name LIKE CONCAT(CONCAT('%', #{res_name}),'%')
+			</if>
+			<if test="res_parentid!=null and res_parentid!=''">
+			AND r.res_parentid=#{res_parentid} 
+			</if>
+		) cot_t)
+	</select>
+	
+</mapper>

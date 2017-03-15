@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.DressResourcesMapper">
+	<sql id="dressResources">
+		id,
+		user_id,
+		name,
+		css_src,
+		img_src,
+		money,
+		price_month,
+		create_time
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.DressResources">
+		INSERT INTO m_dress_resources(
+			id,
+			user_id,
+			name,
+			css_src,
+			img_src,
+			money,
+			price_month,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{name},
+			#{css_src},
+			#{img_src},
+			#{money},
+			#{price_month},
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.DressResources">
+		UPDATE m_dress_resources
+		SET
+			name=#{name},
+			css_src=#{css_src},
+			img_src=#{img_src},
+			money=#{money},
+			price_month=#{price_month}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM m_dress_resources WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.DressResources">
+		SELECT
+		<include refid="dressResources" />
+		FROM m_dress_resources WHERE id = #{id}
+	</select>
+	
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT dr.id,dr.name,dr.css_src,dr.img_src,dr.money,dr.price_month,dr.create_time,d.status,
+		(CASE WHEN d.user_id IS NULL THEN 0 ELSE 1 END) isbuy
+		FROM m_dress_resources dr 
+		LEFT JOIN m_dressup d ON d.dr_id=dr.id AND d.user_id=#{maps.user_id}
+		ORDER BY d.user_id DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT dr.id,dr.name,dr.css_src,dr.img_src,dr.money,dr.price_month,dr.create_time,d.status,
+			(CASE WHEN d.user_id IS NULL THEN 0 ELSE 1 END) isbuy
+			FROM m_dress_resources dr 
+			LEFT JOIN m_dressup d ON d.dr_id=dr.id AND d.user_id=#{maps.user_id}
+		) cot_t)
+	</select>
+	
+	<select id="queryMyDressRes" parameterType="hashmap" resultType="hashmap">
+		SELECT dr.id,d.id AS d_id,dr.name,dr.css_src,dr.img_src,dr.money,dr.price_month,dr.create_time,d.status,d.is_per,
+			(TO_DAYS(date_add(d.create_time, interval d.period month)) - TO_DAYS(NOW())) AS endTime
+		FROM m_dressup d,m_dress_resources dr 
+		WHERE d.dr_id=dr.id AND d.user_id=#{maps.user_id}
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="dresCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT dr.id,dr.name,dr.css_src,dr.img_src,dr.money,dr.price_month,dr.create_time FROM m_dressup d,m_dress_resources dr 
+			WHERE d.dr_id=dr.id AND d.user_id=#{maps.user_id}
+		) cot_t)
+	</select>
+	
+	
+	<select id="queryResources" parameterType="hashmap" resultType="hashmap">
+		SELECT dr.id,dr.name,dr.css_src,dr.img_src,dr.money,dr.price_month,dr.create_time
+		FROM m_dress_resources dr 
+		ORDER BY dr.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="queryCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT dr.id,dr.name,dr.css_src,dr.img_src,dr.money,dr.price_month,dr.create_time
+			FROM m_dress_resources dr 
+		) cot_t)
+	</select>
+</mapper>

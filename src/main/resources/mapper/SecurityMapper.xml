@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.SecurityMapper">
+	<resultMap id="UserResultMap" type="com.yt.framework.persistent.entity.User" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="usernick" property="usernick" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="last_login" property="last_login" jdbcType="TIMESTAMP" />
+		<result column="last_login_ip" property="last_login_ip" jdbcType="VARCHAR" />
+		<result column="id_card" property="id_card" jdbcType="VARCHAR" />
+		<result column="head_icon" property="head_icon" jdbcType="VARCHAR" />
+  	</resultMap>
+  	<resultMap id="RoleResultMap" type="com.yt.framework.persistent.entity.Role" >
+	    <id column="role_id" property="role_id" jdbcType="INTEGER" />
+	    <result column="role_name" property="role_name" jdbcType="VARCHAR" />
+	    <result column="role_str" property="role_str" jdbcType="VARCHAR" />
+	    <result column="role_state" property="role_state" jdbcType="VARCHAR" />
+  	</resultMap>
+  	
+  	<resultMap id="ResourcesResultMap" type="com.yt.framework.persistent.entity.Resources">
+		<id column="res_id" property="res_id" jdbcType="INTEGER" />
+		<result column="res_name" property="res_name" jdbcType="VARCHAR" />
+		<result column="res_url" property="res_url" jdbcType="VARCHAR" />
+		<result column="res_parentid" property="res_parentid" jdbcType="INTEGER" />
+		<result column="res_sort" property="res_sort" jdbcType="INTEGER" />
+		<result column="res_code" property="res_code" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="UserRoleResultMap" type="com.yt.framework.persistent.entity.UserRole" extends="UserResultMap">
+		<collection property="roles" ofType="com.yt.framework.persistent.entity.Role" resultMap="RoleResultMap" />
+	</resultMap>
+	
+	<resultMap id="RoleResourcesResultMap" type="com.yt.framework.persistent.entity.RoleResources" extends="RoleResultMap">
+		<collection property="resources" ofType="com.yt.framework.persistent.entity.Resources" resultMap="ResourcesResultMap" />
+	</resultMap>
+
+   	<select id="queryUserRole" resultMap="UserRoleResultMap">
+		SELECT u.id,u.username,u.password,u.usernick,u.phone,u.email,u.last_login,u.last_login_ip,u.id_card,u.head_icon,
+				r.role_id,r.role_name,r.role_str,role_state FROM m_user u 
+		LEFT JOIN  m_user_role ur  ON u.id=ur.user_id 
+		LEFT JOIN m_role r ON r.role_id=ur.role_id WHERE 1=1 
+		<if test="type !=null and type =='phone' ">
+			AND u.phone=#{username} 
+		</if>
+		<if test="type !=null and type =='email' ">
+			AND u.email=#{username} 
+		</if>
+		
+	</select>
+	
+	<select id="queryRoleResources" resultMap="RoleResourcesResultMap">
+      	SELECT r.role_id,r.role_name,r.role_str,r.role_state, rs.res_id,rs.res_name,rs.res_url,rs.res_parentid,rs.res_sort,rs.res_code 
+        FROM m_role r JOIN m_role_resources re ON r.role_id=re.role_id JOIN m_resources rs ON rs.res_id=re.res_id
+	</select>
+	
+	<select id="queryAllResources" resultMap="ResourcesResultMap">
+      	SELECT rs.res_id,rs.res_name,rs.res_url,rs.res_parentid,rs.res_sort,rs.res_code 
+        FROM m_resources rs 
+	</select>
+	
+	<select id="queryResourcesByRoleId" resultMap="ResourcesResultMap">
+      	SELECT r.* FROM m_role_resources rr,m_resources r 
+		WHERE rr.res_id=r.res_id 
+		AND rr.role_id=#{roleId}
+	</select>
+	
+	<select id="getRoleByUserId" resultMap="RoleResultMap">
+      	SELECT r.* from m_user_role ur,m_role r WHERE ur.role_id=r.role_id AND ur.user_id=#{userId}
+	</select>
+	<select id="getRoleById" resultMap="RoleResultMap">
+      	SELECT r.* from m_role r WHERE r.role_id=#{roleId} 
+	</select>
+	
+	<insert id="saveUserRole">
+     	INSERT INTO m_user_role (user_id,role_id) VALUES(#{userId},#{roleId}) 
+  	</insert>
+  	<insert id="saveRoleResources">
+     	INSERT INTO m_role_resources (role_id,res_id) VALUES(#{roleId},#{resId}) 
+  	</insert>
+  	
+  	<delete id="deleteUserRole">
+     	DELETE FROM m_user_role WHERE user_id=#{userId} 
+     	<if test="roleId !=null">
+	     	AND role_id=#{roleId} 
+		</if>
+  	</delete>
+  	
+  	<delete id="deleteRoleResources">
+     	DELETE FROM m_role_resources WHERE role_id=#{roleId} 
+     	<if test="resId !=null">
+	     	AND res_id=#{resId} 
+		</if>
+  	</delete>
+  	
+  	<insert id="saveRole" parameterType="com.yt.framework.persistent.entity.Role">
+     	INSERT INTO m_role (role_id,role_name,role_str,role_state) VALUES(#{role_id},#{role_name},#{role_str},#{role_state}) 
+  	</insert>
+  	<update id="updateRole" parameterType="com.yt.framework.persistent.entity.Role">
+   		UPDATE m_role
+   			SET 
+   				role_name=#{role_name},
+    			role_str=#{role_str},
+    			role_state=#{role_state}
+   			WHERE 
+   				role_id = #{role_id}	
+   	</update>
+  	<insert id="saveResources" parameterType="com.yt.framework.persistent.entity.Resources">
+     	INSERT INTO m_resources (res_id,res_name,res_url,res_parentid,res_sort,res_code) 
+     			VALUES(#{res_id},#{res_name},#{res_url},#{res_parentid},#{res_sort},#{res_code}) 
+  	</insert>
+  	<update id="updateResources" parameterType="com.yt.framework.persistent.entity.Resources">
+   		UPDATE m_resources
+   			SET 
+   				res_name=#{res_name},
+    			res_url=#{res_url},
+    			res_parentid=#{res_parentid},
+    			res_sort=#{res_sort},
+    			res_code=#{res_code}
+   			WHERE 
+   				res_id = #{res_id}	
+   	</update>
+   	
+   	<delete id="deleteRole">
+     	DELETE FROM m_role WHERE role_id=#{roleId} 
+  	</delete>
+  	<delete id="deleteResources">
+     	DELETE FROM m_resources WHERE res_id=#{resId} 
+  	</delete>
+  	
+  	<select id="findRoleByPage" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.Role">
+   		SELECT role_id,role_name,role_str,role_state FROM m_role 
+   		 <where>
+   		 	<if test="role_name !=null and role_name !='' ">
+				AND role_name LIKE CONCAT(CONCAT('%', #{role_name}),'%')
+			</if>
+   		 </where>
+   		 <if test="start!=null and rows!=null">
+			LIMIT ${start},${rows}
+		</if>
+   	</select>
+   	<select id="roleCount" parameterType="hashmap" resultType="int">
+	SELECT COUNT(1) FROM( (
+		SELECT role_id,role_name,role_str,role_state FROM m_role 
+   		 <where>
+   		 	<if test="role_name !=null and role_name !='' ">
+				AND role_name LIKE CONCAT(CONCAT('%', #{role_name}),'%')
+			</if>
+   		 </where>
+	) cot_t)
+	</select>
+	
+	<update id="updateImageRole">
+   		UPDATE m_images
+   			SET 
+   				role_type=#{role_type}
+   			WHERE 
+   				user_id = #{userId}	
+   	</update>
+   	<update id="updateVideoRole">
+   		UPDATE m_videos
+   			SET 
+   				role_type=#{role_type}
+   			WHERE 
+   				user_id = #{userId}	
+   	</update>
+	
+</mapper>

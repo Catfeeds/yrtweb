@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">    
+<defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            />
+
+    <diskStore path="C:/cache"></diskStore>
+    <cache name="dictCache"
+       maxElementsInMemory="10000"
+       eternal="true"
+       timeToIdleSeconds="30000"
+       timeToLiveSeconds="60000"
+       overflowToDisk="true"
+       memoryStoreEvictionPolicy="LRU">
+     </cache>
+     
+     <cache name="webPageCache"
+       maxElementsInMemory="10000"
+       eternal="true"
+       timeToIdleSeconds="120"
+       timeToLiveSeconds="120"
+       overflowToDisk="true"
+       memoryStoreEvictionPolicy="LRU">
+     </cache>
+     
+     <!-- 权限资源 -->    
+    <cache name="resCache"   
+        maxElementsInMemory="10000"   
+        eternal="true"  
+        overflowToDisk="false"   
+        timeToIdleSeconds="0"   
+        timeToLiveSeconds="0"  
+        memoryStoreEvictionPolicy="LRU" />
+    <!-- 对象资源 -->      
+    <cache name="objCache"   
+        maxElementsInMemory="10000"   
+        eternal="true"  
+        overflowToDisk="false"   
+        timeToIdleSeconds="0"   
+        timeToLiveSeconds="0"  
+        memoryStoreEvictionPolicy="LRU" />  
+    <!-- 区域资源 -->      
+    <cache name="areaCache"
+       maxElementsInMemory="10000"
+       eternal="true"
+       timeToIdleSeconds="30000"
+       timeToLiveSeconds="60000"
+       overflowToDisk="true"
+       memoryStoreEvictionPolicy="LRU">
+     </cache>
+</ehcache>  

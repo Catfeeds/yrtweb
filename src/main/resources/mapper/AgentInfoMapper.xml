@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.AgentInfoMapper">
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.AgentInfo">
+			INSERT INTO a_agent_info(
+				id,
+				user_id,
+				cer_no,
+				agent_plays,
+				know_clubs,
+				create_time,
+				cases,
+				find_area,
+				is_player,
+				title,
+				education,
+				company
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{cer_no},
+				#{agent_plays},
+				#{know_clubs},
+				NOW(),
+				#{cases},
+				#{find_area},
+				#{is_player},
+				#{title},
+				#{education},
+				#{company}
+			)
+		</insert>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.AgentInfo">
+			UPDATE a_agent_info
+				SET
+					cer_no = #{cer_no},
+					agent_plays = #{agent_plays},
+					know_clubs = #{know_clubs},
+					cases = #{cases},
+					find_area = #{find_area},
+					is_player = #{is_player},
+					title = #{title},
+					education = #{education},
+					company = #{company}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<delete id="delete">
+			DELETE FROM a_agent_info WHERE id = #{id}
+		</delete>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.AgentInfo">
+			SELECT * FROM a_agent_info WHERE id = #{id}
+		</select>
+		<select id="getByUserId" resultType="com.yt.framework.persistent.entity.AgentInfo">
+			SELECT * FROM a_agent_info WHERE user_id = #{userId}
+		</select>
+		
+		<select id="getAgentInfoByUserId" resultType="com.yt.framework.persistent.entity.AgentInfo">
+			SELECT * FROM a_agent_info WHERE user_id = #{user_id}
+		</select>
+		
+		<select id="isSignPlayer" resultType="int">
+			SELECT COUNT(*) FROM a_agent_player WHERE p_user_id = #{player_id}
+		</select>
+		
+		<insert id="saveAgentPlayer" >
+			INSERT INTO a_agent_player(
+				id,
+				user_id,
+				p_user_id,
+				status,
+				apply_time,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{p_user_id},
+				#{status},
+				#{apply_time},
+				#{create_time}
+			)
+		</insert>
+		<insert id="saveAgentPlayerSign" >
+			INSERT INTO a_agent_player_sign(
+				id,
+				user_id,
+				p_user_id,
+				apply_time,
+				create_time,
+				applying,
+				sendFlag
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{p_user_id},
+				#{apply_time},
+				NOW(),
+				#{applying},
+				#{sendFlag}
+			)
+		</insert>
+		
+		<delete id="deleteSignPlayer">
+			DELETE FROM a_agent_player
+				WHERE 
+					user_id = #{agent_id}
+				AND p_user_id = #{player_id}
+		</delete>
+		
+		<delete id="outTeam">
+			DELETE FROM t_team_player
+				WHERE
+					teaminfo_id = #{teaminfo_id}
+				AND user_id = #{player_id}
+		</delete>
+		
+		<select id="queryAgentPlayerForPage" resultType="hashmap">
+			SELECT u.*,ap.`status`,ap.applying,tp.teaminfo_id FROM m_user AS u 
+				LEFT JOIN  a_agent_player AS ap ON  ap.p_user_id = u.id
+				LEFT JOIN  t_team_player AS tp ON tp.user_id = ap.p_user_id
+				WHERE 1=1 
+				AND ap.user_id = #{maps.user_id}
+				AND ap.status = ${maps.status}
+				ORDER BY ap.create_time DESC 
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="getAgentPlayerCount" resultType="int">
+				SELECT COUNT(*) FROM m_user AS u 
+					LEFT JOIN  a_agent_player AS ap ON  ap.p_user_id = u.id
+				    LEFT JOIN  t_team_player AS tp ON tp.user_id = ap.p_user_id
+					WHERE 1=1
+					AND ap.user_id = #{maps.user_id}
+					AND ap.status = ${maps.status}
+		</select>
+		
+		<select id="queryForPageForMap" resultType="map">
+			SELECT 
+				u.id AS user_id,u.username,u.head_icon,u.province,u.city,u.usernick,
+				ai.id,ai.find_area,ai.title,ai.education,ai.company,ai.cases
+			FROM a_agent_info AS ai 
+			LEFT JOIN m_user AS u ON u.id = ai.user_id
+				WHERE 1=1
+					<if test="maps.area!=null and maps.area!=''">
+						AND ai.find_area = #{maps.area}
+					</if>
+					<if test="maps.province!=null and maps.province!=''">
+						AND u.province = #{maps.province}
+					</if>
+					<if test="maps.city!=null and maps.city!=''">
+						AND u.city = #{maps.city}
+					</if>
+					<if test="maps.usernick!=null and maps.usernick!=''">
+						AND u.usernick LIKE CONCAT('%',#{maps.usernick},'%') 
+					</if>
+					<if test="maps.company!=null and maps.company!=''">
+						AND ai.company LIKE CONCAT('%',#{maps.company},'%') 
+					</if>
+					ORDER BY ai.create_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT 
+				COUNT(*)
+			FROM a_agent_info AS ai 
+			LEFT JOIN m_user AS u ON u.id = ai.user_id
+				WHERE 1=1
+					<if test="maps.area!=null and maps.area!=''">
+						AND ai.find_area = #{maps.area}
+					</if>
+					<if test="maps.province!=null and maps.province!=''">
+						AND u.province = #{maps.province}
+					</if>
+					<if test="maps.city!=null and maps.city!=''">
+						AND u.city = #{maps.city}
+					</if>
+					<if test="maps.company!=null and maps.company!=''">
+						AND ai.company LIKE CONCAT('%',#{maps.company},'%') 
+					</if>
+		</select>
+		
+		<select id="currentSignPlayer" resultType="com.yt.framework.persistent.entity.AgentInfo">
+			SELECT COUNT(*) FROM a_agent_player WHERE p_user_id = #{player_id}
+		</select>
+		
+		<select id="getAgentPlayerByIds" resultType="com.yt.framework.persistent.entity.AgentPlayer">
+			SELECT * FROM a_agent_player WHERE status = 1 and p_user_id = #{p_user_id} AND user_id = #{user_id}
+		</select>
+		
+		<update id="updateAgentPlayerStatus">
+			UPDATE a_agent_player
+				SET	
+					status = #{status}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<update id="updateAgentPlayer" parameterType="com.yt.framework.persistent.entity.AgentPlayer">
+			UPDATE a_agent_player
+				SET
+					status=#{status},
+					applying=#{applying},
+					apply_sure_time = #{apply_sure_time},
+					break_sure_time = #{break_sure_time},
+					break_time = #{break_time}
+				WHERE	
+					id = #{id}
+		</update>
+		 
+		<select id="ifSendAgentPlayer" resultType="com.yt.framework.persistent.entity.AgentPlayerSign">
+			SELECT * FROM a_agent_player_sign 
+				WHERE p_user_id = #{player_id} AND user_id = #{agent_id} AND applying = #{applying} AND status = 0 limit 1;
+		</select>
+		
+		<select id="getAgentPlayerSign" resultType="com.yt.framework.persistent.entity.AgentPlayerSign">
+			SELECT * FROM a_agent_player_sign 
+				WHERE p_user_id = #{player_id} AND user_id = #{agent_id} AND applying = #{applying} AND status = 0 limit 1;
+		</select>
+		
+		<update id="updateAgentPlayerSign" parameterType="com.yt.framework.persistent.entity.AgentPlayerSign">
+			UPDATE a_agent_player_sign
+				SET
+					<if test="apply_sure_time!=null and apply_sure_time!=''">
+						apply_sure_time=#{apply_sure_time},
+					</if>
+					<if test="apply_sure_time!=null and apply_sure_time!=''">
+						break_sure_time=#{break_sure_time},
+					</if>
+					status=#{status}
+				WHERE	
+					id = #{id}
+		</update>
+		
+		<select id="saveAgentPlayerByProcedure" statementType="CALLABLE">  
+		      {call saveAgentPlayer(#{id},#{user_id},#{p_user_id},#{ap_id})}  
+  		</select>
+</mapper>

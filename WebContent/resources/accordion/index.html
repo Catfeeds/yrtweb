@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8">
+    <title>FAQ可收缩手风琴jquery导航菜单-jQ酷</title>
+    <link type="text/css" rel="stylesheet" href="style/helpCenter.css">
+    <script type="text/javascript" src="script/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //页面加载完后展开第一个问题的内容
+            $("li").first().children(".foldContent").stop(true).slideDown();
+            $("li").click(function () { //绑定问题的单击事件
+                $(".foldContent").stop(true).slideUp(); //把所有的问题内容收起
+                $(this).children(".foldContent").stop(true).slideDown(); //展开当前点击的内容
+            });
+        })
+    </script>
+</head>
+<body>
+    <div id="container" class="w990">
+        <!--questions begin-->
+        <div id="questions">
+            <ul id="questionList" class="foldList clearfix">
+                <li class="clearfix">
+                    <h5>
+                        <b class="UI-ask"></b>
+                        球迷
+                    </h5>
+                    <div class="foldContent">
+                        <p>
+                            球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷球迷
+                        </p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <h5>
+                        <b class="UI-ask"></b>
+                        俱乐部
+                    </h5>
+                    <div class="foldContent">
+                        <p>
+                            俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部俱乐部
+                        </p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <h5>
+                        <b class="UI-ask"></b>
+                        经纪人
+                    </h5>
+                    <div class="foldContent">
+                        <p>
+                            经纪人经纪人经纪人经纪人经纪人经纪人经纪人经纪人经纪人经纪人经纪人经纪人经纪人
+                        </p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <h5>
+                        <b class="UI-ask"></b>
+                       教练
+                    </h5>
+                    <div class="foldContent">
+                        <p>
+                            教练教练教练教练教练教练教练教练教练教练教练教练教练教练教练教练教练
+                        </p>
+                    </div>
+                </li>
+              
+            </ul>
+        </div>
+        <!--questions end-->
+    </div>
+    <div class="clear"></div>
+   
+</body>
+</html>

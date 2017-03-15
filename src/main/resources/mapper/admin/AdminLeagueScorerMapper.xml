@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminLeagueScorerMapper">
+	<sql id="leagueScorer">
+		id,
+		league_id,
+		group_id,
+		team_id,
+		user_id,
+		goal,
+		shemen_num,
+		shezheng_num,
+		s_sort,
+		create_time
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.LeagueScorer">
+		INSERT INTO a_league_scorer(
+			id,
+			league_id,
+			group_id,
+			team_id,
+			user_id,
+			goal,
+			shemen_num,
+			shezheng_num,
+			shangchang_num,
+			s_sort,
+			create_time
+		)VALUES(
+			#{id},
+			#{league_id},
+			#{group_id},
+			#{team_id},
+			#{user_id},
+			#{goal},
+			#{shemen_num},
+			#{shezheng_num},
+			#{shangchang_num},
+			#{s_sort},
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.LeagueScorer">
+		UPDATE a_league_scorer
+		SET
+			league_id = #{league_id},
+			group_id = #{group_id},
+			team_id = #{team_id},
+			user_id = #{user_id},
+			goal = #{goal},
+			shemen_num = #{shemen_num},
+			shezheng_num = #{shezheng_num},
+			shangchang_num = #{shangchang_num},
+			s_sort = #{s_sort},
+			create_time = NOW()
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_league_scorer WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.LeagueScorer">
+		SELECT
+		<include refid="leagueScorer" />
+		FROM a_league_scorer WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT ls.*,l.`name` lname,u.username,u.usernick,t.`name` tname,lg.name gname FROM a_league_scorer ls
+		LEFT JOIN a_league l ON l.id=ls.league_id 
+		LEFT JOIN m_user u ON u.id=ls.user_id 
+		LEFT JOIN t_team_info t ON t.id=ls.team_id 
+		LEFT JOIN a_league_group lg ON lg.id=ls.group_id 
+		<where>
+   		 	<if test="maps.username !=null and maps.username !='' ">
+				AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.group_id !=null and maps.group_id !='' ">
+				AND ls.group_id=#{maps.group_id} 
+			</if>
+			<if test="maps.league_id !=null and maps.league_id !='' ">
+				AND ls.league_id=#{maps.league_id} 
+			</if>
+   		 </where>
+   		 ORDER BY ls.goal DESC,ls.s_sort DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT ls.*,l.`name` lname,u.username,u.usernick,t.`name` tname,lg.name gname FROM a_league_scorer ls
+			LEFT JOIN a_league l ON l.id=ls.league_id 
+			LEFT JOIN m_user u ON u.id=ls.user_id 
+			LEFT JOIN t_team_info t ON t.id=ls.team_id 
+			LEFT JOIN a_league_group lg ON lg.id=ls.group_id 
+			<where>
+	   		 	<if test="maps.username !=null and maps.username !='' ">
+					AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+				</if>
+				<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND ls.group_id=#{maps.group_id} 
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND ls.league_id=#{maps.league_id} 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="queryQUserData" resultType="hashmap">
+		SELECT *,SUM(jinqiu_num) jinqiu_nums,SUM(shemen_num) shemen_nums,SUM(shezheng_num) shezheng_nums,COUNT(*) shangchang_num 
+		FROM (SELECT qmi.league_id,qmi.record_id,e.group_id,u.q_match_id,u.shemen_num,u.shezheng_num,u.jinqiu_num,u.rel_palyer_id,u.teaminfo_id    
+		FROM q_match_info qmi 
+		LEFT JOIN a_event_record e ON e.id=qmi.record_id 
+		LEFT JOIN q_user_data u ON u.q_match_id=qmi.id 
+		WHERE qmi.league_id=#{league_id} AND qmi.review_status=2 AND (u.rel_palyer_id IS NOT NULL AND u.rel_palyer_id!='') 
+		ORDER BY qmi.create_time DESC
+		) scorers
+		GROUP BY league_id,group_id,rel_palyer_id
+	</select>
+	
+	<select id="getLeagueScorer" resultType="com.yt.framework.persistent.entity.LeagueScorer">
+		SELECT * FROM a_league_scorer WHERE league_id=#{league_id} AND group_id=#{group_id} AND user_id=#{user_id} 
+	</select>
+</mapper>

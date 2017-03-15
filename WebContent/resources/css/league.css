@@ -1,0 +1,4355 @@
+.registration {
+    position: relative;
+    width: 1000px;
+    background: url(../images/sy_bg.png) repeat-y;
+    padding-bottom: 25px;
+     min-height: 520px;
+}
+
+.makser {
+    position: absolute;
+    display: none;
+    width: 100%;
+    opacity: .5;
+    filter: alpha(opacity = 50);
+    background: #000;
+    z-index: 110;
+}
+
+.invitation_code {
+    display: none;
+    width: 510px;
+    height: 320px;
+    background: #0f0f0f;
+    z-index: 150;
+    text-align: center;
+}
+
+    .invitation_code .title {
+        text-align: center;
+    margin-top: 70px;
+    color: #fff;
+    letter-spacing: 2px;
+    }
+
+    .invitation_code .title_1 {
+       text-align: center;
+    margin-top: 25px;
+    color: #666;
+    letter-spacing: 2px;
+    }
+
+    .invitation_code .activecode {
+        background: transparent;
+    width: 300px;
+    height: 27px;
+    line-height: 27px;
+    margin-top: 23px;
+    color: #fff;
+    }
+
+.closeBtn_1 {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background: url(../images/closebtn_1.png) no-repeat;
+    cursor: pointer;
+    z-index: 150;
+}
+
+.reg_title {
+    width: 1000px;
+    height: 38px;
+    line-height: 38px;
+    background: url(../images/bb_title.png) no-repeat center;
+    text-align: center;
+}
+.player_reg {
+    width: 670px;
+    margin: 30px auto;
+}
+
+    .player_reg ul {
+    }
+
+        .player_reg ul li {
+            float: left;
+            width: 137px;
+            height: 30px;
+            line-height: 30px;
+            margin-right: -5px;
+            text-align: center;
+            color: #fff;
+            font-family: "Microsoft YaHei";
+            background: url(../images/ls004.png) no-repeat;
+        }
+
+            .player_reg ul li.active {
+                background: url(../images/ls002.png) no-repeat;
+            }
+
+            .player_reg ul li.actived {
+                background: url(../images/ls003.png) no-repeat;
+            }
+.reg_area {
+    width: 880px;
+    margin: 40px auto;
+}
+
+.reg_l {
+    float: left;
+    width: 230px;
+    height:350px;
+    border-right: 1px solid #666;
+}
+
+.reg_r table {
+    margin-top: 30px;
+    margin-left: 25px;
+    width: 610px;
+}
+
+    .reg_r table td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+        .reg_r table td.r {
+            text-align: right;
+        }
+
+.reg_r span {
+    vertical-align: middle;
+}
+
+.reg_right {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: url(../images/reg_right.png) no-repeat;
+    vertical-align: middle;
+}
+.reg_err {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: url(../images/reg_err.png) no-repeat;
+    vertical-align: middle;
+}
+
+.s_h3 {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: #fff;
+    font-family: 'Microsoft YaHei';
+    font-size: 16px;
+    background: #131313;
+    text-indent: 60px;
+}
+
+.reg_id {
+    width: 878px;
+    margin: 0px auto;
+    padding-top: 25px;
+}
+
+    .reg_id ul {
+        margin-top: 25px;
+    }
+
+    .reg_id li {
+        float: left;
+        margin-left: 94px;
+    }
+
+.reg_ability {
+    width: 878px;
+    margin: 0px auto;
+    padding-top: 25px;
+}
+
+    .reg_ability .abil {
+        margin-top: 25px;
+        width: 255px;
+        float: left;
+        margin-left: 130px;
+    }
+
+    .reg_ability td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+     .reg_ability .score {
+        padding: 8px 60px;
+        border: 1px solid #1e7e14;
+        color: #1e7e14;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+.bar_progress {
+    position: relative;
+}
+
+.scale_panel {
+    font-size: 12px;
+    color: #999;
+    width: 180px;
+    position: absolute;
+    line-height: 18px;
+    left: 70px;
+    top: -0px;
+}
+
+    .scale_panel .r {
+        float: right;
+    }
+
+.scale span {
+    background: url(../images/scroll.gif) no-repeat;
+    width: 8px;
+    height: 16px;
+    position: absolute;
+    left: -2px;
+    top: -3px;
+    cursor: pointer;
+}
+
+.scale {
+    background: url(../images/red.gif) repeat-x 0 100%;
+    /*border-left: 1px #83BBD9 solid;*/
+    /*border-right: 1px red solid;*/
+    width: 158px;
+    height: 10px;
+    position: relative;
+    font-size: 0px;
+    margin-top: 5px;
+}
+
+    .scale div {
+        /*background: url(images/blue.gif) repeat-x;*/
+        background: url(../images/gold.gif) repeat-x;
+        width: 0px;
+        position: absolute;
+        width: 0;
+        left: 0;
+        height: 10px;
+        bottom: 0;
+    }
+
+.result {
+    float: right;
+    color: #fff;
+}
+
+.exitbtn {
+    padding: 3px 10px;
+    margin-left: 10px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.activebtn {
+    padding: 5px 13px;
+    margin-left: 10px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn_l {
+    padding: 4px 22px;
+    margin-left: 10px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.btn_g {
+    padding: 4px 22px;
+    margin-left: 10px;
+    background: #7d7d7d;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.btn_m {
+    padding: 4px 17px;
+    margin-left: 10px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/*未通过的状态*/
+.audit, .through, .notby {
+    float: right;
+    margin-right: 75px;
+}
+
+.audit {
+    border: 3px solid #666;
+    color: #666;
+    padding: 10px 22px;
+}
+
+.through {
+    border: 3px solid #5dc93c;
+    color: #5dc93c;
+    display: inline-block;
+    padding: 10px 22px 10px 42px;
+    background: url(../images/audit.png) -4px -16px no-repeat;
+}
+
+.notby {
+    border: 3px solid #ff0000;
+    color: #ff0000;
+    display: inline-block;
+    padding: 10px 22px 10px 42px;
+    background: url(../images/audit.png) -4px -70px no-repeat;
+}
+
+
+.activation {
+    width: 700px;
+    height: 390px;
+    margin: 40px auto;
+    border: 1px dashed #666;
+}
+
+    .activation .err {
+        margin-top: 120px;
+        margin-left: 165px;
+    }
+
+    .activation .suc {
+        margin-top: 120px;
+        margin-left: 240px;
+    }
+
+
+/*俱乐部联赛报名*/
+.league_reg {
+    width: 1000px;
+    height: 660px;
+    background: url(../images/bb_bg.png) repeat-y;
+    padding-top: 10px;
+}
+
+.internal_border {
+    width: 980px;
+    height: 650px;
+    margin-left: 10px;
+    border: 1px solid #666;
+}
+
+    .internal_border .title_1 {
+        text-align: center;
+        color: #fff;
+        font-size: 36px;
+        margin-top: 45px;
+    }
+
+    .internal_border .title_2 {
+        text-align: center;
+        color: #fff;
+        font-size: 18px;
+        letter-spacing: 4px;
+        margin-top: 30px;
+    }
+
+.int_pic {
+    width: 790px;
+    margin: 70px auto 20px;
+}
+
+    .int_pic li {
+        float: left;
+        margin-left: 155px;
+    }
+
+.internal_border .btn_div {
+    width: 530px;
+    margin: 0 auto;
+}
+
+.admin_sbtn {
+    padding: 10px 35px;
+    border: 1px solid #0194fb;
+    border-radius: 4px;
+    background: #203545;
+    color: #fff;
+}
+
+.player_sbtn {
+    padding: 10px 35px;
+    border: 1px solid #17a004;
+    border-radius: 4px;
+    background: #203f2e;
+    color: #fff;
+}
+
+
+.reg_result {
+    width: 1000px;
+    padding-bottom: 55px;
+    background: url(../images/bb_bg.png) repeat-y;
+}
+
+.result_title {
+    width: 100%;
+    height: 33px;
+    line-height: 33px;
+    background: #212a19;
+    text-align: center;
+    padding-top:10px;
+}
+
+.reg_result .right {
+    display: inline-block;
+    height: 85px;
+    background: url(../images/result_right.png) no-repeat left center;
+    padding-left: 105px;
+    padding-top: 70px;
+    color: #fff;
+    font-size: 24px;
+}
+
+.reg_result .fail {
+    display: inline-block;
+    height: 85px;
+    background: url(../images/result_fail.png) no-repeat left center;
+    padding-left: 105px;
+    padding-top: 70px;
+    color: #fff;
+    font-size: 24px;
+}
+
+.reg_result .staus {
+    width: 80%;
+    margin: 70px auto 0;
+    text-align: center;
+}
+
+.reg_result .tishi {
+    width: 463px;
+    height: 96px;
+    margin: 20px auto;
+    /*background: url(../images/reg_tishil.png) no-repeat center;*/
+}
+
+.clubs {
+    width: 800px;
+    margin: 60px auto 0;
+}
+
+    .clubs img {
+        width: 231px;
+        height: 231px;
+        margin-left: 255px;
+        margin:auto;
+    }
+
+.clubs_active {
+    width: 475px;
+    margin: 20px auto;
+    color: #fff;
+    line-height: 55px;
+    font-size: 20px;
+    font-family: 'Microsoft YaHei';
+}
+
+    .clubs_active span, .clubs_active input[type=text] {
+        vertical-align: middle;
+    }
+
+    .clubs_active input[type=text] {
+        width: 210px;
+        height: 22px;
+        line-height: 22px;
+        background: transparent;
+        color: #fff;
+    }
+
+/*联赛预告*/
+.league_tools {
+    width: 1000px;
+}
+
+    .league_tools ul {
+        float: right;
+        height: 31px;
+    }
+
+        .league_tools ul li {
+            float: left;
+            margin-left: 7px;
+        }
+
+        .league_tools ul .jiaoyi, .league_tools ul .liansai {
+            padding: 8px 30px;
+            color: #fff;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .league_tools ul .jiaoyi {
+            border-radius: 18px 18px 0 0;
+            background: #1a8c02;
+        }
+
+        .league_tools ul .liansai {
+            border-radius: 12px 12px 0 0;
+            background: #db7304;
+        }
+
+.league_match {
+    position: relative;
+    width: 1000px;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+}
+
+    .league_match .league_title {
+        width: 100%;
+        height: 38px;
+        line-height: 38px;
+        text-indent: 2em;
+        color: #fff;
+        background: #212a19;
+    }
+
+.match_time {
+    width: 980px;
+    position: relative;
+    margin: 0 auto;
+}
+
+    .match_time ul {
+        float: left;
+        margin-top: 10px;
+    }
+
+        .match_time ul li {
+            float: left;
+            margin-left: 25px;
+            padding-bottom: 9px;
+            cursor: pointer;
+        }
+
+            .match_time ul li.active {
+                background: url(../images/l_active.png) no-repeat 58px 24px;
+                z-index: 5;
+            }
+
+            .match_time ul li {
+                font-size: 20px;
+                font-family: "Microsoft YaHei";
+                color: #fff;
+            }
+
+.lea_prev, .lea_next {
+    position: absolute;
+    display: inline-block;
+    height: 40px;
+    width: 23px;
+    cursor: pointer;
+    top: 50px;
+}
+
+.lea_prev {
+    left: 10px;
+    background: url(../images/league_arr.png) -31px -47px no-repeat;
+}
+
+.lea_next {
+    right: 10px;
+    background: url(../images/league_arr.png) -31px -144px no-repeat;
+}
+
+.match_grouping {
+    width: 935px;
+    height: 100px;
+    margin-left: 29px;
+}
+
+    .match_grouping ul {
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+        .match_grouping ul li {
+            float: left;
+            margin-right: 29px;
+            min-height: 90px;
+        }
+
+    .match_grouping table {
+        width: 450px;
+    }
+
+        .match_grouping table td {
+            text-align: center;
+        }
+
+            .match_grouping table td.w1 {
+                width: 45px;
+            }
+
+            .match_grouping table td.w2 {
+                width: 60px;
+            }
+
+            .match_grouping table td.w3 {
+                width: 65px;
+            }
+
+.league_info {
+    width: 1000px;
+    margin-top: 20px;
+}
+
+.league_l {
+    float: left;
+    width: 670px;
+}
+
+.league_pic {
+    position: relative;
+    width: 100%;
+}
+
+    .league_pic .more {
+        position: absolute;
+        display: inline-block;
+        width: 38px;
+        height: 17px;
+        top: -24px;
+        right: 5px;
+        color: #999;
+    /*background: url(../images/l_more.png) no-repeat;*/
+    }
+
+
+.integral_list {
+    width: 335px;
+    margin-top: 10px;
+}
+
+.i_list {
+    width: 325px;
+    position: relative;
+    margin: 0 auto;
+}
+
+    .i_list ul {
+        margin-top: 5px;
+    }
+
+        .i_list ul li {
+            float: left;
+            margin-left: 25px;
+            padding-bottom: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+            .i_list ul li.active {
+                background: url(../images/l_active.png) no-repeat center 22px;
+                z-index: 5;
+            }
+
+.l_fenge {
+    width: 98%;
+    margin: 0 auto;
+    border-bottom: 1px solid #205219;
+    z-index: 0;
+}
+
+.integral_list .jifen {
+    width: 300px;
+    margin: 5px auto 0;
+}
+
+    .integral_list .jifen td {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        text-align: center;
+    }
+
+/*积分榜*/
+.red_one {
+    color: #ff0000;
+}
+
+    .red_one.s {
+        padding: 1px 4px;
+        border: 1px solid #ff0000;
+        border-radius: 3px;
+    }
+
+.green_two {
+    color: #acd598;
+}
+
+    .green_two.s {
+        padding: 1px 4px;
+        border: 1px solid #acd598;
+        border-radius: 3px;
+    }
+
+.blue_three {
+    color: #7ecef4;
+}
+
+    .blue_three.s {
+        padding: 1px 4px;
+        border: 1px solid #7ecef4;
+        border-radius: 3px;
+    }
+
+.white_four {
+    color: #fff;
+    
+}
+.white_four:hover {
+   
+    text-decoration: underline;
+}
+
+    .white_four.s {
+        padding: 1px 4px;
+        border: 1px solid #fff;
+        border-radius: 3px;
+    }
+.yellow_five {
+    color: #fcff00;
+}
+
+    .yellow_five.s {
+        padding: 1px 4px;
+        border: 1px solid #fff;
+        border-radius: 3px;
+    }
+
+.league_news {
+    width: 330px;
+    float: left;
+}
+
+    .league_news dl {
+        width: 320px;
+        margin-top: 10px;
+        margin-left: 15px;
+        line-height: 30px;
+    }
+
+    .league_news dt a {
+        font-size: 14px;
+        font-family: 'Microsoft YaHei';
+        color: #fff;
+    }
+
+    .league_news dd {
+        background: url(../images/news_dian.png) no-repeat left center;
+        padding-left: 12px;
+    }
+
+        .league_news dd a {
+            color: #999;
+        }
+
+.league_r {
+    width: 320px;
+    float: right;
+}
+
+.more {
+    position: absolute;
+    display: inline-block;
+    
+    height: 17px;
+    top: -13px;
+    right: 5px;
+    text-indent: 0em;
+    color: #999;
+    /*background: url(../images/l_more.png) no-repeat;*/
+}
+
+.league_video_list {
+    width: 320px;
+    margin-top: 10px;
+    margin-left: 15px;
+    line-height: 36px;
+}
+
+    .league_video_list dd {
+        background: url(../images/camera.png) no-repeat left center;
+        padding-left: 25px;
+    }
+
+        .league_video_list dd a {
+            color: #999;
+        }
+
+.league_video {
+    width: 290px;
+}
+
+    .league_video .con {
+        position: relative;
+        width: 280px;
+        height: 160px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+        .league_video .con .v_mask {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url(../images/v_mask.png) no-repeat;
+        }
+
+        .league_video .con img {
+            width: 280px;
+            height: 160px;
+        }
+
+        .league_video .con .shuoming {
+            position: absolute;
+            bottom: 10px;
+            z-index: 5;
+            left: 10px;
+            color: #fff;
+        }
+
+.worth {
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+.exh_area {
+    position: relative;
+    width: 980px;
+    margin: 10px auto;
+}
+
+    .exh_area .high li {
+        float: left;
+        margin-left: 25px;
+        padding-bottom: 10px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 14px;
+        font-family: 'Microsoft YaHei';
+    }
+
+        .exh_area .high li.active {
+            background: url(../images/l_active.png) no-repeat center 25px;
+            z-index: 5;
+        }
+
+.exh_area {
+}
+
+    .exh_area .frame {
+        width: 910px;
+        height: 150px;
+        margin: 20px auto;
+    }
+
+        .exh_area .frame ul {
+            margin-left: -360px;
+        }
+
+        .exh_area .frame li {
+            float: left;
+            margin-right: 40px;
+        }
+
+        .exh_area .frame img {
+            width: 150px;
+            height: 150px;
+            border-radius: 6px;
+        }
+
+
+
+.player_display {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+    .player_display .ranking_1, .player_display .ranking_2, .player_display .ranking_3, .player_display .ranking_4 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 65px;
+        height: 65px;
+        line-height: 35px;
+        text-indent: .7em;
+    }
+
+    .player_display .ranking_1 {
+        background: url(../images/r01.png) no-repeat;
+    }
+
+    .player_display .ranking_2 {
+        background: url(../images/r02.png) no-repeat;
+    }
+
+    .player_display .ranking_3 {
+        background: url(../images/r03.png) no-repeat;
+    }
+
+    .player_display .ranking_4 {
+        background: url(../images/r04.png) no-repeat;
+    }
+
+        .player_display .ranking_1 span, .player_display .ranking_2 span, .player_display .ranking_3 span, .player_display .ranking_4 span {
+            font-size: 24px;
+            color: #fff;
+            font-family: 'Microsoft YaHei';
+        }
+
+.shenjia_title {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    bottom: 0;
+    background: url(../images/shenjia.png) repeat-x;
+    text-indent: 1em;
+}
+
+.s_prev, .s_next {
+    position: absolute;
+    display: inline-block;
+    height: 40px;
+    width: 23px;
+    cursor: pointer;
+    top: 105px;
+}
+
+.s_prev {
+    left: 5px;
+    background: url(../images/league_arr.png) -56px -47px no-repeat;
+}
+.s_prev:hover {
+    left: 5px;
+    background: url(../images/league_arr.png) -24px -47px no-repeat;
+}
+.s_next {
+    right: 5px;
+    background: url(../images/league_arr.png) -47px -144px no-repeat;
+}
+.s_next:hover {
+    right: 5px;
+    background: url(../images/league_arr.png) -15px -144px no-repeat;
+}
+
+/*球员竞拍*/
+.l_tools_one, .l_tools_two {
+    float: left;
+    margin-left: 35px;
+    margin-top: 30px;
+}
+
+    .l_tools_one li {
+        float: left;
+        margin-right: 12px;
+        color: #666;
+        font-size: 16px;
+        font-family: "Microsoft YaHei";
+        cursor: pointer;
+        padding-bottom: 10px;
+    }
+
+        .l_tools_one li.active {
+            color: #fff;
+            font-size: 16px;
+            font-family: "Microsoft YaHei";
+            background: url(../images/l_active.png) no-repeat 50% 25px;
+            z-index: 5;
+        }
+
+    .l_tools_two li {
+        float: left;
+        margin-right: 8px;
+        color: #666;
+        font-size: 12px;
+        font-family: "Microsoft YaHei";
+        cursor: pointer;
+    }
+
+        .l_tools_two li.active {
+            color: #fff;
+            font-size: 12px;
+            font-family: "Microsoft YaHei";
+        }
+
+.l_tools_three {
+    float: left;
+    margin-left: 80px;
+    margin-top: 30px;
+}
+
+    .l_tools_three li {
+        float: left;
+        margin-right: 8px;
+        color: #666;
+        font-size: 12px;
+        font-family: "Microsoft YaHei";
+        cursor: pointer;
+    }
+
+        .l_tools_three li input[type=text] {
+            width: 90px;
+            height: 10px;
+            margin-left: 10px;
+            background: transparent;
+            color: #fff;
+        }
+
+    .l_tools_three select {
+        margin-left: 10px;
+        /*background: transparent;*/
+        height: 22px;
+        /*color: #fff;*/
+    }
+
+        .l_tools_three select option {
+            color: #000;
+            float: left;
+        }
+
+.auction_btn {
+    cursor: pointer;
+    padding: 3px 15px;
+    border: none;
+    color: #fff;
+    background: #eb6100;
+}
+
+.j_fenge {
+    width: 94%;
+    margin: 0 auto;
+    border-bottom: 1px solid #205219;
+    z-index: 0;
+}
+
+.auction_area {
+    width: 940px;
+    margin: 20px auto 0;
+}
+
+    .auction_area .a_list {
+    }
+
+        .auction_area .a_list li {
+            float: left;
+            margin-top: 30px;
+        }
+
+    .auction_area .countdown {
+        width: 320px;
+        height: 50px;
+        line-height: 50px;
+        margin: 20px auto;
+        text-align: center;
+        border: 1px solid #eb6100;
+        color: #eb6100;
+        font-size: 22px;
+        font-family: 'Microsoft YaHei';
+        border-radius: 7px;
+    }
+
+.rounds {
+    width: 320px;
+    height: 20px;
+    line-height: 27px;
+    margin: 20px auto;
+    text-align: center;
+    border-radius: 7px;
+    color: #fff;
+    padding-bottom: 25px;
+}
+
+    .rounds span {
+        padding:1px 5px;
+        border-radius: 11px;
+        border: 1px solid #fff;
+        
+        cursor: pointer;
+    }
+     .rounds span.active {
+         background: #eb6100;
+         border: 1px solid #eb6100;
+     }
+
+.auction_super {
+    position: relative;
+    width: 232px;
+    height: 375px;
+    /*overflow: hidden;*/
+    cursor: pointer;
+}
+
+    .auction_super .name {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        text-align: center;
+        z-index: 4;
+        top: 29px;
+    }
+
+    .auction_super .po {
+        position: absolute;
+        color: #fff;
+        z-index: 4;
+        top: 60px;
+        left: 27px;
+        letter-spacing: 4px;
+    }
+
+    .auction_super .player_cf {
+        position: absolute;
+        z-index: 3;
+    }
+
+    .auction_super .cf_forward {
+        position: absolute;
+        width: 128px;
+        height: 128px;
+        overflow: hidden;
+        z-index: 2;
+        top: 52px;
+        left: 92px;
+    }
+
+        .auction_super .i {
+        position: absolute;
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        color: #fff;
+        text-align: center;
+        top: 60px;
+        left: 188px;
+        z-index: 15;
+        background: url(../images/qiuyi4.png) no-repeat;    
+    }
+
+.numbers {
+    position: absolute;
+    display: none;
+    width: 135px;
+    height: 75px;
+    top: 58px;
+    left: 188px;
+    z-index: 12;
+    background: #020202;
+    border-radius: 8px;
+    text-align: center;
+}
+
+    .numbers dl {
+        color: #fff;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+        .numbers dl .num {
+            float: left;
+            width: 31px;
+            height: 23px;
+            line-height: 23px;
+            background: url(../images/qiuyi_num.png) no-repeat center;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+.auction_super .cf_forward img {
+    width: 128px;
+    height: 128px;
+    -webkit-transition: -webkit-transform .3s linear;
+    -moz-transition: -moz-transform .3s linear;
+    -o-transition: -o-transform .3s linear;
+    transition: transform .3s linear;
+}
+
+.auction_super:hover .cf_forward img {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+    -webkit-transition: -webkit-transform .3s linear;
+    -moz-transition: -moz-transform .3s linear;
+    -o-transition: -o-transform .3s linear;
+    transition: transform .3s linear;
+}
+
+.auction_super .attr {
+    position: absolute;
+    z-index: 4;
+    color: #fff;
+    top: 90px;
+    left: 30px;
+    font-size: 12px;
+    text-align: right;
+}
+
+.auction_super .quote {
+    position: absolute;
+    z-index: 4;
+    color: #fff;
+    top: 170px;
+    left: 12px;
+    text-align:center;
+    width: 90%;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+    .auction_super .quote .the_center {
+        width: 160px;
+        text-align: center;
+        margin-left: 5px;
+    }
+     .auction_super .quote .the_center img {
+         display: inline-block;
+         margin-top: 5px;
+     }
+.auction_super .ability {
+    position: absolute;
+    z-index: 4;
+    color: #fff;
+    top: 200px;
+    width: 100%;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+    .auction_super .ability table {
+        width: 160px;
+        margin: 0 auto;
+    }
+
+        .auction_super .ability table td {
+            text-align: center;
+        }
+
+.auction_super .auc_div {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+}
+
+    .auction_super .auc_div span {
+        color: #5fbd52;
+        font-size: 18px;
+        font-family: "Microsoft YaHei";
+    }
+
+/*竞拍报价大图*/
+.auction_super_l {
+    position: relative;
+    width: 356px;
+    height: 545px;
+    /*overflow: hidden;*/
+    cursor: pointer;
+    z-index: 150;
+    display: none;
+}
+
+    .auction_super_l .name {
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        text-align: center;
+        z-index: 4;
+        top: 45px;
+    }
+
+    .auction_super_l .po {
+        position: absolute;
+        color: #fff;
+        z-index: 4;
+        top: 95px;
+        left: 27px;
+        letter-spacing: 4px;
+    }
+
+    .auction_super_l .player_cf {
+        position: absolute;
+        z-index: 3;
+        width: 356px;
+        height: 545px;
+    }
+
+    .auction_super_l .cf_forward {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+        z-index: 2;
+        top: 82px;
+        left: 154px;
+    }
+
+    .auction_super_l i {
+        position: absolute;
+        top: 60px;
+        left: 188px;
+        z-index: 8;
+    }
+
+.numbers {
+    position: absolute;
+    display: none;
+    width: 135px;
+    height: 75px;
+    top: 58px;
+    left: 188px;
+    z-index: 7;
+    background: #020202;
+    border-radius: 8px;
+    text-align: center;
+}
+
+    .numbers dl {
+        color: #fff;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+        .numbers dl .num {
+            float: left;
+            width: 31px;
+            height: 23px;
+            line-height: 23px;
+            background: url(../images/qiuyi_num.png) no-repeat center;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+.auction_super_l .cf_forward img {
+    width: 182px;
+    height: 182px;
+    -webkit-transition: -webkit-transform .3s linear;
+    -moz-transition: -moz-transform .3s linear;
+    -o-transition: -o-transform .3s linear;
+    transition: transform .3s linear;
+}
+
+.auction_super_l:hover .cf_forward img {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+    -webkit-transition: -webkit-transform .3s linear;
+    -moz-transition: -moz-transform .3s linear;
+    -o-transition: -o-transform .3s linear;
+    transition: transform .3s linear;
+}
+
+.auction_super_l .attr {
+    position: absolute;
+    z-index: 4;
+    color: #fff;
+    top: 135px;
+    left: 30px;
+    font-size: 20px;
+    line-height: 32px;
+    text-align: right;
+}
+
+.auction_super_l .quote {
+    position: absolute;
+    z-index: 4;
+    color: #fff;
+    top: 280px;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    line-height: 28px;
+}
+
+.auction_super_l .ability {
+    position: absolute;
+    z-index: 4;
+    color: #fff;
+    top: 312px;
+    width: 100%;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+    .auction_super_l .ability table {
+        width: 250px;
+        margin: 0 auto;
+    }
+
+        .auction_super_l .ability table td {
+            text-align: center;
+        }
+
+.auction_super_l .auc_div {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+}
+
+    .auction_super_l .auc_div span {
+        color: #5fbd52;
+        font-size: 18px;
+        font-family: "Microsoft YaHei";
+    }
+
+.auction_super_l .auc_div_2 {
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+}
+
+.ac_btn {
+    padding: 4px 15px;
+    background: #eb6100;
+    border: none;
+ 
+    cursor: pointer;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.ac_btn_end {
+    padding: 4px 15px;
+    background: #7d7d7d;
+    border: none;
+    
+    cursor: pointer;
+    color: #fff;
+    border-radius: 4px;
+}
+
+
+.failure {
+    display: none;
+    width: 509px;
+    height: 239px;
+    background: #000;
+    border: 1px solid #333;
+    text-align: center;
+    z-index: 150;
+}
+
+    .failure h3 {
+        text-align: center;
+        color: #fff;
+        font-size: 16px;
+        margin-top: 40px;
+    }
+
+    .failure p {
+        text-align: center;
+        color: #fff;
+        font-size: 16px;
+        margin-top: 40px;
+    }
+
+
+.pay_status {
+    width: 600px;
+    min-height: 310px;
+    background: url(../images/sy_bg.png) repeat-y;
+    z-index: 150;
+    display: none;
+}
+
+    .pay_status .pay_title {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        text-indent: 2em;
+        background: #212a19;
+    }
+
+.pay_tips {
+    width: 390px;
+    height: 150px;
+    line-height: 120px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+
+/*我的联赛*/
+.my_league {
+    width: 1000px;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+}
+
+    .my_league .l_title {
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        text-indent: 2em;
+        color: #fff;
+        background: #212a19;
+    }
+
+.l_trailer {
+    width: 380px;
+    float: left;
+}
+
+
+
+.playing_area {
+    width: 100%;
+}
+
+    .playing_area ul {
+        margin-top: 20px;
+        margin-left: 10px;
+    }
+
+        .playing_area ul li {
+            float: left;
+        }
+
+            .playing_area ul li dl {
+                text-align: center;
+                color: #fff;
+                width: 120px;
+            }
+
+.zhuchang, .kechang {
+    width: 60px;
+    height: 60px;
+    margin-left: 30px;
+}
+
+.l_b_info {
+    font-size: 13px;
+    font-family: "Microsoft YaHei";
+}
+
+    .l_b_info .bian {
+        border-left: 1px solid #0776b6;
+        border-right: 1px solid #0776b6;
+    }
+
+.l_news {
+    width: 270px;
+    float: left;
+    margin-left: 10px;
+}
+
+    .l_news dl {
+        margin-top: 10px;
+        margin-left: 7px;
+        line-height: 24px;
+    }
+
+    .l_news dd {
+        /*background: url(images/news_dian.png) no-repeat left center;
+                            padding-left: 8px;*/
+    }
+
+        .l_news dd a {
+            color: #fff;
+        }
+
+.l_club {
+    width: 330px;
+    float: left;
+    margin-left: 10px;
+}
+
+    .l_club .club_info {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+        .l_club .club_info .logo {
+            width: 98px;
+            height: 98px;
+            float: left;
+        }
+       .l_club .club_info .logo img{
+            width: 98px;
+            height: 100px;
+       }
+        .l_club .club_info .club_r {
+            width: 220px;
+            float: left;
+            margin-left: 10px;
+        }
+
+            .l_club .club_info .club_r dl {
+                line-height: 24px;
+                text-align: center;
+            }
+
+            .l_club .club_info .club_r .jlb {
+                color: #0cb2e3;
+            }
+
+            .l_club .club_info .club_r .zhanji {
+                margin-left: 15px;
+            }
+
+                .l_club .club_info .club_r .zhanji li {
+                    float: left;
+                    margin-right: 10px;
+                }
+#news {
+    width: 310px;
+    height: 60px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+    #news .list {
+        float: left;
+        margin-left: 5px;
+    }
+.zhanji .s {
+    background: #ff022c;
+    padding: 3px 4px;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.zhanji .f {
+    background: #10a943;
+    padding: 3px 4px;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.zhanji .p {
+    background: #00bcdb;
+    padding: 3px 4px;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.jf {
+    border: 1px solid #0cb2e3;
+    padding: 5px 6px;
+    border-radius: 4px;
+    color: #0cb2e3;
+}
+
+.js {
+    border: 1px solid #fb8b08;
+    padding: 5px 6px;
+    border-radius: 4px;
+    color: #fb8b08;
+}
+
+.my_schedule {
+    float: left;
+    width: 660px;
+    margin-top: 20px;
+}
+
+    .my_schedule table {
+        width: 100%;
+    }
+
+        .my_schedule table th {
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            color: #666;
+            width: 9%;
+        }
+
+        .my_schedule table td {
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            color: #fff;
+            vertical-align: top;
+        }
+
+.wonderful_pic {
+    width: 360px;
+    float: left;
+}
+
+.pic_area {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+    .pic_area img {
+        cursor: pointer;
+        -webkit-transition: -webkit-transform .3s linear;
+        -moz-transition: -moz-transform .3s linear;
+        -o-transition: -o-transform .3s linear;
+        transition: transform .3s linear;
+    }
+
+        .pic_area img:hover {
+            -webkit-transform: scale(1.1);
+            -moz-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            -o-transform: scale(1.1);
+            transform: scale(1.1);
+            -webkit-transition: -webkit-transform .3s linear;
+            -moz-transition: -moz-transform .3s linear;
+            -o-transition: -o-transform .3s linear;
+            transition: transform .3s linear;
+        }
+
+.pic_001 {
+    float: left;
+    width: 155px;
+    height: 185px;
+}
+
+.pic_002 {
+    float: left;
+    width: 185px;
+    height: 85px;
+    margin-left: 5px;
+}
+
+.pic_003 {
+    float: left;
+    width: 90px;
+    height: 95px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.pic_004 {
+    float: left;
+    width: 100px;
+    height: 95px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.pic_005 {
+    float: left;
+    margin-top: 5px;
+    width: 155px;
+    height: 95px;
+}
+
+.club_member {
+    float: left;
+    position: relative;
+    width: 630px;
+    margin-left: 10px;
+}
+
+    .club_member .role {
+        position: absolute;
+        left: 100px;
+        top: 12px;
+    }
+
+        .club_member .role li {
+            float: left;
+            margin-right: -7px;
+        }
+
+        .club_member .role li {
+            color: #666;
+            cursor: pointer;
+        }
+
+            .club_member .role li.active, .club_member .role li:hover {
+                color: #fff;
+            }
+
+.role_pic {
+    width: 600px;
+    height: 280px;
+    margin-top: 15px;
+    margin-left: 12px;
+}
+
+    .role_pic ul {
+        margin-left: 32px;
+    }
+
+        .role_pic ul li {
+            float: left;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+
+.role_ranking {
+    position: relative;
+    cursor: pointer;
+}
+
+    .role_ranking img {
+        width: 120px;
+        height: 110px;
+    }
+
+    .role_ranking .rank_1, .role_ranking .rank_2, .role_ranking .rank_3, .role_ranking .rank_4 {
+        position: absolute;
+        display: inline-block;
+        height: 28px;
+        width: 28px;
+        text-indent: .4em;
+        line-height: 20px;
+        color: #fff;
+    }
+
+    .role_ranking .rank_1 {
+        background: url(../images/role_rank.png) -14px -25px no-repeat;
+    }
+
+    .role_ranking .rank_2 {
+        background: url(../images/role_rank.png) -14px -75px no-repeat;
+    }
+
+    .role_ranking .rank_3 {
+        background: url(../images/role_rank.png) -14px -123px no-repeat;
+    }
+
+    .role_ranking .rank_4 {
+        background: url(../images/role_rank.png) -14px -176px no-repeat;
+    }
+
+.role_info {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 35px;
+    bottom: 0;
+    background: #000;
+    opacity: .7;
+    filter: alpha(opacity = 70);
+}
+
+    .role_info dl {
+        text-align: center;
+        line-height: 15px;
+    }
+
+    .role_info span {
+        color: #fff;
+    }
+
+.f_num {
+    height: 26px;
+    width: 33px;
+    line-height: 33px;
+    text-align: center;
+    background: url(../images/jersey.png) -2px -72px no-repeat;
+    color: #fff;
+}
+.f_num_s {
+    height: 16px;
+    width: 21px;
+    line-height: 16px;
+    text-align: center;
+    background: url(../images/jersey_n.png) no-repeat center;
+    color: #fff;
+}
+/*选择球衣*/
+.select_jersey {
+    position: absolute;
+    z-index: 150;
+    width: 620px;
+    padding-top: 15px;
+    padding-bottom: 35px;
+    background: #000;
+    display: none;
+}
+
+    .select_jersey h3 {
+        text-align: center;
+        color: #fff;
+    }
+
+    .select_jersey ul {
+        width: 530px;
+        margin-left: 60px;
+        margin-top: 20px;
+    }
+
+        .select_jersey ul li {
+            float: left;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+
+    .select_jersey .num, .select_jersey .num.active {
+        height: 26px;
+        width: 33px;
+        line-height: 33px;
+        text-align: center;
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .select_jersey .num {
+        background: url(../images/jersey.png) -2px -8px no-repeat;
+    }
+
+        .select_jersey .num:hover {
+            background: url(../images/jersey.png) -2px -72px no-repeat;
+        }
+
+        .select_jersey .num.active {
+            background: url(../images/jersey.png) -2px -72px no-repeat;
+        }
+.chosen {
+    height: 26px;
+    width: 33px;
+    float: left;
+    margin-left: 10px;
+    line-height: 33px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+    background: url(../images/jersey.png) -2px -72px no-repeat;
+}
+
+#shooter {
+   
+}
+
+#appearance {
+    display: none;
+}
+
+#location {
+    display: none;
+}
+
+#baby {
+    display: none;
+}
+
+
+/*积分榜*/
+.credit_list {
+    width: 994px;
+    min-height:600px;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+    border: 3px solid rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+    .credit_list .title {
+        position:relative;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        background: #212a19;
+    }
+
+        .credit_list .title a.active, .credit_list .title a:hover {
+            color: #fff;
+        }
+
+        .credit_list .title a {
+            color: #666;
+        }
+
+.points {
+    width: 980px;
+    position: relative;
+    margin: 0 auto;
+}
+
+    .points ul {
+        float: left;
+        margin-top: 10px;
+    }
+
+        .points ul li {
+            float: left;
+            margin-left: 25px;
+            padding-bottom: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: "Microsoft YaHei";
+        }
+
+            .points ul li.active {
+                
+                background: url(../images/l_active.png) no-repeat center 23px;
+                z-index: 5;
+            }
+
+    .points table {
+        position: relative;
+        width: 98%;
+        margin-top: 10px;
+    }
+
+        .points table th {
+            color: #666;
+            text-align: center;
+            width: 9%;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        .points table td {
+            color: #fff;
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            font-size: 16px;
+            font-family: "Microsoft YaHei";
+        }
+
+            .points table td img {
+                width: 50px;
+                height: 50px;
+                display: inline-block;
+            }
+            .points table td.t {
+                border-top: 1px solid #434343;
+            }
+
+            .points table td.r {
+                border-right: 1px solid #434343;
+            }
+
+            .points table td.b {
+                border-bottom: 1px solid #434343;
+            }
+
+            .points table td.l {
+                border-left: 1px solid #434343;
+            }
+
+    .points .player {
+    }
+
+        .points .player img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .points .player dl {
+            float: left;
+            text-align: left;
+            margin-left: 10px;
+        }
+
+    .points .the_team {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+        .points .the_team th {
+            width: 5%;
+        }
+
+            .points .the_team th.w15 {
+                width: 15%;
+            }
+
+        .points .the_team td {
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+
+        .points .the_team img {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+        }
+
+    .points .argee_btn {
+        padding: 5px 10px;
+        background: #eb6100;
+        cursor: pointer;
+        border: none;
+        color: #fff;
+    }
+
+    .points .refuse_btn {
+        padding: 5px 10px;
+        background: #666;
+        cursor: pointer;
+        border: none;
+        color: #fff;
+    }
+
+    .points .pagination {
+        float: right;
+        margin-top: 25px;
+        margin-right: 40px;
+    }
+
+        .points .pagination li {
+            margin-left: 0;
+        }
+
+    .points .the_inv {
+        width: 960px;
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+        .points .the_inv th {
+            width: 10%;
+        }
+
+        .points .the_inv td {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+            .points .the_inv td.left {
+                text-align: left;
+                padding-left: 20px;
+            }
+
+
+.btn_ll {
+    padding: 2px 20px;
+    margin-left: 10px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.tools_b {
+    display: none;
+    position: absolute;
+    padding: 6px;
+    left: 140px;
+    background: #000;
+    padding: 5px;
+    z-index: 25;
+}
+
+    .tools_b dl span {
+        color: #fff !important;
+    }
+
+    .tools_b span {
+        font-size: 12px !important;
+    }
+
+    .tools_b ul li {
+        float: none !important;
+    }
+
+.setting {
+    width: 27px;
+    height: 20px;
+    background: url(../images/setting.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+.dz {
+    position: absolute;
+    top: 86px;
+    left: 201px;
+    z-index: 3;
+    padding: 0px 5px;
+    background: #1073c0;
+    border: 1px solid #10a943;
+    border-radius: 12px;
+    color: #fff;
+    font-style:normal;
+}
+
+.gl {
+    position: absolute;
+    top: 92px;
+    left: 201px;
+    z-index: 3;
+    padding: 0px 5px;
+    background: #eb6100;
+    border: 1px solid #10a943;
+    border-radius: 12px;
+    color: #fff;
+    font-style:normal;
+}
+
+.notice {
+    display: none;
+    width: 470px;
+    height: 500px;
+    background: #000;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    z-index: 150;
+}
+
+    .notice .title {
+        width: 100%;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        color: #fff;
+        background: url(../images/bb_title.png) no-repeat center;
+    }
+
+    .notice .auction_super {
+        margin-left: 108px;
+    }
+
+    .notice .ability {
+        position: absolute;
+        z-index: 4;
+        color: #fff;
+        top: 200px;
+        width: 100%;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+        .notice .ability table {
+            width: 160px;
+            margin: 0 auto;
+        }
+
+            .notice .ability table td {
+                text-align: center;
+            }
+
+    .notice .auc_div {
+        position: absolute;
+        width: 100%;
+        bottom: 15px;
+        text-align: center;
+    }
+   
+        .notice .auc_div span {
+            color: #fff;
+            font-size: 14px;
+            font-family: "Microsoft YaHei";
+        }
+
+
+.notice_argee {
+    display: none;
+    width: 470px;
+    height: 500px;
+    background: #000;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    z-index: 150;
+}
+
+    .notice_argee .title {
+        width: 100%;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        color: #fff;
+        background: url(../images/bb_title.png) no-repeat center;
+    }
+
+    .notice_argee .auction_super {
+        margin-left: 108px;
+        margin-top: 20px;
+    }
+
+    .notice_argee .ability {
+        position: absolute;
+        z-index: 4;
+        color: #fff;
+        top: 200px;
+        width: 100%;
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+        .notice_argee .ability table {
+            width: 160px;
+            margin: 0 auto;
+        }
+
+            .notice_argee .ability table td {
+                text-align: center;
+            }
+
+    .notice_argee .auc_div {
+        position: absolute;
+        width: 100%;
+        bottom: -30px;
+        text-align: center;
+    }
+
+        .notice_argee .auc_div span {
+            color: #fff;
+            font-size: 14px;
+            font-family: "Microsoft YaHei";
+        }
+
+
+.lc_tab {
+    width: 98%;
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+}
+
+    .lc_tab th {
+        width: 10%;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        color: #666;
+    }
+
+    .lc_tab td {
+        position: relative;
+        text-align: center;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .lc_tab .three {
+        cursor: pointer;
+    }
+
+.three_t {
+    display: none;
+    position: absolute;
+    background: #000;
+    width: 100%;
+    top: 7px;
+}
+
+.input_score {
+}
+
+    .input_score table {
+        width: 80%;
+        margin: 20px auto;
+        color: #fff;
+    }
+
+        .input_score table td {
+            text-align: center;
+        }
+
+            .input_score table td .mt10 {
+                width: 90px;
+            }
+
+        .input_score table dl dd {
+            margin-top: 10px;
+            font-size: 14px;
+            font-family: "Microsoft YaHei";
+        }
+
+    .input_score p {
+        text-align: center;
+        color: #fff;
+        font-size: 14px;
+        font-family: "Microsoft YaHei";
+    }
+
+
+.formation {
+    position: relative;
+    width: 994px;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+    border: 3px solid rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+    .formation .title {
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        background: #212a19;
+    }
+
+    .formation .for_l {
+        float: left;
+        width: 490px;
+        height: 760px;
+        margin-top: 20px;
+        border-right: 1px solid #333;
+    }
+
+        .formation .for_l table {
+            width: 100%;
+        }
+
+            .formation .for_l table th {
+                padding-top: 8px;
+                padding-bottom: 18px;
+            }
+
+            .formation .for_l table td {
+                width: 20%;
+                text-align: center;
+                padding-top: 8px;
+                padding-bottom: 20px;
+            }
+
+    .formation .select_form {
+        float: right;
+        position: relative;
+        width: 490px;
+        height: 740px;
+        margin-top: 28px;
+        text-align: center;
+        background: url(../images/formation.png) no-repeat center;
+    }
+
+        .formation .select_form .seat {
+            position: absolute;
+            width: 63px;
+            height: 62px;
+        }
+
+            .formation .select_form .seat img {
+                width: 63px;
+                height: 62px;
+                border-radius: 30px;
+            }
+
+.seat.one {
+    top: 108px;
+    left: 140px;
+}
+
+.seat.two {
+    top: 108px;
+    left: 290px;
+}
+
+.seat.three {
+    top: 250px;
+    left: 78px;
+}
+
+.seat.four {
+    top: 340px;
+    left: 140px;
+}
+
+.seat.five {
+    top: 340px;
+    left: 290px;
+}
+
+.seat.six {
+    top: 250px;
+    left: 350px;
+}
+
+.seat.seven {
+    top: 460px;
+    left: 78px;
+}
+
+.seat.eight {
+    top: 500px;
+    left: 170px;
+}
+
+.seat.nine {
+    top: 500px;
+    left: 260px;
+}
+
+.seat.ten {
+    top: 460px;
+    left: 350px;
+}
+
+.seat.eleven {
+    top: 600px;
+    left: 216px;
+}
+
+.arrangement {
+    position: absolute;
+    left: 5px;
+    margin-top: 10px;
+    width: 540px;
+    height: 760px;
+    background: #000;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    z-index: 150;
+    display: none;
+}
+
+    .arrangement .titles {
+        width: 520px;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        background: url(../images/ping.png) no-repeat center;
+    }
+
+    .arrangement .t_title {
+        width: 520px;
+        margin-top: 10px;
+    }
+
+        .arrangement .t_title input[type=checkbox] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .arrangement .t_title .th {
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        .arrangement .t_title td {
+            text-align: center;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-size: 14px;
+            font-family: "Microsoft YaHei";
+        }
+
+.btn_tool {
+    width: 500px;
+    margin: 10px auto;
+    text-align: center;
+}
+
+
+.m_auction {
+    width: 980px;
+    height: 650px;
+    padding: 10px;
+    background: url(../images/sy_bg.png) repeat-y;
+}
+
+.m_info {
+    width: 100%;
+    height: 650px;
+    border: 1px solid #666;
+}
+
+.m_info {
+}
+
+    .m_info .m_1 {
+        margin-left: 65px;
+        margin-top: 40px;
+    }
+
+    .m_info .p_h3 {
+        text-align: center;
+        margin-top: 30px;
+        color: #fff;
+        font-size: 36px;
+    }
+
+    .m_info .m_1 li {
+        float: left;
+        margin-right: 35px;
+        margin-top: 55px;
+    }
+
+        .m_info .m_1 li img {
+            width: 262px;
+            height: 172px;
+            cursor: pointer;
+        }
+
+
+.title_new {
+    width: 100%;
+    height: 38px;
+    line-height: 38px;
+    background: #212a19;
+}
+
+    .title_new span {
+        color: #666;
+        cursor: pointer;
+    }
+
+        .title_new span.active,.title_new span:hover {
+            color: #fff;
+        }
+
+.search_terms {
+    width: 100%;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333333;
+}
+
+    .search_terms .txt {
+        width: 100px;
+        height: 10px;
+    }
+
+    .search_terms .tiaojian {
+        margin-left: 20px;
+        margin-top: 20px;
+    }
+    .search_terms .tiaojian a.active,.search_terms .tiaojian a:hover {
+         color: #fff;
+    }
+    
+/*历史竞价弹窗*/
+.historical {
+            display: none;
+            position: relative;
+            width: 640px;
+            padding-bottom: 25px;
+            background: #000;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            z-index: 150;
+        }
+
+            .historical .title {
+                width: 209px;
+                height: 38px;
+                margin: 0 auto;
+                line-height: 38px;
+                text-align: center;
+                background: url(../images/bb_title.png) no-repeat;
+            }
+
+            .historical .infos {
+                width: 98%;
+                margin: 20px auto;
+            }
+
+                .historical .infos th {
+                    text-align: center;
+                    width: 25%;
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                    color: #666;
+                }
+
+        .historical .infos td {
+            text-align: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            font-size: 14px;
+            color: #fff;
+            font-family: "Microsoft YaHei";
+        }
+
+.qiuyuanku {
+    position: relative;
+}
+
+.a_left {
+    position: absolute;
+    left: 40px;
+    top: 20px;
+    width: 14px;
+    height: 57px;
+    background: url(../images/a_left.png) no-repeat;
+}
+.a_left:hover {
+    background: url(../images/a_left_on.png) no-repeat;
+}
+.a_right {
+    position: absolute;
+    right: 40px;
+    top: 20px;
+    width: 14px;
+    height: 57px;
+    background: url(../images/a_right.png) no-repeat;
+}
+.a_right:hover {
+    background: url(../images/a_right_on.png) no-repeat;
+}
+.player_head {
+    width: 960px;
+    margin: 15px auto;
+    padding: 10px;
+    border: 1px solid #333;
+}
+
+    .player_head ul {
+        margin-left: 70px;
+    }
+
+    .player_head li {
+        float: left;
+        margin-right: 16px;
+    }
+
+    .player_head img {
+        cursor: pointer;
+        width: 72px;
+        height: 72px;
+        border-radius: 42px;
+          -webkit-transition: -webkit-transform .3s linear;
+        -moz-transition: -moz-transform .3s linear;
+        -o-transition: -o-transform .3s linear;
+        transition: transform .3s linear;
+        border: 3px solid transparent;
+    }
+    .player_head img:hover {
+         -webkit-transform: scale(1.1);
+            -moz-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            -o-transform: scale(1.1);
+            transform: scale(1.1);
+            -webkit-transition: -webkit-transform .3s linear;
+            -moz-transition: -moz-transform .3s linear;
+            -o-transition: -o-transform .3s linear;
+            transition: transform .3s linear;
+            border: 3px solid #3693db;
+    }
+    .search_terms .tiaojian span.active, .search_terms .tiaojian span:hover {
+    cursor: pointer;
+    color: #fff;
+}
+.lstag {
+    display: inline-block;
+    position: absolute;
+    left: 25px;
+    top: 175px;
+    background: url(../images/lsqy.png) no-repeat;
+    width: 71px;
+    height: 12px;
+    z-index: 50;
+}
+/*联赛预告时间表*/
+.day_of_play {
+    position: relative;
+    width: 100%;
+}
+
+    .day_of_play .day {
+        margin-top: 10px;
+    }
+
+        .day_of_play .day li {
+            float: left;
+            height: 28px;
+            margin-left: 40px;
+            color: #666;
+            font-size: 18px;
+            font-family: "Microsoft YaHei";
+            cursor: pointer;
+        }
+
+            .day_of_play .day li.active {
+                color: #fff;
+                background: url(../images/l_active.png) no-repeat 42px 23px;
+                z-index: 5;
+            }
+
+.concrete {
+    width: 100%;
+}
+
+.timeinfo {
+    width: 940px;
+    margin: 0px auto;
+    border: 1px solid #205219;
+    border-radius: 4px;
+}
+
+    .timeinfo ul {
+    }
+
+        .timeinfo ul li {
+            float: left;
+            color: #666;
+            font-size: 16px;
+            margin-left: 30px;
+            font-family: "Microsoft YaHei";
+            padding-top: 5px;
+            padding-bottom: 5px;
+            cursor: pointer;
+        }
+
+            .timeinfo ul li.active {
+                color: #fff;
+            }
+
+.clash {
+    width: 100%;
+    margin-top: 15px;
+    background: url(../images/sd_fenge.png) no-repeat center;
+}
+
+    .clash img {
+        display: inline-block;
+    }
+
+    .clash .tab1, .clash .tab2 {
+        float: left;
+        width: 46%;
+        margin-left: 28px;
+    }
+
+    .clash .tab1 {
+    }
+
+         .clash .tab1 td, .clash .tab2 td {
+            width: 185px;
+            text-align: center;
+            
+        }
+         .clash .tab1 td.two, .clash .tab2 td.two {
+            width: 90px;
+            text-align: center;
+         }
+ .response {
+            border: 1px solid transparent;
+        }
+        .response:hover {
+            cursor: pointer;
+            border: 1px solid #3693db;
+        }
+.l_logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+
+.schedule_show {
+    width: 994px;
+    background: url(../images/bb_bg.png) repeat-y;
+    border: 3px solid rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+    .schedule_show .title {
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        background: #212a19;
+    }
+
+.fenzu {
+    width: 100%;
+}
+
+    .fenzu ul {
+        margin-left: 15px;
+        margin-top: 15px;
+    }
+
+        .fenzu ul li {
+            float: left;
+            padding-bottom: 10px;
+            margin-left: 30px;
+            font-size: 18px;
+            font-family: "Microsoft YaHei";
+            color: #666;
+            cursor: pointer;
+        }
+
+            .fenzu ul li.active, .fenzu ul li:hover {
+                background: url(../images/l_active.png) no-repeat 12px 25px;
+                z-index: 5;
+                color: #fff;
+            }
+
+.schedule_show table {
+    width: 940px;
+    margin: 0 auto;
+}
+
+    .schedule_show table th {
+        padding-top: 18px;
+        padding-bottom: 8px;
+        color: #666;
+    }
+
+    .schedule_show table td {
+        text-align: center;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+/*联赛统计*/
+.count {
+    width: 994px;
+    padding-bottom:25px;
+    background: url(../images/bb_bg.png) repeat-y;
+    border: 3px solid rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+    .count .title {
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        background: #212a19;
+    }
+
+.count_content {
+    width: 100%;
+    padding-bottom: 35px;
+}
+
+    .count_content .ycls {
+        width: 50%;
+        margin: 40px auto 20px;
+        text-align: center;
+    }
+
+.gains {
+    width: 720px;
+    margin: 0 auto;
+}
+
+.home_team, .vs_score, .guest_team {
+    float: left;
+}
+
+.home_team, .guest_team {
+    width: 210px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .home_team img, .guest_team img {
+        display: inline-block;
+        border-radius: 6px;
+        width: 80px;
+        height: 80px;
+    }
+
+.vs_score {
+    width: 290px;
+    height: 130px;
+    background: url(../images/vsa.png) no-repeat center 64%;
+    text-align: center;
+}
+
+    .vs_score dl {
+        margin-top: 15px;
+        font-size: 16px;
+        line-height: 24px;
+        font-family: "Microsoft YaHei";
+    }
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .scoreline {
+        background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(#fff), to(#ba9866));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
+
+.scoreline {
+    height: 40px;
+    line-height: 40px;
+    font-size: 50px;
+    color: #ba9866;
+    margin-top: 58px;
+}
+
+.player_library {
+    width: 928px;
+    margin: 20px auto;
+    background: url(../images/sxsx.png) repeat-y center;
+}
+
+.home_plyaer, .guest_player {
+    float: left;
+    width: 460px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+    .home_plyaer table {
+        width: 100%;
+        text-align: center;
+    }
+
+        .home_plyaer table td {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+    .guest_player table {
+        width: 100%;
+        text-align: center;
+        margin-left: 35px;
+    }
+
+        .guest_player table td {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+.home_num {
+    display: inline-block;
+    text-align: center;
+    width: 31px;
+    height: 23px;
+    line-height: 23px;
+    background: url(../images/jersey_two.png) -3px -14px no-repeat;
+}
+
+.guest_num {
+    display: inline-block;
+    text-align: center;
+    width: 31px;
+    height: 23px;
+    line-height: 23px;
+    background: url(../images/jersey_two.png) -3px -60px no-repeat;
+}
+
+.data_sheet {
+    position: relative;
+    width: 930px;
+    margin: 30px auto;
+}
+
+.data_l {
+    float: left;
+    width: 465px;
+}
+
+.data_r {
+    float: right;
+    width: 465px;
+}
+
+.green_progress_bg {
+    float: right;
+    width: 380px;
+    height: 12px;
+    margin-top: 8px;
+    background: url(../images/nlbg_l.png) no-repeat;
+}
+
+.green_progress {
+    float: right;
+    width: 170px;
+    height: 9px;
+    margin-top: -2px;
+    background: url(../images/data_l.jpg) repeat-x;
+    border-radius: 4px 0 0 4px;
+}
+
+.yellow_progress_bg {
+    float: left;
+    width: 380px;
+    height: 12px;
+    margin-top: 8px;
+    background: url(../images/nlbg_l.png) no-repeat;
+}
+
+.yellow_progress {
+    float: left;
+    width: 170px;
+    height: 9px;
+    margin-top: -2px;
+    background: url(../images/data_r.jpg) repeat-x;
+    border-radius: 0 4px 4px 0;
+}
+
+.data_name {
+    position: absolute;
+    margin-left: 430px;
+    top: -35px;
+}
+
+    .data_name li {
+        text-align: center;
+        line-height: 50px;
+    }
+
+.checkbtn {
+    padding: 7px 15px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.home_guest {
+    width: 100%;
+}
+
+    .home_guest ul {
+        margin: 20px auto 0;
+    }
+
+        .home_guest ul li {
+            float: left;
+            padding-bottom: 10px;
+            margin-left: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #999;
+            font-family: "Microsoft YaHei";
+        }
+
+            .home_guest ul li.active, .home_guest ul li:hover {
+                background: url(../images/l_active.png) no-repeat 12px 25px;
+                z-index: 5;
+                color: #fff;
+            }
+
+.hg_tab {
+    width: 940px;
+    margin: 20px auto;
+}
+
+    .hg_tab th {
+        color: #999;
+        text-align: center;
+    }
+
+    .hg_tab td {
+        color: #fff;
+        text-align: center;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+
+.red_yellow_card {
+                width: 994px;
+                padding-bottom: 25px;
+                background: url(../images/bb_bg.png) repeat-y;
+                border: 3px solid rgba(255,255,255,0.2);
+                color: #fff;
+            }
+
+                .red_yellow_card .title {
+                    width: 100%;
+                    height: 35px;
+                    line-height: 35px;
+                    background: #212a19;
+                }
+
+            .ry_tab table {
+                width: 96%;
+                margin: 20px auto;
+            }
+
+                .ry_tab table th {
+                    color: #999;
+                    text-align: center;
+                }
+
+                .ry_tab table td {
+                    text-align: center;
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                }
+
+                    .ry_tab table td .avatar {
+                        float: left;
+                        width: 50px;
+                        height: 50px;
+                    }
+
+                    .ry_tab table td .name {
+                        float: left;
+                        margin-top: 14px;
+                        margin-left: 10px;
+                        font-size: 16px;
+                        font-family: "Microsoft YaHei";
+                    }
+                    
+.tolbtn {
+    padding: 4px 12px;
+    margin-left: 10px;
+    background: #eb6100;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.track_record {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    margin-top: 20px;
+}
+.track_record .arr_l {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        background: url(../images/arr.png) -11px -168px no-repeat;
+    }
+
+        .track_record .arr_l:hover {
+            display: inline-block;
+            height: 30px;
+            width: 30px;
+            background: url(../images/arr.png) -11px -68px no-repeat;
+        }
+
+    .track_record .arr_r {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        background: url(../images/arr.png) -11px -118px no-repeat;
+    }
+
+        .track_record .arr_r:hover {
+            display: inline-block;
+            height: 30px;
+            width: 30px;
+            background: url(../images/arr.png) -11px -18px no-repeat;
+        }
+.ban1 {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    background: url(../images/ban1.png) no-repeat;
+    z-index: 50;
+    left: 175px;
+    top: 130px;
+}
+/*发放工资*/
+.wages {
+    position: relative;
+    width: 994px;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+    border: 3px solid rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+    .wages .title {
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        background: #212a19;
+    }
+
+.the_area {
+}
+
+.subject_title {
+    text-align: center;
+}
+
+    .subject_title .subject {
+        margin-top: 30px;
+        color: #f6ff00;
+        font-size: 16px;
+        font-family: "Microsoft YaHei";
+    }
+
+.name_score_name {
+    width: 680px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+    .name_score_name img {
+        display: inline-block;
+    }
+
+    .name_score_name .n_logo {
+        width: 50px;
+        height: 50px;
+    }
+
+.jfen span, .jfen img {
+    vertical-align: middle;
+}
+
+.player_salaries {
+    width: 750px;
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+    .player_salaries th {
+        color: #666;
+        font-family: "Microsoft YaHei";
+        font-weight: bold;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        width: 10%;
+        border-bottom: 1px solid #205219;
+    }
+
+        .player_salaries th.left {
+            text-align: left;
+        }
+
+        .player_salaries th.center {
+            text-align: center;
+        }
+
+    .player_salaries .num {
+        display: inline-block;
+        height: 26px;
+        width: 33px;
+        line-height: 33px;
+        text-align: center;
+        cursor: pointer;
+        color: #fff;
+        background: url(../images/jersey.png) -1px -8px no-repeat;
+    }
+
+    .player_salaries td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+        .player_salaries td.pt15 {
+            padding-top: 15px;
+        }
+
+        .player_salaries td.left {
+            text-align: left;
+        }
+
+        .player_salaries td.center {
+            text-align: center;
+        }
+
+.ball_h_0, .ball_h_1, .ball_h_2, .ball_h_3, .ball_h_4, .ball_h_5, .ball_h_6, .ball_h_7, .ball_h_8, .ball_h_9, .ball_h_10 {
+    display: inline-block;
+    width: 190px;
+    height: 20px;
+}
+
+.ball_h_1 {
+    background: url(../images/ball_hn.png) -27px -211px no-repeat;
+}
+
+.ball_h_2 {
+    background: url(../images/ball_hn.png) -27px -188px no-repeat;
+}
+
+.ball_h_3 {
+    background: url(../images/ball_hn.png) -27px -165px no-repeat;
+}
+
+.ball_h_4 {
+    background: url(../images/ball_hn.png) -27px -142px no-repeat;
+}
+
+.ball_h_5 {
+    background: url(../images/ball_hn.png) -27px -119px no-repeat;
+}
+
+.ball_h_6 {
+    background: url(../images/ball_hn.png) -27px -95px no-repeat;
+}
+
+.ball_h_7 {
+    background: url(../images/ball_hn.png) -27px -72px no-repeat;
+}
+
+.ball_h_8 {
+    background: url(../images/ball_hn.png) -27px -49px no-repeat;
+}
+
+.ball_h_9 {
+    background: url(../images/ball_hn.png) -27px -26px no-repeat;
+}
+
+.ball_h_10 {
+    background: url(../images/ball_hn.png) -27px -4px no-repeat;
+}
+
+.ball_h_0 {
+    background: url(../images/ball_hn.png) -27px -235px no-repeat;
+}
+
+.bonus {
+    width: 60px;
+    height: 12px;
+}
+
+.fgl {
+    width: 750px;
+    margin: 10px auto;
+    border-top: 1px solid #205219;
+}
+
+.grant {
+    width: 750px;
+    margin: 20px auto;
+}
+.grant .btn_div {
+    width: 400px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/*赛区新*/
+.advert {
+    width: 100%;
+    height: 150px;
+    margin: 0 auto;
+    background: #0b0f18;
+    text-align: center;
+}
+
+    .advert img {
+        width: 100%;
+        height:150px;
+        display: inline-block;
+    }
+
+.nl_nav {
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background: #040304;
+}
+
+    .nl_nav .navs {
+        width: 1000px;
+        margin: 0 auto;
+       
+    }
+
+    .nl_nav ul .li {
+        position: relative;
+        float: left;
+        margin-right:40px;
+    }
+
+
+    .nl_nav ul li .anav {
+        color: #2296ca;
+        font-size: 20px;
+        font-family: "Microsoft YaHei";
+    }
+    .nl_nav ul li .anav_green {
+        color: #2aa83e;
+        font-size: 20px;
+        font-family: "Microsoft YaHei";
+    }
+.race {
+    width: 994px;
+    margin: 20px auto 0;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+    /*border: 3px solid rgba(255,255,255,0.2);*/
+}
+
+    .race .title {
+        position: relative;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        background: #212a19;
+        font-size: 16px;
+        color: #fff;
+        font-family: "Microsoft YaHei";
+    }
+
+.race_content {
+    width: 980px;
+    margin: 10px auto;
+}
+
+.race_round {
+    position: relative;
+    width: 100%;
+    height: 160px;
+}
+
+.round_num {
+    position: relative;
+    float: left;
+    width: 100px;
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: #24a0d8 url(../images/arrd.png) no-repeat 45px 95px;
+}
+
+.round_change {
+    position: relative;
+    float: left;
+    width: 100px;
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: #24a0d8 url(../images/arrd.png) no-repeat 80px center;
+}
+
+    .round_num a, .round_change a {
+        display: inline-block;
+        letter-spacing: 2px;
+        color: #fff;
+        font-family: "Microsoft YaHei";
+        font-size: 16px;
+    }
+
+.round_info {
+    position: relative;
+    width: 860px;
+    height: 158px;
+    margin: 0 auto;
+    border: 1px solid #666;
+}
+
+    .round_info ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        margin-left: -10px;
+    }
+
+    .round_info li {
+        float: left;
+        width: 840px;
+        height: 100%;
+        margin-left: 20px;
+        padding: 0;
+        color: #fff;
+        cursor: pointer;
+    }
+
+.battle_info {
+    width: 100%;
+    height: 158px;
+    background: url(../images/battleline.png) no-repeat center;
+    font-family: "Microsoft YaHei";
+    text-align: center;
+}
+
+.battle_1 {
+    float: left;
+    width: 250px;
+    margin-left: 58px;
+}
+
+.battle_2 {
+    float: left;
+    width: 250px;
+    margin-left: 40px;
+}
+
+.battle_3 {
+    float: left;
+    width: 250px;
+    margin-left: 35px;
+}
+
+.battle_info dl {
+    float: left;
+}
+
+.battle_name {
+    width: 85px;
+}
+
+    .battle_name img {
+        display: inline-block;
+    }
+
+.bvs {
+    width: 70px;
+    margin-top: 50px;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+}
+
+.nums_time {
+    display: none;
+    position: absolute;
+    z-index: 6;
+    left: 100px;
+    width: 280px;
+    height: 160px;
+    background: url(../images/bluee.png) repeat-x;
+}
+
+    .nums_time ul {
+        width: 260px;
+        margin-left: 15px;
+    }
+
+    .nums_time li {
+        float: left;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+
+    .nums_time li {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 14px;
+        border: 1px solid #fff;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .nums_time li.active, .nums_time li:hover {
+            background: #0e4964;
+        }
+
+
+
+.video_q {
+    float: left;
+    width: 330px;
+    margin-top: 15px;
+}
+
+    .video_q .v_list {
+        margin-top: 5px;
+    }
+
+        .video_q .v_list li {
+            float: left;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .video_q .v_list .v_txt {
+            position: absolute;
+            width: 100%;
+            height: 23px;
+            line-height: 23px;
+            bottom: 0;
+            background: url(../images/vmaskk.png) repeat-x;
+        }
+
+        .video_q .v_list .video {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            left: 60px;
+            top: 5px;
+            background: url(../images/vedio_play.png) no-repeat;
+        }
+
+    .video_q .p_list {
+        margin-top: 5px;
+    }
+
+        .video_q .p_list li {
+            float: left;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+.playtxt {
+    color: #fff;
+}
+
+.playnum {
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
+    padding-left: 25px;
+    background: url(../images/playnum.png) no-repeat left center;
+    color: #fff;
+}
+
+.video_q .small {
+    width: 158px;
+    height: 105px;
+}
+
+.video_q .picc {
+    width: 158px;
+    height: 105px;
+    cursor: pointer;
+}
+
+.nl_news {
+    float: left;
+    margin-top: 15px;
+    margin-left: 10px;
+    width: 330px;
+}
+
+.mores {
+    float: right;
+    margin-top:2px;
+    margin-right: 10px;
+    color: #666;
+    font-size: 12px;
+}
+
+.nl_news dl {
+    width: 320px;
+    margin-top: 10px;
+    margin-left: 15px;
+    line-height: 30px;
+}
+
+    .nl_news dl dt a {
+        font-size: 14px;
+        font-family: 'Microsoft YaHei';
+        color: #fff;
+    }
+
+    .nl_news dl dd {
+        background: url(../images/news_dian.png) no-repeat left center;
+        padding-left: 12px;
+    }
+
+        .nl_news dl dd a {
+            color: #999;
+        }
+
+.ranking_s {
+    width: 300px;
+    float: right;
+    margin-top: 15px;
+}
+
+    .ranking_s .jifen {
+        width: 300px;
+        margin: 5px auto 0;
+    }
+
+        .ranking_s .jifen td {
+            padding-top: 3px;
+            padding-bottom: 3px;
+            text-align: center;
+        }
+
+.select_area {
+    width: 930px;
+    min-height: 600px;
+    margin: 15px auto 0;
+}
+
+.enlist_area {
+    width: 930px;
+}
+
+    .enlist_area li {
+        float: left;
+        margin-left: 9px;
+        margin-top: 10px;
+    }
+
+.enlist {
+    position: relative;
+    width: 295px;
+    height: 240px;
+    border-radius: 4px;
+    border: 1px solid #666;
+    text-align: center;
+}
+
+.i_pic {
+    width: 259px;
+    height: 173px;
+    margin: 10px auto 20px;
+    border-radius: 4px;
+    word-break: break-all;
+    display: inline-block;
+    text-align: center;
+}
+
+.area_name {
+    width: 205px;
+    margin: 70px auto 0;
+    color: #fff;
+    font-size: 20px;
+    font-family: "Microsoft YaHei";
+}
+
+.more_area {
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    font-family: "Microsoft YaHei";
+    margin: 40px auto;
+}
+.new_left, .new_right {
+    position: absolute;
+    top: 45px;
+    display: inline-block;
+    width: 20px;
+    height: 70px;
+    cursor: pointer;
+    border: none;
+}
+
+
+.new_left {
+    left: 28px;
+    background: url(../images/index_left.png) no-repeat;
+}
+.new_left:hover {
+    background: url(../images/index_left_on.png) no-repeat;
+}
+
+.new_right {
+    right: 28px;
+    background: url(../images/index_right.png) no-repeat;
+}
+.new_right:hover {
+    background: url(../images/index_right_on.png) no-repeat;
+}
+
+.select_s_area {
+    color: #fff;
+    font: 12px/20px "SimSun","瀹嬩綋","Arial Narrow",HELVETICA;
+    margin-left: 3px;
+}
+
+    .select_s_area.active, .select_s_area:hover {
+        /*color: #fff;*/
+    }
+/*赛程*/
+.selection_btn {
+    width: 65px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    background: #d66719;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    float: right;
+    margin-top: 8px;
+    margin-right: 15px;
+}
+
+    .selection_btn:hover {
+        background: #eb6100;
+    }
+
+.runs {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #24a0d8;
+    color: #666;
+    margin-top: 5px;
+}
+
+    .runs.active, .runs:hover {
+        color: #fff;
+        background: #24a0d8;
+    }
+
+.select_runs {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.select_group {
+    font-family: "Microsoft YaHei";
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+    .select_group li {
+        display: inline-block;
+        height: 28px;
+        color: #666;
+        font-size: 16px;
+        cursor: pointer;
+        margin-left: 15px;
+    }
+
+        .select_group li.active, .select_group li:hover {
+            color: #fff;
+            background: url(../images/l_active.png) no-repeat center 23px;
+        }
+
+.select_group_line {
+    width: 960px;
+    margin: 0 auto;
+    border-top: 1px solid #205219;
+}
+
+.race_card {
+    width: 960px;
+    margin: 10px auto;
+}
+
+    .race_card th {
+        text-align: center;
+        color: #666;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .race_card td {
+        color: #fff;
+        text-align: center;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .race_card th.left {
+        text-align: left;
+    }
+
+    .race_card th.right {
+        text-align: right;
+    }
+
+    .race_card th.w40 {
+        width: 40px;
+    }
+
+    .race_card th.w50 {
+        width: 50px;
+    }
+
+    .race_card th.w60 {
+        width: 60px;
+    }
+
+    .race_card th.w80 {
+        width: 80px;
+    }
+
+    .race_card th.w100 {
+        width: 100px;
+    }
+
+    .race_card th.w155 {
+        width: 155px;
+    }
+
+    .race_card td.left {
+        text-align: left;
+    }
+
+    .race_card td.right {
+        text-align: right;
+    }
+.zddb,.kddb {
+   width: 30px;
+   height: 30px;
+}
+.zddb, .vsi, .kddb {
+    display: inline-block;
+}
+
+.point {
+    font-size: 16px;
+    font-family: "Microsoft YaHei";
+}
+
+.vsi, .point {
+    vertical-align: middle;
+}
+
+.zddb, .club_nm {
+    vertical-align: middle;
+}
+
+.kddb, .club_nm {
+    vertical-align: middle;
+}
+
+.census {
+    color: #fff;
+    text-decoration: underline;
+}
+
+    .census:hover {
+        color: #00bfff;
+    } 
+/*无赛事*/
+.no_match {
+    width: 860px;
+    height: 160px;
+    line-height: 160px;
+    text-align: center;
+    margin: 10px auto;
+    border: 1px solid #666;
+}
+.all_look {
+    width: 130px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 60px auto 0;
+    border: 1px solid #999;
+}
+
+ .nodate img {
+      margin-left: 3px;
+      margin-top: 5px;
+      width: 296px;
+ }
+/*助攻榜*/
+.f_1, .s_2, .t_3, .f_4 {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 auto;
+    padding: 5px 4px;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.f_1 {
+    border: 1px solid #e2e203;
+}
+
+.s_2 {
+    border: 1px solid #ff0000;
+}
+
+.t_3 {
+    border: 1px solid #22a436;
+}
+
+.f_4 {
+    border: 1px solid #fff;
+}
+
+.seq {
+    display: inline-block;
+    width: 30px;
+    font-size: 20px;
+    font-family: "Microsoft YaHei";
+}
+
+.portrait {
+    width: 65px;
+    height: 65px;
+    display: inline-block;
+    border-radius: 30px;
+}
+
+.z_name, .team_name {
+    display: inline-block;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+}
+
+.team_name {
+    width: 30px;
+    height: 30px;
+}
+
+.portrait, .z_name, .team_name {
+    vertical-align: middle;
+}
+
+.race_card th.w190 {
+    width: 190px;
+}
+
+.race_card th.w305 {
+    width: 305px;
+}
+.select_condition {
+    float: right;
+    line-height: 17px;
+    margin-right: 15px;
+    margin-top: 5px;
+    padding: 5px 15px 5px 10px;
+    font-size: 12px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    padding-right: 25px;
+    background: url(../images/rsan.png) no-repeat 92% center;
+}
+
+.select_season {
+    position: absolute;
+    text-align: right;
+    right: 14px;
+    top: 35px;
+    background: #666;
+    padding-left: 10px;
+    padding-right: 10px;
+    line-height: 28px;
+}
+
+    .select_season p {
+        color: #fff;
+        font-size: 14px;
+        border-bottom: 1px solid #000;
+        cursor: pointer;
+    }
+
+.select_s {
+    float: right;
+    line-height: 12px;
+    margin-right: 15px;
+    margin-top: 8px;
+    padding: 5px 15px 5px 16px;
+    font-size: 12px;
+    border: 1px solid #666;
+    cursor: pointer;
+    padding-right: 18px;
+    background: url(../images/rsan_s.png) no-repeat 96% center;
+}
+
+.select_s_season {
+    display: none;
+    position: absolute;
+    text-align: right;
+    right: 49px;
+    top: 32px;
+    background: #666;
+    padding-left: 15px;
+    padding-right: 18px;
+    line-height: 20px;
+    z-index: 20;
+}
+
+    .select_s_season p {
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        font: 12px/20px "SimSun","瀹嬩綋","Arial Narrow",HELVETICA;
+    }
+/*总览*/
+.nag {
+    width: 78px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 6px 6px 0 0;
+    background: #008000;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+
+.nag_title {
+    font-size: 16px;
+    font-family: "Microsoft YaHei";
+    color: #fff;
+}
+
+.nag_line {
+    width: 900px;
+    margin: 0 auto;
+    border-bottom: 1px solid #205219;
+}
+
+.full {
+    float: right;
+    margin-right: 36px;
+    margin-top: -1px;
+    padding: 3px 7px;
+    border: 1px solid #205219;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    color: #fff;
+}
+
+.nag_name {
+    width: 640px;
+    margin: 50px auto 20px;
+}
+
+    .nag_name li {
+        float: left;
+        margin-left: 130px;
+    }
+
+.nag_info_2 {
+    width: 112px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.nag_info_1 {
+    width: 130px;
+    text-align: center;
+}
+
+.nag_info_3 {
+    width: 112px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.nag_h {
+    position: relative;
+    width: 112px;
+}
+
+    .nag_h .nag_head_2 {
+        width: 112px;
+        height: 112px;
+        border-radius: 70px;
+    }
+
+    .nag_h .nag_head_1 {
+        width: 130px;
+        height: 130px;
+        border-radius: 70px;
+    }
+
+    .nag_h .nag_head_3 {
+        width: 112px;
+        height: 112px;
+        border-radius: 70px;
+    }
+
+
+.d_yi {
+    position: absolute;
+    display: inline-block;
+    left: 2px;
+    top: 92px;
+    width: 126px;
+    height: 71px;
+    background: url(../images/d_yi.png) no-repeat;
+}
+
+.d_er {
+    position: absolute;
+    display: inline-block;
+    left: 2px;
+    top: 77px;
+    width: 108px;
+    height: 62px;
+    background: url(../images/d_er.png) no-repeat;
+}
+
+.d_san {
+    position: absolute;
+    display: inline-block;
+    left: 2px;
+    top: 77px;
+    width: 108px;
+    height: 62px;
+    background: url(../images/d_san.png) no-repeat;
+}
+
+.s_choice {
+    position: relative;
+    margin-top: -5px;
+    display: inline-block;
+    color: #2296ca;
+    padding: 5px 20px 5px 10px;
+    border: 1px solid #3E3E3E;
+    font-size: 14px;
+    background: url(../images/a_san.png) no-repeat 98% center;
+    cursor: pointer;
+}
+
+.s_select {
+    display: none;
+    position: absolute;
+    padding-right:15px;
+    background: #000;
+    z-index: 10;
+    padding-bottom: 10px;
+}
+
+    .s_select p {
+        color: #2296ca;
+        font-size: 14px;
+        margin-left: 10px;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+/*转会*/
+.zh {
+    width: 994px;
+    margin: 20px auto 0;
+    padding-bottom: 25px;
+    background: url(../images/bb_bg.png) repeat-y;
+    border: 3px solid rgba(255,255,255,0.2);
+}
+
+    .zh .title {
+        position: relative;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        background: #212a19;
+        font-size: 16px;
+        color: #fff;
+        font-family: "Microsoft YaHei";
+    }
+
+    .zh .zhb {
+        width: 940px;
+        margin: 20px auto 0px;
+        color: #fff;
+    }
+
+    .zh .zhb  td {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+     .zh .zhb_more {
+        width: 940px;
+        margin: 20px auto 0px;
+        color: #fff;
+    }
+
+    .zh .zhb_more td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #666;
+    }  
+.mybuy, .mysell {
+    padding: 5px 15px;
+    border: 1px solid #656565;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #656565;
+    font-family: "Microsoft YaHei";
+}
+
+    .mybuy:hover, .mybuy.active, .mysell:hover, .mysell.active {
+        color: #fff;
+        border: 1px solid #fff;
+    }
+
+.buytab {
+    width: 910px;
+    margin-top: 20px !important;
+    text-align: center;
+}
+
+.selltab {
+    display: none;
+    width: 910px;
+    margin-top: 20px !important;
+    text-align: center;
+}      

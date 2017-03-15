@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.UserProductMapper">
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.UserProduct">
+		update  product
+			set 
+				product_title = #{product_title},	
+				category_id = #{category_id},	
+				product_banner = #{product_banner},	
+				product_header = #{product_header},	
+				product_second_title = #{product_second_title},	
+				product_desc = #{product_desc},	
+				product_single_price = #{product_single_price},	
+				product_total_price = #{product_total_price},	
+				product_total_count = #{product_total_count},	
+				product_recommend_sort = #{product_recommend_sort},	
+				product_status = #{product_status},	
+				product_keyword = #{product_keyword},
+				product_hot = #{product_hot},
+				product_recommend = #{product_recommend},
+				product_type = #{product_type}
+				<if test="product_ifopen!=null and product_ifopen!=''">
+		 		,product_ifopen=#{product_ifopen}
+		 		</if>
+		 		<if test="product_ifdel!=null and product_ifdel!=''">
+		 		,product_ifdel=#{product_ifdel}
+		 		</if>
+			where 
+				product_id = #{product_id}
+	</update>
+	
+	<update id="updateProductData" parameterType="com.yt.framework.persistent.entity.UserProductData">
+		update  product_data
+			set 
+				data_count = #{data_count},
+				data_status = #{data_status},
+				data_start_time = #{data_start_time},
+				data_finish_time = #{data_finish_time},
+				data_win_num = #{data_win_num},
+				data_win_user = #{data_win_user}
+			where 
+				data_id = #{data_id}
+	</update>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.UserProduct">
+		SELECT * FROM product WHERE product_id = #{id}
+	</select>
+	
+	<select id="queryProductCategory" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.UserProductCategory">
+		SELECT pc.* FROM product_category pc ORDER BY pc.category_sort ASC
+	</select>
+	
+	<select id="getProduct" resultType="hashmap">
+		SELECT u.usernick,u.head_icon,p.product_title,p.product_header,p.product_type,p.product_banner,p.product_desc,p.product_second_title,p.product_hot,pd.*,o.order_pay_num FROM product_data pd
+		LEFT JOIN product p ON p.product_id=pd.product_id 
+		LEFT JOIN m_user u ON u.id=pd.data_win_user 
+		LEFT JOIN or_order o ON o.data_id=pd.data_id AND o.order_ifwin=1 
+		WHERE pd.data_id=#{id} 
+	</select>
+	
+	<select id="queryProducts" parameterType="hashmap" resultType="hashmap">
+		SELECT p.product_title,p.product_header,p.product_hot,u.usernick,u.username,u.head_icon,pd.* 
+		<if test="query_type !=null and query_type =='past' ">
+		,o.order_pay_num  
+		</if>
+		FROM product_data pd
+		LEFT JOIN product p ON p.product_id=pd.product_id 
+		LEFT JOIN m_user u ON u.id=pd.data_win_user 
+		<if test="query_type !=null and query_type =='past' ">
+		LEFT JOIN or_order o ON o.data_id=pd.data_id AND o.order_ifwin=1 
+		</if>
+		WHERE p.product_ifdel=0 AND p.product_status=1 
+		<if test="data_status !=null and data_status !='' ">
+			AND pd.data_status=#{data_status} 
+		</if>
+		<if test="product_id !=null and product_id !='' ">
+			AND p.product_id=#{product_id} 
+		</if>
+		<if test="category_id !=null and category_id !='' ">
+			AND pd.category_id=#{category_id} 
+		</if>
+		<if test="product_title !=null and product_title !='' ">
+			AND p.product_title LIKE CONCAT(CONCAT('%', #{product_title}),'%')
+		</if>
+		<if test="current_id !=null and current_id !='' ">
+			AND pd.data_id!=#{current_id} 
+		</if>
+		<choose>
+   			<when test="order_by !=null and order_by =='recom' ">
+   		ORDER BY p.product_recommend DESC,p.product_recommend_sort DESC
+   			</when>
+   			<when test="order_by !=null and order_by =='turn' ">
+   		ORDER BY pd.data_turn DESC 
+   			</when>
+   			<otherwise>
+		ORDER BY pd.create_time DESC	
+   			</otherwise>
+   		</choose>
+   		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryProductsCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT p.product_title,p.product_header,p.product_hot,u.usernick,u.username,u.head_icon,pd.* 
+			<if test="query_type !=null and query_type =='past' ">
+			,o.order_pay_num  
+			</if>
+			FROM product_data pd
+			LEFT JOIN product p ON p.product_id=pd.product_id 
+			LEFT JOIN m_user u ON u.id=pd.data_win_user 
+			<if test="query_type !=null and query_type =='past' ">
+			LEFT JOIN or_order o ON o.data_id=pd.data_id AND o.order_ifwin=1 
+			</if>
+			WHERE p.product_ifdel=0 AND p.product_status=1 
+			<if test="data_status !=null and data_status !='' ">
+				AND pd.data_status=#{data_status} 
+			</if>
+			<if test="product_id !=null and product_id !='' ">
+				AND p.product_id=#{product_id} 
+			</if>
+			<if test="category_id !=null and category_id !='' ">
+				AND pd.category_id=#{category_id} 
+			</if>
+			<if test="product_title !=null and product_title !='' ">
+				AND p.product_title LIKE CONCAT(CONCAT('%', #{product_title}),'%')
+			</if>
+			<if test="current_id !=null and current_id !='' ">
+				AND pd.data_id!=#{current_id} 
+			</if>
+		) cot_t)
+	</select>
+	
+	<select id="queryProductData" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.UserProductData">
+		SELECT pd.* FROM product_data pd
+		<where>
+			<if test="product_id !=null and product_id !='' ">
+				AND pd.product_id=#{product_id} 
+			</if>
+   		 	<if test="data_status !=null and data_status !='' ">
+				AND pd.data_status=#{data_status} 
+			</if>
+   		</where>
+   		<choose>
+   			<when test="order_by !=null and order_by =='asc' ">
+   		ORDER BY pd.data_turn ASC 
+   			</when>
+   			<otherwise>
+		ORDER BY pd.data_turn DESC	
+   			</otherwise>
+   		</choose>
+	</select>
+	
+	
+	<select id="queryWinUsers" parameterType="hashmap" resultType="hashmap">
+		SELECT p.product_title,p.product_header,u.usernick,u.username,u.head_icon,o.order_count,pd.* FROM product_data pd
+		LEFT JOIN product p ON p.product_id=pd.product_id 
+		LEFT JOIN m_user u ON u.id=pd.data_win_user
+		LEFT JOIN or_order o ON o.data_id=pd.data_id AND o.order_ifwin=1
+		WHERE pd.data_status=4 
+		ORDER BY pd.data_finish_time DESC 
+		LIMIT 0,20 
+	</select>
+	
+	<select id="queryConsumeTop" parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM (
+		SELECT o.order_id,SUM(o.order_actual_cash) price,o.user_id,u.usernick,u.head_icon,u.username FROM or_order o 
+		LEFT JOIN m_user u ON u.id=o.user_id 
+		GROUP BY o.user_id
+		) consume_top 
+		ORDER BY price DESC 
+		LIMIT 6
+	</select>
+	
+	
+	<select id="queryIndianaRecords" parameterType="hashmap" resultType="hashmap">
+		SELECT u.usernick,u.head_icon,o.* FROM or_order o 
+		LEFT JOIN m_user u ON u.id=o.user_id 
+		WHERE o.data_id=#{data_id} 
+		ORDER BY o.create_time DESC 
+		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryIndianaRecordsCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT u.usernick,u.head_icon,o.* FROM or_order o 
+			LEFT JOIN m_user u ON u.id=o.user_id 
+			WHERE o.data_id=#{data_id} 
+		) cot_t)
+	</select>
+	
+	<!-- 夺宝号码查询 -->
+	<select id="queryOrderNumData" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.OrderNumData">
+		SELECT * FROM order_num 
+			<where>
+				<choose>
+					<when test="order_sn!=null and order_sn!=''">
+						order_sn = #{order_sn}
+					</when>
+					<otherwise>
+						AND (order_sn = '' OR order_sn is null)
+					</otherwise>
+				</choose>
+				<if test="data_sn!=null and data_sn!=''">
+					AND data_sn = #{data_sn}
+				</if>
+			</where>
+		ORDER BY order_num_mark 
+	</select>
+	
+	<update id="updateOrderNumData" parameterType="com.yt.framework.persistent.entity.OrderNumData">
+		UPDATE 
+				order_num 
+		SET 
+				order_sn = #{order_sn}
+		WHERE
+				num_id = #{num_id}
+	</update>
+	
+	<update id="updateProductDataNum">
+		UPDATE 
+				product_data 
+		SET 
+				data_count = #{data_count}
+				<if test="data_status!=null and data_status!=''">
+					 ,data_status = #{data_status}
+				</if>
+		WHERE
+				data_id = #{data_id}
+	</update>
+</mapper>

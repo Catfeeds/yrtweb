@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.TeamInviteMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.TeamInvite" >
+			INSERT INTO t_team_invite(
+				id,
+				teaminfo_id,
+				t_name,
+				t_logo,
+				respond_teaminfo_id,
+				r_name,
+				r_logo,
+				invite_time,
+				position,
+				status,
+				ball_format,
+				declar,
+				create_time
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{t_name},
+				#{t_logo},
+				#{respond_teaminfo_id},
+				#{r_name},
+				#{r_logo},
+				#{invite_time},
+				#{position},
+				#{status},
+				#{ball_format},
+				#{declar},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="delete">
+			DELETE FROM t_team_invite WHERE id = #{id}
+		</delete>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.TeamInvite">
+			UPDATE t_team_invite
+				SET
+				teaminfo_id = #{teaminfo_id},
+				respond_teaminfo_id = #{respond_teaminfo_id},
+				invite_time = #{invite_time},
+				position = #{position},
+				status = #{status},
+				ball_format = #{ball_format}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.TeamInvite">
+			SELECT * FROM t_team_invite WHERE id = #{id} 
+		</select>
+		
+		<select id="queryForPage" resultType="com.yt.framework.persistent.entity.TeamInvite">
+			SELECT * FROM t_team_invite
+				WHERE 1=1
+				<choose>
+					<when test="maps.teaminfo_id!=null and maps.respond_teaminfo_id==null">
+						AND	teaminfo_id = #{maps.teaminfo_id}	
+					</when>
+					<when test="maps.teaminfo_id==null and maps.respond_teaminfo_id!=null">
+						AND	respond_teaminfo_id = #{maps.respond_teaminfo_id}	
+					</when>
+					<when test="maps.teaminfo_id!=null and maps.respond_teaminfo_id!=null">
+						AND	(teaminfo_id = #{maps.teaminfo_id} OR respond_teaminfo_id = #{maps.respond_teaminfo_id}) 
+					</when>
+				</choose>
+				<if test="maps.status!=null and maps.status!=''">
+					AND	status = #{maps.status}	
+				</if>
+				<choose>
+					<when test="maps.orderNum!=null and maps.orderNum!=''">
+						ORDER BY #{maps.orderNum} DESC
+					</when>
+					<otherwise>
+						ORDER BY create_time DESC
+					</otherwise>
+				</choose>
+				 <if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT count(id) FROM t_team_invite
+				WHERE 1=1
+				<choose>
+					<when test="maps.teaminfo_id!=null and maps.respond_teaminfo_id==null">
+						AND	teaminfo_id = #{maps.teaminfo_id}	
+					</when>
+					<when test="maps.teaminfo_id==null and maps.respond_teaminfo_id!=null">
+						AND	respond_teaminfo_id = #{maps.respond_teaminfo_id}	
+					</when>
+					<when test="maps.teaminfo_id!=null and maps.respond_teaminfo_id!=null">
+						AND	(teaminfo_id = #{maps.teaminfo_id} OR respond_teaminfo_id = #{maps.respond_teaminfo_id}) 
+					</when>
+				</choose>
+				<if test="maps.status!=null and maps.status!=''">
+					AND	status = #{maps.status}	
+				</if>
+		</select>
+		
+		<update id="updateInvite" parameterType="com.yt.framework.persistent.entity.TeamInvite">
+			UPDATE t_team_invite
+				SET
+					status = #{status}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="updateInviteByProcedure" statementType="CALLABLE">  
+		      {call invite_procedure(#{maps.teaminfo_id},#{maps.t_name},#{maps.t_logo},#{maps.respond_teaminfo_id},#{maps.r_name},#{maps.r_logo},#{maps.id},#{maps.game_id})}  
+  		</select>  
+		
+		<select id="inviteList" resultType="com.yt.framework.persistent.entity.TeamInvite">  
+		     SELECT * FROM t_team_invite WHERE 1=1 
+		     <if test="teaminfo_id!=null">
+				AND respond_teaminfo_id = #{teaminfo_id}
+			 </if>
+				ORDER BY create_time DESC 
+				LIMIT 0,1			 
+  		</select> 
+  		
+  		<select id="historyGameList" resultType="com.yt.framework.persistent.entity.TeamGame">  
+		     SELECT * FROM t_team_game WHERE 1=1 
+		     <if test="maps.teaminfo_id!=null">
+					AND (initiate_teaminfo_id = #{maps.teaminfo_id} 
+					OR respond_teaminfo_id = #{maps.teaminfo_id}) AND status in (1,2)
+			 </if>
+					ORDER BY create_time DESC
+			 <if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows};
+			</if>
+  		</select> 
+  		
+  		<resultMap id="teamGameResultMap" type="com.yt.framework.persistent.entity.TeamGame">   
+	        <id column="id" property="id" jdbcType="INTEGER" />
+	        <result column="rownum" property="rownum" jdbcType="INTEGER" />
+	        <result column="initiate_teaminfo_id" property="initiate_teaminfo_id" jdbcType="INTEGER" />
+	        <result column="t_name" property="t_name" jdbcType="VARCHAR" />
+	        <result column="t_logo" property="t_logo" jdbcType="VARCHAR" />
+	        <result column="respond_teaminfo_id" property="respond_teaminfo_id" jdbcType="INTEGER" />
+	        <result column="r_name" property="r_name" jdbcType="VARCHAR" />
+	        <result column="r_logo" property="r_logo" jdbcType="VARCHAR" />
+	        <result column="initiate_score" property="initiate_score" jdbcType="INTEGER" />
+	        <result column="respond_score" property="respond_score" jdbcType="INTEGER" />
+	        <result column="position" property="position" jdbcType="VARCHAR" />
+	        <result column="initiate_win" property="initiate_win" jdbcType="INTEGER" />
+	        <result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+	        <result column="game_time" property="game_time" jdbcType="DATE" />
+	        <result column="ball_format" property="ball_format" jdbcType="INTEGER" />
+	        <result column="initiate_sure" property="initiate_sure" jdbcType="INTEGER" />
+	        <result column="respond_sure" property="respond_sure" jdbcType="INTEGER" />
+	        <result column="status" property="status" jdbcType="INTEGER" />
+	     </resultMap>  
+	     <resultMap id="babyUserResultMap" type="com.yt.framework.persistent.entity.UserBaby">
+	     	<result column="baby_id" property="baby_id" jdbcType="INTEGER" /> 
+	     	<result column="user_id" property="user_id" jdbcType="INTEGER" /> 
+	        <result column="head_icon" property="head_icon" jdbcType="VARCHAR" />
+	        <result column="usernick" property="usernick" jdbcType="VARCHAR" />
+	     </resultMap> 
+	     
+  		 <resultMap id="teamGameBabyResultMap" type="com.yt.framework.persistent.entity.TeamGameBaby" extends="teamGameResultMap">
+			<collection property="users" ofType="com.yt.framework.persistent.entity.UserBaby" resultMap="babyUserResultMap" />
+		 </resultMap>	
+  		
+  		<select id="historyGameMap" resultMap="teamGameBabyResultMap">  
+  		SELECT @rownum:=@rownum+1 AS rownum,aa.* FROM (
+		     SELECT tg.*,fc.user_id,m.head_icon,m.usernick FROM 
+				(SELECT * FROM  t_team_game tt WHERE 1=1
+					<if test="maps.teaminfo_id!=null">
+						AND (tt.initiate_teaminfo_id = #{maps.teaminfo_id} OR tt.respond_teaminfo_id = #{maps.teaminfo_id}) 
+					 </if>
+					 ORDER BY tt.game_time DESC
+					 <if test="maps.start!=null and maps.rows!=null">
+						LIMIT #{maps.start},#{maps.rows}
+					 </if>
+				) tg 
+				LEFT JOIN f_baby_cheer fc ON fc.teamgame_id = tg.id  
+				<if test="maps.status!=null and maps.status!=''">
+					AND fc.status = #{maps.status} 
+				</if>
+				<if test="maps.teaminfo_id!=null">
+		     		AND fc.teaminfo_id = #{maps.teaminfo_id}
+		     	</if>	
+				LEFT JOIN m_user m ON fc.user_id = m.id
+		     	WHERE 1=1 
+				ORDER BY tg.game_time DESC 
+			)AS aa,(SELECT @rownum:=0)AS bb	
+  		</select> 
+  		
+  		<select id="countHistory" resultType="int">  
+		     SELECT count(id) FROM t_team_game WHERE 1=1 
+		     <if test="maps.teaminfo_id!=null">
+					AND (initiate_teaminfo_id = #{maps.teaminfo_id} 
+					OR respond_teaminfo_id = #{maps.teaminfo_id})
+			 </if>
+					ORDER BY create_time DESC;
+  		</select> 
+  		
+  		<select id="currentGame" resultType="com.yt.framework.persistent.entity.TeamGame">  
+		     SELECT * FROM t_team_game WHERE 1=1 AND status in(0,3)
+		     <if test="teaminfo_id!=null">
+					AND (initiate_teaminfo_id = #{teaminfo_id} 
+					OR respond_teaminfo_id = #{teaminfo_id}) 
+			 </if>
+			 	ORDER BY create_time DESC limit 1;
+  		</select> 
+  		
+  		<select id="allMatchGame" resultType="map">  
+		    SELECT t.id,t.initiate_teaminfo_id,initiate_score,respond_score,
+				(SELECT s.name FROM t_team_info s where s.id = t.initiate_teaminfo_id) AS initiate_teaminfo_name, 
+				t.respond_teaminfo_id ,
+				(SELECT s.name FROM t_team_info s where s.id = t.respond_teaminfo_id) AS respond_teaminfo_name 
+				FROM t_team_game t
+		     	WHERE 1=1 
+		     <if test="maps.teaminfo_id!=null">
+					AND (initiate_teaminfo_id = #{maps.teaminfo_id} 
+					OR respond_teaminfo_id = #{maps.teaminfo_id}) 
+			 </if>
+			 <choose>
+					<when test="maps.status!=null">
+						AND t.status = #{maps.status}
+					</when>
+					<otherwise>
+						AND t.status in (0,3)
+					</otherwise>
+			</choose>
+			 	ORDER BY t.create_time DESC;
+  		</select>
+  		
+  		<update id="updateTeamGame" parameterType="com.yt.framework.persistent.entity.TeamGame">
+			UPDATE t_team_game
+				SET 
+				<if test="initiate_score!=null">
+					initiate_score = #{initiate_score},
+			 	</if>
+			 	<if test="respond_score!=null">
+					respond_score = #{respond_score},
+			 	</if>
+			 	<if test="initiate_sure!=null">
+					initiate_sure = #{initiate_sure},
+			 	</if>
+			 	<if test="respond_sure!=null">
+					respond_sure = #{respond_sure},
+			 	</if>
+			 	<if test="initiate_win!=null">
+					initiate_win = #{initiate_win},
+			 	</if>
+			 	respond_sure = #{respond_sure},
+			 	initiate_sure = #{initiate_sure},
+				status = #{status}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="getTeamGameById" resultType="com.yt.framework.persistent.entity.TeamGame">
+			SELECT * FROM t_team_game WHERE id = #{id} 
+		</select>
+		
+		<select id="queryHotGame" resultType="hashmap">
+			SELECT t.initiate_teaminfo_id,(SELECT t1.`name` FROM t_team_info t1 WHERE t1.id = t.initiate_teaminfo_id) initiate_teaminfo_name,
+					t.respond_teaminfo_id,(SELECT t2.`name` FROM t_team_info t2 WHERE t2.id = t.respond_teaminfo_id) respond_teaminfo_name,t.* 
+			FROM t_team_game t , t_team_info s WHERE (t.initiate_teaminfo_id = s.id OR t.respond_teaminfo_id = t.id) AND t.status = 0 ORDER BY s.score DESC 
+			<choose>
+				<when test="maps!=null and maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows};
+				</when>
+				<otherwise>
+					LIMIT 5;
+				</otherwise>
+			</choose>
+		</select>
+		
+		<select id="queryHotGameCount" resultType="int">
+		SELECT 
+			COUNT(*)
+			FROM t_team_game t , t_team_info s WHERE (t.initiate_teaminfo_id = s.id OR t.respond_teaminfo_id = t.id) AND t.status = 0 
+		</select>
+		
+		<select id="getInviteByTeam" resultType="com.yt.framework.persistent.entity.TeamInvite">
+			SELECT * FROM t_team_invite WHERE teaminfo_id = #{teaminfo_id} AND respond_teaminfo_id = #{respond_teaminfo_id}  and status = 2
+		</select>
+		
+		<select id="loadTeamGameByTeamId" resultType="com.yt.framework.persistent.entity.TeamGame">
+			SELECT * FROM t_team_game AS tg 
+			WHERE (
+					(tg.initiate_teaminfo_id = #{teaminfo_id} AND tg.initiate_sure =0)
+					 OR
+					(tg.respond_teaminfo_id=#{teaminfo_id} AND tg.respond_sure=0)
+				  )
+				AND tg.`status` = 0  
+		</select>
+		
+		<select id="loadTeamGameById" resultType="com.yt.framework.persistent.entity.TeamGame">
+			SELECT * FROM t_team_game WHERE id = #{id}
+		</select>
+		
+		<select id="getAllTeamGameByDate" resultType="com.yt.framework.persistent.entity.TeamGame">
+			SELECT * FROM t_team_game 
+				WHERE 1=1 
+				 AND game_time = DATE_FORMAT(#{date},'%y-%m-%d')
+				 AND status !=1 
+				 AND status !=2
+		</select>
+		
+		<insert id="saveTeamGame" parameterType="com.yt.framework.persistent.entity.TeamGame" >
+			INSERT INTO t_team_game(
+				id,
+				initiate_teaminfo_id,
+				initiate_score,
+				t_name,
+				t_logo,
+				respond_teaminfo_id,
+				respond_score,
+				r_name,
+				r_logo,
+				game_time,
+				position,
+				status,
+				ball_format,
+				initiate_win,
+				initiate_sure,
+				respond_sure,
+				create_time
+			)VALUES(
+				#{id},
+				#{initiate_teaminfo_id},
+				#{initiate_score},
+				#{t_name},
+				#{t_logo},
+				#{respond_teaminfo_id},
+				#{respond_score},
+				#{r_name},
+				#{r_logo},
+				#{game_time},
+				#{position},
+				#{status},
+				#{ball_format},
+				#{initiate_win},
+				#{initiate_sure},
+				#{respond_sure},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="delTeamGame">
+			DELETE FROM t_team_game WHERE id=#{id}
+		</delete>
+		
+		<!-- 定向转会消息 -->
+		<select id="transferMarketCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT tm.*,tb.`name` buy_name,ts.`name` sell_name,u.username,u.usernick,u.sex,u.phone,u.head_icon FROM t_transfer_msg tm 
+				LEFT JOIN t_team_info tb ON tb.id=tm.buy_teaminfo_id 
+				LEFT JOIN t_team_info ts ON ts.id=tm.sell_teaminfo_id 
+				LEFT JOIN m_user u ON u.id=tm.user_id 
+				<where>
+		   		 	<if test="maps.type !=null and maps.type ==1 ">
+						AND tm.buy_teaminfo_id=#{maps.teaminfo_id} 
+					</if>
+					<if test="maps.type !=null and maps.type ==2 ">
+						AND tm.sell_teaminfo_id=#{maps.teaminfo_id} 
+					</if>
+					<if test="maps.status !=null and maps.status !='' ">
+						AND tm.status=#{maps.status} 
+					</if>
+		   		 </where> 
+			) cot_t)
+		</select>
+		
+		<select id="queryTransferMarket" parameterType="hashmap" resultType="hashmap">
+			SELECT tm.*,tb.`name` buy_name,ts.`name` sell_name,u.username,u.usernick,u.sex,u.phone,u.head_icon FROM t_transfer_msg tm 
+			LEFT JOIN t_team_info tb ON tb.id=tm.buy_teaminfo_id 
+			LEFT JOIN t_team_info ts ON ts.id=tm.sell_teaminfo_id 
+			LEFT JOIN m_user u ON u.id=tm.user_id 
+			<where>
+	   		 	<if test="maps.type !=null and maps.type ==1 ">
+					AND tm.buy_teaminfo_id=#{maps.teaminfo_id} 
+				</if>
+				<if test="maps.type !=null and maps.type ==2 ">
+					AND tm.sell_teaminfo_id=#{maps.teaminfo_id} 
+				</if>
+	   		 </where>
+			ORDER BY tm.`status` ASC,tm.deal_time DESC 
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="getTransferMsg" resultType="com.yt.framework.persistent.entity.TransferMsg">
+			SELECT * FROM t_transfer_msg WHERE id=#{id}
+		</select>
+		
+		<select id="queryOtherTransferMsg" resultType="com.yt.framework.persistent.entity.TransferMsg">
+			SELECT * FROM t_transfer_msg WHERE id!=#{mid} AND sell_teaminfo_id=#{tid} AND user_id=#{uid}
+		</select>
+		<select id="queryUntreatedTransferMsg" resultType="com.yt.framework.persistent.entity.TransferMsg">
+			SELECT * FROM t_transfer_msg WHERE sell_teaminfo_id=#{team_id} AND user_id=#{user_id} AND status=0 
+		</select>
+		
+		<insert id="saveTransferMsg" parameterType="com.yt.framework.persistent.entity.TransferMsg">
+			INSERT INTO t_transfer_msg(
+				id,
+				buy_teaminfo_id,
+				sell_teaminfo_id,
+				user_id,
+				price,
+				if_ok,
+				status,
+				remark,
+				deal_time
+			)VALUES(
+				#{id},
+				#{buy_teaminfo_id},
+				#{sell_teaminfo_id},
+				#{user_id},
+				#{price},
+				#{if_ok},
+				#{status},
+				#{remark},
+				NOW()
+			)
+		</insert>
+		
+		<update id="updateTransferMsg" parameterType="com.yt.framework.persistent.entity.TransferMsg">
+			UPDATE t_transfer_msg
+				SET
+					buy_teaminfo_id = #{buy_teaminfo_id},
+					sell_teaminfo_id = #{sell_teaminfo_id},
+					user_id = #{user_id},
+					price = #{price},
+					if_ok = #{if_ok},
+					status = #{status},
+					remark = #{remark},
+					deal_time = #{deal_time}
+			WHERE id = #{id}
+		</update>
+		
+		<delete id="deleteTransferMsg">
+			DELETE FROM t_transfer_msg WHERE id = #{id}
+		</delete>
+		<!-- 定向转会消息 -->
+</mapper>

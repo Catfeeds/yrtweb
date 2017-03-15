@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.PkRecordMapper">
+		
+		<select id="queryForPageForMap" resultType="hashmap">
+		SELECT er.id,er.m_teaminfo_id,er.m_team_name,er.g_teaminfo_id,er.g_team_name,er.m_score,er.g_score,er.position,DATE_FORMAT(er.play_time,'%Y-%m-%d %H:%i')AS play_time,er.rounds 
+		FROM a_event_record AS er
+			LEFT JOIN t_team_info AS ti ON (ti.id = er.m_teaminfo_id OR ti.id = er.g_teaminfo_id)
+		WHERE 1=1
+			AND er.league_id = #{maps.league_id}
+			AND ti.id=#{maps.teaminfo_id}
+		ORDER BY play_time ASC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>    
+		</select>
+		
+		<select id="count" resultType="int">
+		SELECT COUNT(*) FROM a_event_record AS er
+			LEFT JOIN t_team_info AS ti ON (ti.id = er.m_teaminfo_id OR ti.id = er.g_teaminfo_id)
+		WHERE 1=1
+			AND er.league_id = #{maps.league_id}
+			AND ti.id=#{maps.teaminfo_id}
+		</select>
+		
+		<select id="teamLeagueWinCount" resultType="int">
+			SELECT COUNT(*) FROM a_pk_record AS pr
+			WHERE 1=1
+			AND (pr.m_teaminfo_id = #{maps.teaminfo_id} OR pr.g_teaminfo_id = #{maps.teaminfo_id})
+			AND pr.league_id = #{maps.league_id}
+			<choose>
+				<when test="maps.num!=null and maps.num!=''">
+					AND pr.win_teaminfo_id = #{maps.num}
+				</when>
+				<otherwise>
+					AND pr.win_teaminfo_id IS NULL
+				</otherwise>
+			</choose>
+		</select>
+		
+		<select id="teamLeagueCount" resultType="int">
+			SELECT COUNT(*) FROM a_pk_record AS pr
+			WHERE 1=1
+			AND (pr.m_teaminfo_id = #{maps.teaminfo_id} OR pr.g_teaminfo_id = #{maps.teaminfo_id})
+			AND pr.league_id = #{maps.league_id}
+		</select>
+</mapper>

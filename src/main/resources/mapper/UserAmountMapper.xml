@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.UserAmountMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.UserAmount">
+			INSERT INTO m_user_amount(
+				id,
+				user_id,
+				teaminfo_id,
+				amount,
+				real_amount,
+				send_amount,
+				status,
+				type
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{teaminfo_id},
+				#{amount},
+				#{real_amount},
+				#{send_amount},
+				#{status},
+				#{type}
+			)
+		</insert>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.UserAmount">
+			UPDATE m_user_amount
+			SET
+				amount=#{amount},
+				real_amount=#{real_amount},
+				send_amount=#{send_amount},
+				status=#{status}
+			WHERE
+				id = #{id}
+		</update>
+		
+		<update id="updateShow">
+			UPDATE m_user_amount
+				SET
+					`show`=#{show}
+				WHERE
+					user_id = #{user_id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.UserAmount">
+			SELECT * FROM m_user_amount WHERE id = #{id}
+		</select>
+		
+		<select id="getByUserId" resultType="com.yt.framework.persistent.entity.UserAmount">
+			SELECT * FROM m_user_amount WHERE user_id = #{userId}
+		</select>
+		
+		<select id="getFreezeAmountById" resultType="com.yt.framework.persistent.entity.UserFreezeAmount">
+			SELECT * FROM m_freeze_amount WHERE id = #{id}
+		</select>
+			
+		<insert id="saveUserFreezeAmount" parameterType="com.yt.framework.persistent.entity.UserFreezeAmount">
+			INSERT INTO m_freeze_amount(
+				id,
+				user_id,
+				u_amount_id,
+				teaminfo_id,
+				amount,
+				status,
+				describle,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{u_amount_id},
+				#{teaminfo_id},
+				#{amount},
+				#{status},
+				#{describle},
+				NOW()
+			)
+		</insert>
+		
+		<update id="updateFreezeAmount" parameterType="com.yt.framework.persistent.entity.UserFreezeAmount">
+			UPDATE m_freeze_amount
+			SET
+				status = #{status},
+				describle = #{describle}
+			WHERE
+				id = #{id} 
+		</update>
+		
+		<insert id="saveFee" parameterType="com.yt.framework.persistent.entity.Fee">
+			INSERT INTO m_fee(
+				id,
+				order_id,
+				fee_money,
+				create_time
+			)VALUES(
+				#{id},
+				#{order_id},
+				#{fee_money},
+				NOW()
+			)
+			
+			
+		</insert>
+		
+		<select id="getUserAmountByTeaminfoID" resultType="com.yt.framework.persistent.entity.UserAmount">
+			SELECT * FROM m_user_amount WHERE teaminfo_id = #{teaminfo_id}
+		</select>	
+		
+		<insert id="saveTeamAmountDetail" parameterType="com.yt.framework.persistent.entity.AmountDetail">
+			INSERT INTO t_amount_detail(
+				id,
+				teaminfo_id,
+				user_id,
+				amount,
+				create_time
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{user_id},
+				#{amount},
+				NOW()
+			)
+		</insert>
+		
+		<select id="loadAmountDetail" resultType="hashmap">
+			SELECT SUM(ad.amount)AS amount,ad.user_id,u.usernick FROM t_amount_detail AS ad 
+				LEFT JOIN m_user AS u on u.id = ad.user_id
+				WHERE 1=1
+					AND ad.teaminfo_id = #{maps.teaminfo_id}
+					GROUP BY ad.user_id
+					ORDER BY amount DESC
+				<if test="maps.firstNum!=null and maps.pageSize!=null">
+					limit #{maps.firstNum},#{maps.pageSize}
+				</if>	
+		</select>
+</mapper>

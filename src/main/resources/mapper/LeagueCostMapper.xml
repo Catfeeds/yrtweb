@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.LeagueCostMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.LeagueCost">
+		INSERT INTO a_league_cost(
+			id,
+			league_id,
+			user_id,
+			amount,
+			create_time,
+			order_no,
+			status,
+			sign_way
+		)VALUES(
+			#{id},
+			#{league_id},
+			#{user_id},
+			#{amount},
+			NOW(),
+			#{order_no},
+			#{status},
+			#{sign_way}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.LeagueCost">
+		UPDATE a_league_cost
+			SET
+			status = #{status}
+			WHERE
+		id = #{id}
+	</update>
+	
+	<select id="getLeagueCostByOrderNo" resultType="com.yt.framework.persistent.entity.LeagueCost">
+		SELECT * FROM a_league_cost WHERE order_no = #{order_no}
+	</select>
+	
+	<select id="getLeagueCostByUserId" resultType="com.yt.framework.persistent.entity.LeagueCost">
+		SELECT * FROM a_league_cost 
+			WHERE user_id = #{user_id} AND league_id = #{league_id} AND status=1
+	</select>
+	
+</mapper>

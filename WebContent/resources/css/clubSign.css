@@ -1,0 +1,28 @@
+.prompt{
+	width: 880px;
+	margin: 10px auto;
+	border-bottom: 1px solid #666;
+	padding-bottom: 20px;
+}
+
+.prompt input{
+	width: 70px;
+	height: 35px;
+	border: none;
+	color: white;
+	font-size: 18px;
+	border: 1px solid #666;
+	border-radius: 4px;
+	background: transparent;
+}
+
+.upClubLogo{
+	width: 800px;
+  	margin: 60px auto 0;
+}
+
+.upClubLogo img{
+	width: 180px;
+	height: 180px;
+	margin-left: 300px;
+}

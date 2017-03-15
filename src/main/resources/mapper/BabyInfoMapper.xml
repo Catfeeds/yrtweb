@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.BabyInfoMapper">
+	
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.BabyInfo" >
+		INSERT INTO f_baby_info(
+			id,
+			user_id,
+			constellation,
+			height,
+			weight,
+			chest,
+			hobby,
+			achievement,
+			intro,
+			love_team,
+			hip,
+			waist,
+			score,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{constellation},
+			#{height},
+			#{weight},
+			#{chest},
+			#{hobby},
+			#{achievement},
+			#{intro},
+			#{love_team},
+			#{hip},
+			#{waist},
+			#{score},
+			NOW()
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.BabyInfo">
+		UPDATE f_baby_info
+			SET
+				constellation=#{constellation},
+				height=#{height},
+				weight=#{weight},
+				chest=#{chest},
+				hobby=#{hobby},
+				achievement=#{achievement},
+				intro=#{intro},
+				love_team=#{love_team},
+				hip=#{hip},
+				waist=#{waist},
+				score=#{score}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.BabyInfo">
+		SELECT * FROM f_baby_info WHERE id = #{id}
+	</select>
+	
+	<select id="getByUserId" resultType="com.yt.framework.persistent.entity.BabyInfo">
+		SELECT * FROM f_baby_info WHERE user_id = #{userId}
+	</select>
+	
+	<insert id="saveImgOrVideos" parameterType="com.yt.framework.persistent.entity.ImageVideoBaby" >
+		INSERT INTO f_baby_image_video(
+			id,
+			user_id,
+			babyinfo_id,
+			if_show,
+			src,
+			v_cover,
+			status,
+			type,
+			praise_count,
+			unpraise_count,
+			click_count,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{babyinfo_id},
+			#{if_show},
+			#{src},
+			#{v_cover},
+			#{status},
+			#{type},
+			0,
+			0,
+			0,
+			NOW()
+		)
+	</insert>
+	
+	<select id="getBabyUser" resultType="hashmap">
+		SELECT m.usernick,m.head_icon,fb.id,fb.user_id
+			FROM m_user m,f_baby_info fb 
+			WHERE m.id = fb.user_id AND fb.user_id = #{baby_id};
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT fbiv.f_src,fb.id AS id ,fb.user_id AS user_id,mu.usernick AS usernick,mu.head_icon AS head_icon,mc.status AS status
+			FROM f_baby_info fb 
+			LEFT JOIN m_user mu ON  fb.user_id = mu.id
+			LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) AS fbiv ON fbiv.user_id = mu.id
+			LEFT JOIN m_certification mc ON fb.user_id = mc.user_id
+			WHERE 1=1
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND mu.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.city!=null and maps.city!=''">
+				AND mu.city=#{maps.city}
+			</if>
+			<if test="maps.if_del!=null and maps.if_del!=''">
+				AND fb.if_del=#{maps.if_del}
+			</if>
+			<if test="maps.height!=null and maps.height!=''">
+				AND fb.height &gt; #{maps.height}
+			</if>
+			<if test="maps.score!=null and maps.score!=''">
+				AND fb.score &gt; #{maps.score}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				<choose>
+					<when test="maps.status == 0 or maps.status =='0'">
+						AND (mc.status is null OR mc.status = 3 OR mc.status = 2)
+					</when>
+					<otherwise>
+						AND mc.status=#{maps.status}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="maps.is_index!=null and maps.is_index!=''">
+				AND fb.is_index = #{maps.is_index}
+			</if>
+			GROUP BY fb.user_id
+			<choose>
+				<when test="maps.show_num!=null and maps.show_num!=''">
+					ORDER BY fb.show_num ASC
+				</when>
+				<otherwise>
+					ORDER BY mu.create_time DESC 
+				</otherwise>
+			</choose>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(DISTINCT(fb.id))
+			FROM f_baby_info fb 
+			LEFT JOIN m_user mu ON  fb.user_id = mu.id
+			LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) AS fbiv ON fbiv.user_id = mu.id
+			LEFT JOIN m_certification mc ON fb.user_id = mc.user_id
+			WHERE 1=1
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND mu.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.city!=null and maps.city!=''">
+				AND mu.city=#{maps.city}
+			</if>
+			<if test="maps.if_del!=null and maps.if_del!=''">
+				AND fb.if_del=#{maps.if_del}
+			</if>
+			<if test="maps.height!=null and maps.height!=''">
+				AND fb.height &gt; #{maps.height}
+			</if>
+			<if test="maps.score!=null and maps.score!=''">
+				AND fb.score &gt; #{maps.score}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				<choose>
+					<when test="maps.status == 0 or maps.status =='0'">
+						AND (mc.status is null OR mc.status = 3 OR mc.status = 2)
+					</when>
+					<otherwise>
+						AND mc.status=#{maps.status}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="maps.is_index!=null and maps.is_index!=''">
+				AND fb.is_index = #{maps.is_index}
+			</if>
+		</select>
+			
+	<select id="loadAllBabyVideoByUserId" resultType="hashmap">
+		SELECT * FROM m_videos
+			WHERE 1=1 
+				AND user_id = #{user_id}
+				AND f_status = 1
+				AND role_type = #{role_type}
+					ORDER BY create_time 
+	</select>
+	
+	<select id="loadAllBabyImageByUserId" resultType="hashmap">
+		SELECT * FROM m_images
+			WHERE 1=1 
+				AND user_id = #{user_id}
+				AND f_status = 1
+				AND role_type = #{role_type}
+					ORDER BY create_time 
+	</select>
+	
+	<select id="getInviteAndCheerCount" resultType="hashmap">
+	SELECT 
+	(SELECT COUNT(*) FROM f_baby_cheer AS bc WHERE bc.user_id = #{user_id} AND bc.`status` = 1)AS bc_count,
+	(SELECT COUNT(*) FROM f_baby_team AS bt WHERE bt.user_id = #{user_id} AND bt.`status` = 1)AS bt_count
+	</select>
+	
+	
+	<select id="queryBabyImages" parameterType="hashmap" resultType="hashmap">
+		SELECT biv.id,biv.user_id,biv.v_cover,biv.if_show,biv.src,biv.title,biv.`status`,biv.praise_count,biv.type,biv.`no`,biv.f_size,biv.describle,biv.create_time 
+		FROM f_baby_image_video biv 
+		WHERE biv.user_id=#{maps.user_id}
+		<if test="maps.type!=null and maps.type!=''">
+			AND biv.type = #{maps.type}
+		</if>
+		ORDER BY biv.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="babyImgCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT biv.id,biv.user_id,biv.v_cover,biv.if_show,biv.src,biv.title,biv.`status`,biv.praise_count,biv.type,biv.`no`,biv.f_size,biv.describle,biv.create_time 
+			FROM f_baby_image_video biv 
+			WHERE biv.user_id=#{maps.user_id} 
+			<if test="maps.type!=null and maps.type!=''">
+			AND biv.type = #{maps.type}
+			</if>
+		) cot_t)
+	</select>
+	
+	<delete id="deleteBabyImg">
+		DELETE FROM f_baby_image_video WHERE id = #{id}
+	</delete>
+	
+	<select id="loadRecommendBabyImages" resultType="hashmap">
+	SELECT fbiv.f_src,fbiv.to_oss,fbi.id AS baby_id,fbi.chest,fbi.waist,fbi.hip,u.*,TIMESTAMPDIFF(YEAR,u.borndate,now())AS age,mc.`status` 
+	 FROM f_baby_info AS fbi 
+		LEFT JOIN m_user AS u ON u.id = fbi.user_id 
+		LEFT JOIN (SELECT * FROM m_images WHERE f_status=1 AND role_type='BABY' ORDER BY create_time ASC ) AS fbiv ON fbiv.user_id = u.id
+		LEFT JOIN m_certification AS mc ON mc.user_id = fbi.user_id
+	WHERE
+	   fbi.is_index=1 AND fbi.if_del=0
+	   GROUP BY fbi.user_id ORDER BY fbi.show_num 
+	   <if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="getTeamInfoByUserId" resultType="com.yt.framework.persistent.entity.TeamInfo">
+		SELECT ti.*,TIMESTAMPDIFF(DAY,join_date,end_date)AS re_days,bt.id AS baby_team_id,bt.status AS bt_status FROM t_team_info AS ti 
+			LEFT JOIN f_baby_team AS bt ON bt.teaminfo_id = ti.id
+		WHERE
+			bt.user_id = #{baby_user_id} AND bt.status = 1
+	</select>
+	
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminTeamInfoMapper">
+	<sql id="teamInfo">
+		id,
+		user_id,
+		name,
+		is_pk,
+		logo,
+		draw_count,
+		image_count,
+		video_count,
+		win_count,
+		loss_count,
+		score,
+		play_time,
+		is_exist,
+		ball_format,
+		allow,
+		play_position,
+		province,
+		city,
+		sumballs,
+		notice,
+		remark,
+		create_time
+	</sql>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.TeamInfo">
+		SELECT * FROM t_team_info WHERE id = #{id}
+	</select>
+
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT t.*,u.usernick FROM t_team_info t,m_user u 
+		<where>
+			t.user_id=u.id 
+   		 	<if test="maps.name !=null and maps.name !='' ">
+				AND t.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+			<if test="maps.is_exist !=null and maps.is_exist !='' ">
+				AND t.is_exist=#{maps.is_exist}
+			</if>
+			<if test="maps.not_exists !=null and maps.not_exists =='recommendation' ">
+				AND NOT EXISTS (SELECT r.teaminfo_id FROM t_recommendation r WHERE r.teaminfo_id=t.id) 
+			</if>
+   		 </where>
+   		 ORDER BY t.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT t.*,u.usernick FROM t_team_info t,m_user u 
+			<where>
+				t.user_id=u.id 
+	   		 	<if test="maps.name !=null and maps.name !='' ">
+				AND t.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.is_exist !=null and maps.is_exist !='' ">
+					AND t.is_exist=#{maps.is_exist}
+				</if>
+				<if test="maps.not_exists !=null and maps.not_exists =='recommendation' ">
+					AND NOT EXISTS (SELECT r.teaminfo_id FROM t_recommendation r WHERE r.teaminfo_id=t.id) 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="queryTeamLeagueForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT t.* FROM a_group_event a 
+			LEFT JOIN a_league_group g ON g.id = a.group_id 
+		 	LEFT JOIN t_team_info t ON a.teaminfo_id = t.id
+			WHERE 1 = 1
+				<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND a.group_id = #{maps.group_id}
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND g.league_id = #{maps.league_id}
+				</if>
+   		 	ORDER BY t.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="teamLeagueCount" parameterType="hashmap" resultType="int">
+		SELECT count(a.id) FROM a_group_event a 
+			LEFT JOIN a_league_group g ON g.id = a.group_id 
+		 	LEFT JOIN t_team_info t ON a.teaminfo_id = t.id
+			WHERE 1 = 1
+				<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND a.group_id = #{maps.group_id}
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND g.league_id = #{maps.league_id}
+				</if>
+	</select>
+	
+	<insert id="saveRecommendation">
+		INSERT INTO t_recommendation(
+			id,
+			teaminfo_id,
+			re_sort,
+			user_id,
+			create_time
+		)VALUES(
+			#{id},
+			#{teaminfo_id},
+			0,
+			#{user_id},
+			NOW()
+		)
+	</insert>
+	
+	<update id="updateRecommendation" parameterType="hashmap">
+		UPDATE t_recommendation
+		SET
+			re_sort = #{re_sort},
+			user_id = #{user_id}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="deleteRecommendation">
+		DELETE FROM t_recommendation WHERE id = #{id}
+	</delete>
+	
+	<select id="recommendationCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT t.*,r.id rid,r.re_sort,r.user_id ruser_id,r.create_time rcreate_time,u.usernick FROM t_recommendation r    
+			LEFT JOIN t_team_info t ON t.id=r.teaminfo_id     
+			LEFT JOIN m_user u ON u.id=t.user_id     
+			<where>
+	   		 	<if test="maps.name !=null and maps.name !='' ">
+					AND t.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="queryRecommendation" parameterType="hashmap" resultType="hashmap">
+		SELECT t.*,r.id rid,r.re_sort,r.user_id ruser_id,r.create_time rcreate_time,u.usernick FROM t_recommendation r
+		LEFT JOIN t_team_info t ON t.id=r.teaminfo_id 
+		LEFT JOIN m_user u ON u.id=t.user_id 
+		<where>
+   		 	<if test="maps.name !=null and maps.name !='' ">
+				AND t.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+   		 </where>
+   		ORDER BY r.re_sort DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+</mapper>

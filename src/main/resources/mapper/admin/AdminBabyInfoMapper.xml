@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminBabyInfoMapper">
+
+	<select id="getBabyInfoById" resultType="com.yt.framework.persistent.entity.BabyInfo">
+		SELECT * FROM f_baby_info WHERE id = #{id}
+	</select>
+
+	<update id="updateBabyInfo" parameterType="com.yt.framework.persistent.entity.BabyInfo">
+		UPDATE f_baby_info
+			SET
+				is_index = #{is_index},
+				show_num = #{show_num},
+				if_del = #{if_del}
+			WHERE
+				id = #{id}	
+	</update>
+	
+	<select id="isExistByShowNum" resultType="int">
+		SELECT COUNT(*) from f_baby_info WHERE show_num = #{show_num}
+	</select>
+
+	<select id="loadBabyDataPage" resultType="hashmap">
+		SELECT fbi.*,u.username,u.usernick,u.phone,u.head_icon 
+			FROM f_baby_info AS fbi 
+				LEFT JOIN m_user AS u ON u.id = fbi.user_id
+			WHERE 1=1
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND u.usernick LIKE CONCAT('%',#{maps.usernick},'%')	
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone = #{maps.phone}	
+			</if>
+			ORDER BY create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="loadBabyDataCount" resultType="int">
+		SELECT COUNT(*) FROM f_baby_info AS fbi 
+			LEFT JOIN m_user AS u ON u.id = fbi.user_id
+				WHERE 1=1
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND u.usernick LIKE CONCAT('%',#{maps.usernick},'%')	
+				</if>
+				<if test="maps.phone!=null and maps.phone!=''">
+					AND u.phone = #{maps.phone}	
+				</if>
+	</select>
+	
+</mapper>

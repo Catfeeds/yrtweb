@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.ReceiveGiftsMapper">
+	
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.ReceiveGifts" >
+		insert into m_receive_gifts (id, rec_user_id, pay_user_id, p_code, p_name, charm_value, price, createTime) 
+		values (#{id}, #{rec_user_id}, #{pay_user_id}, #{p_code}, #{p_name}, #{charm_value}, #{price}, #{createTime})
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.ReceiveGifts">
+		update m_receive_gifts set  rec_user_id = #{rec_user_id}, pay_user_id = #{pay_user_id}, p_code = #{p_code}, p_name = #{p_name}, charm_value = #{charm_value}, price = #{price}, createTime = #{createTime} where id = #{id}
+	</update>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.ReceiveGifts">
+		SELECT * FROM m_receive_gifts WHERE id = #{id}
+	</select>
+	<select id="getUserReceiveGifts" resultType="hashmap">
+		select count(0) as _count, p_code from m_receive_gifts where rec_user_id=#{user_id} group by p_code
+	</select>
+</mapper>

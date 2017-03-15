@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.ImageVideoLeagueMapper">
+	<sql id="imageVideoTeam">
+		id,league_id,group_id,v_cover,if_show,role_type,src,title,status,praise_count,create_time,type,no,f_size,describle 
+	</sql>
+	<!-- 查询关联 参加联赛俱乐部的图片、视频 -->
+	<select id="queryForPageForMap" resultType="hashmap">
+	SELECT iv.* FROM 
+		<if test="maps.type!=null and maps.type==1">
+			m_images AS iv 
+		</if> 
+		<if test="maps.type!=null and maps.type==2">
+			m_videos AS iv 
+		</if> 
+		WHERE 1=1
+		AND EXISTS(
+					SELECT it.id FROM a_iv_team AS it WHERE it.teaminfo_id = (
+							SELECT ti.id FROM t_team_info AS ti WHERE ti.id = #{maps.teaminfo_id}
+					)
+					AND it.a_iv_id = iv.id
+				)
+		AND iv.user_id=#{maps.league_id} AND iv.role_type='LEAGUE' 
+		ORDER BY iv.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	<!-- 查询关联 参加联赛俱乐部的图片、视频总数-->
+	<select id="count" resultType="int">
+		SELECT count(*) FROM 
+		<if test="maps.type!=null and maps.type==1">
+			m_images AS iv 
+		</if> 
+		<if test="maps.type!=null and maps.type==2">
+			m_videos AS iv 
+		</if> 
+		WHERE 1=1
+		AND EXISTS(
+					SELECT it.id FROM a_iv_team AS it WHERE it.teaminfo_id = (
+							SELECT ti.id FROM t_team_info AS ti WHERE ti.id = #{maps.teaminfo_id}
+					)
+					AND it.a_iv_id = iv.id
+				)
+		AND iv.user_id=#{maps.league_id} AND iv.role_type='LEAGUE'
+	</select>
+	
+	<select id="loadAllLeaguePhotos" resultType="hashmap">
+		SELECT * FROM
+			<if test="maps.type!=null and maps.type==1">
+				m_images 
+			</if> 
+			<if test="maps.type!=null and maps.type==2">
+				m_videos 
+			</if> 
+			WHERE role_type='LEAGUE' 
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND user_id=#{maps.league_id} 
+			</if> 
+			<if test="maps.if_show!=null and maps.if_show!=''">
+				AND if_show = #{maps.if_show}
+			</if> 
+			ORDER BY create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="getAllLeaguePhotosCount" resultType="int">
+			SELECT count(1) FROM
+		<if test="maps.type!=null and maps.type==1">
+				m_images 
+		</if> 
+		<if test="maps.type!=null and maps.type==2">
+			m_videos 
+		</if> 
+			WHERE user_id=#{maps.league_id} AND role_type='LEAGUE'
+			<if test="maps.if_show!=null and maps.if_show!=''">
+				AND if_show = #{maps.if_show}
+			</if> 
+	</select>
+	
+	<select id="loadAllIvComments" resultType="hashmap">
+		SELECT ivc.*,u.usernick,u.head_icon FROM a_iv_comments AS ivc
+			LEFT JOIN m_user AS u ON u.id = ivc.user_id
+ 				WHERE 1=1
+ 					AND ivc.iv_id = #{maps.id}
+ 					AND ivc.is_show = 1
+ 					ORDER BY ivc.create_time DESC
+ 				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>	
+	</select>
+	
+	<select id="loadAllIvCommentsCount" resultType="int">
+		SELECT COUNT(*) FROM a_iv_comments AS ivc
+			LEFT JOIN m_user AS u ON u.id = ivc.user_id
+ 				WHERE 1=1
+ 					AND ivc.iv_id = #{maps.id}
+ 					AND ivc.is_show = 1
+	</select>
+</mapper>

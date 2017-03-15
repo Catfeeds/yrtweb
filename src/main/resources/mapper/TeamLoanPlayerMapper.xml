@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.TeamLoanPlayerMapper">
+		<!--球员租借信息-->
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.TeamLoanPlayer">
+			INSERT INTO t_teamloan_player(
+				id,
+				new_teaminfo_id,
+				teaminfo_id,
+				salary,
+				position,
+				user_id,
+				player_num,
+				end_time,
+				create_time
+			)VALUES(
+				#{id},
+				#{new_teaminfo_id},
+				#{teaminfo_id},
+				#{salary},
+				#{position},
+				#{user_id},
+				#{player_num},
+				#{end_time},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="delete">
+			DELETE FROM t_teamloan_player WHERE id = #{id}
+		</delete>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.TeamLoanPlayer">
+			UPDATE t_teamloan_player
+				SET
+				new_teaminfo_id = #{new_teaminfo_id},	
+				teaminfo_id = #{teaminfo_id},
+				salary = #{salary},
+				position = #{position},
+				status = #{status},
+				end_time = #{end_time}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<update id="updateNum">
+			UPDATE t_teamloan_player
+				SET
+					player_num = #{num}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.TeamLoanPlayer">
+			SELECT * FROM t_teamloan_player WHERE id = #{id} 
+		</select>
+		
+		<select id="queryForPage" resultType="com.yt.framework.persistent.entity.TeamLoanPlayer">
+			SELECT * FROM t_teamloan_player
+				WHERE 1=1
+				 <if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="queryForPageForMap" resultType="hashmap">
+			SELECT mu.usernick,mu.username,mu.head_icon,mu.borndate,
+				   tp.id,tp.position,tp.player_num,tp.position,tp.user_id,tp.end_time,
+				   pp.current_price,pp.score,pp.pass_ability,pp.header,pp.shot,pp.power,pp.speed,pp.explosive,
+				   pp.height,pp.weight,pp.position love_position,pp.love_num, 
+				   sp.id AS sp_id 
+				FROM t_teamloan_player AS tp 
+				LEFT JOIN p_player_info AS pp ON pp.user_id = tp.user_id
+				LEFT JOIN m_user AS mu ON mu.id = tp.user_id
+				LEFT JOIN a_suspend_player AS sp ON sp.user_id = tp.user_id AND sp.status = 1
+				WHERE
+					tp.new_teaminfo_id = #{maps.teaminfo_id} AND tp.end_time &gt; NOW()
+				ORDER BY tp.player_num ASC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT count(tp.id) FROM t_teamloan_player AS tp 
+				WHERE
+					tp.new_teaminfo_id = #{maps.teaminfo_id}
+					AND tp.end_time &gt; NOW()
+		</select>
+		
+		<select id="getTeamPlayersByTeamInfoId" resultType="com.yt.framework.persistent.entity.TeamLoanPlayer">
+			SELECT * FROM t_teamloan_player AS tp 
+				WHERE
+					tp.new_teaminfo_id = #{teaminfo_id}
+					AND tp.end_time &gt; NOW()
+		</select>
+		
+		
+		
+		<!-- 球员租借消息-->
+		
+		<insert id="saveLoanMsg" parameterType="com.yt.framework.persistent.entity.TeamLoanMsg">
+			INSERT INTO t_teamloan_msg(
+				id,
+				buy_teaminfo_id,
+				loan_teaminfo_id,
+				user_id,
+				price,
+				remark,
+				over_time,
+				cfg_id,
+				end_time,
+				create_time
+			)VALUES(
+				#{id},
+				#{buy_teaminfo_id},
+				#{loan_teaminfo_id},
+				#{user_id},
+				#{price},
+				#{remark},
+				#{over_time},
+				#{cfg_id},
+				#{end_time},
+				NOW()
+			)
+		</insert>
+		
+		<select id="queryTeamLoanMsg" parameterType="hashmap" resultType="hashmap">
+			SELECT *,(CASE WHEN over_time>=now() THEN 0 ELSE 1 END) if_lose
+			FROM t_teamloan_msg
+			WHERE 1=1 
+			<if test="maps.type!=null and maps.type==1">
+				AND loan_teaminfo_id=#{maps.teaminfo_id}
+			</if>
+			<if test="maps.type!=null and maps.type==2">
+				AND buy_teaminfo_id=#{maps.teaminfo_id}
+			</if>
+			ORDER BY `status`,create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="teamLoanMsgCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT *,(CASE WHEN over_time>=now() THEN 0 ELSE 1 END) if_lose
+				FROM t_teamloan_msg
+				WHERE 1=1 
+				<if test="maps.type!=null and maps.type==1">
+					AND loan_teaminfo_id=#{maps.teaminfo_id}
+				</if>
+				<if test="maps.type!=null and maps.type==2">
+					AND buy_teaminfo_id=#{maps.teaminfo_id}
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					AND status=#{maps.status}
+				</if>
+				<if test="maps.status!=null and maps.status==1">
+					AND over_time>=now() 
+				</if>
+			) cot_t)
+		</select>
+		
+		<select id="getTeamLoanMsgById" resultType="com.yt.framework.persistent.entity.TeamLoanMsg">
+			SELECT * FROM t_teamloan_msg WHERE id=#{id} 
+		</select>
+		
+		<delete id="deleteTeamLoanMsg">
+			DELETE FROM t_teamloan_msg WHERE id = #{id}
+		</delete>
+		
+		<update id="updateTeamLoanMsg" parameterType="com.yt.framework.persistent.entity.TeamLoanPlayer">
+			UPDATE t_teamloan_msg
+				SET
+				if_ok = #{if_ok},	
+				status = #{status},
+				closing_time = #{closing_time}
+				WHERE 
+					id = #{id}
+		</update>
+
+		<select id="queryUntreatedTeamLoanMsg" resultType="com.yt.framework.persistent.entity.TeamLoanMsg">
+			SELECT * FROM t_teamloan_msg 
+			WHERE loan_teaminfo_id=#{loan_teaminfo_id} AND user_id=#{user_id} AND `status`!=2 AND over_time>=now() 
+		</select>
+		
+		<!-- 球员球员详情 -->
+		<select id="getTeamLoanDetailData" resultType="hashmap">
+			SELECT 
+					 DISTINCT m.id, 
+					 mu.username,
+					 mc.id_card,
+					 mu.phone,
+					 (SELECT t1.name FROM t_team_info t1 WHERE t1.id = m.loan_teaminfo_id) loan_name,
+					 (SELECT t2.name FROM t_team_info t2 WHERE t2.id = m.buy_teaminfo_id) buy_name,
+					 DATE_FORMAT(m.closing_time,'%Y-%m-%d %H:%i:%s') closing_time,		
+					 DATE_FORMAT(m.end_time,'%Y-%m-%d %H:%i:%s') end_time
+				FROM 
+						t_teamloan_msg m
+				LEFT JOIN  
+							a_marketcfg c ON c.id = m.cfg_id
+				LEFT JOIN 
+							m_user mu ON m.user_id = mu.id
+				LEFT JOIN 
+							m_certification mc ON m.user_id = mc.user_id
+				WHERE 
+						c.s_id = #{s_id} AND m.if_ok = 1 AND c.turn_num = #{turn_num}
+				ORDER BY 
+						c.turn_num
+		</select>
+			
+</mapper>

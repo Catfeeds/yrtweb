@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminLeagueStatisticsMapper">
+	<sql id="leagueScorer">
+		id,
+		user_id,
+		teaminfo_id,
+		league_id,
+		shemen_num,
+		shezheng_num,
+		shepian_num,
+		jinqiu_num,
+		zhugong_num,
+		pujiu_num,
+		lanjie_num,
+		qiangduan_num,
+		jiewei_num,
+		fangui_num,
+		hongpai_num,
+		huangpai_num,
+		shuanghuang_num,
+		wulong_num,
+		zg_sort,
+		hop_sort,
+		hup_sort,
+		shup_sort,
+		create_time	
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.LeagueStatistics">
+		INSERT INTO a_league_statistics(
+			id,
+			user_id,
+			teaminfo_id,
+			league_id,
+			shemen_num,
+			shezheng_num,
+			shepian_num,
+			jinqiu_num,
+			zhugong_num,
+			pujiu_num,
+			lanjie_num,
+			qiangduan_num,
+			jiewei_num,
+			fangui_num,
+			hongpai_num,
+			huangpai_num,
+			shuanghuang_num,
+			wulong_num,
+			zg_sort,
+			hop_sort,
+			hup_sort,
+			shup_sort,
+			create_time	
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{teaminfo_id},
+			#{league_id},
+			#{shemen_num},
+			#{shezheng_num},
+			#{shepian_num},
+			#{jinqiu_num},
+			#{zhugong_num},
+			#{pujiu_num},
+			#{lanjie_num},
+			#{qiangduan_num},
+			#{jiewei_num},
+			#{fangui_num},
+			#{hongpai_num},
+			#{huangpai_num},
+			#{shuanghuang_num},
+			#{wulong_num},
+			#{zg_sort},
+			#{hop_sort},
+			#{hup_sort},
+			#{shup_sort},
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.LeagueStatistics">
+		UPDATE a_league_statistics
+		SET
+			teaminfo_id = #{teaminfo_id},
+			shemen_num = #{shemen_num},
+			shezheng_num = #{shezheng_num},
+			shepian_num = #{shepian_num},
+			jinqiu_num = #{jinqiu_num},
+			zhugong_num = #{zhugong_num},
+			pujiu_num = #{pujiu_num},
+			lanjie_num = #{lanjie_num},
+			qiangduan_num = #{qiangduan_num},
+			jiewei_num = #{jiewei_num},
+			fangui_num = #{fangui_num},
+			hongpai_num = #{hongpai_num},
+			huangpai_num = #{huangpai_num},
+			shuanghuang_num = #{shuanghuang_num},
+			wulong_num = #{wulong_num},
+			zg_sort = #{zg_sort},
+			hop_sort = #{hop_sort},
+			hup_sort = #{hup_sort},
+			shup_sort = #{shup_sort},
+			create_time = NOW()
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_league_statistics WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.LeagueStatistics">
+		SELECT
+		<include refid="leagueScorer" />
+		FROM a_league_statistics WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT ls.*,l.`name` lname,u.username,u.usernick,t.`name` tname FROM a_league_statistics ls
+		LEFT JOIN a_league l ON l.id=ls.league_id 
+		LEFT JOIN m_user u ON u.id=ls.user_id 
+		LEFT JOIN t_team_info t ON t.id=ls.teaminfo_id 
+		<where>
+   		 	<if test="maps.username !=null and maps.username !='' ">
+				AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.league_id !=null and maps.league_id !='' ">
+				AND ls.league_id=#{maps.league_id} 
+			</if>
+   		</where>
+   		<if test="maps.chart !=null and maps.chart == 1 ">
+			ORDER BY ls.zhugong_num DESC,ls.zg_sort DESC 
+		</if>
+		<if test="maps.chart !=null and maps.chart == 2 ">
+			ORDER BY ls.hongpai_num DESC,ls.huangpai_num DESC,ls.hop_sort DESC,ls.hup_sort DESC 
+		</if>
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT ls.*,l.`name` lname,u.username,u.usernick,t.`name` tname FROM a_league_statistics ls
+			LEFT JOIN a_league l ON l.id=ls.league_id 
+			LEFT JOIN m_user u ON u.id=ls.user_id 
+			LEFT JOIN t_team_info t ON t.id=ls.teaminfo_id 
+			<where>
+	   		 	<if test="maps.username !=null and maps.username !='' ">
+					AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND ls.league_id=#{maps.league_id} 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="queryQUserData" resultType="com.yt.framework.persistent.entity.LeagueStatistics">
+		SELECT league_id,rel_palyer_id user_id,teaminfo_id,SUM(shemen_num) shemen_num,SUM(shezheng_num) shezheng_num,SUM(shepian_num) shepian_num
+		,SUM(jinqiu_num) jinqiu_num,SUM(zhugong_num) zhugong_num,SUM(pujiu_num) pujiu_num,SUM(lanjie_num) lanjie_num,SUM(qiangduan_num) qiangduan_num
+		,SUM(jiewei_num) jiewei_num,SUM(fangui_num) fangui_num,SUM(hongpai_num) hongpai_num,SUM(huangpai_num) huangpai_num,SUM(shuanghuang_num) shuanghuang_num
+		,SUM(wulong_num) wulong_num
+		FROM (SELECT qmi.league_id,u.*
+		FROM q_match_info qmi 
+		LEFT JOIN q_user_data u ON u.q_match_id=qmi.id 
+		WHERE qmi.league_id=#{league_id} AND qmi.review_status=2 AND (u.rel_palyer_id IS NOT NULL AND u.rel_palyer_id!='') 
+		ORDER BY qmi.create_time DESC
+		) scorers 
+		GROUP BY league_id,rel_palyer_id
+	</select>
+	
+	<select id="getLeagueStatistics" resultType="com.yt.framework.persistent.entity.LeagueStatistics">
+		SELECT * FROM a_league_statistics WHERE league_id=#{league_id} AND user_id=#{user_id} 
+	</select>
+	
+	<!-- 竞拍统计 -->
+	<select id="getAuctionStatisticsData" resultType="hashmap">
+		SELECT 
+				aa.turn_num, 
+				count(aa.id) z_count,
+				(SELECT 
+						count(bb.id) 
+				FROM  
+						a_league_auction bb 
+				WHERE 
+						bb.turn_num = aa.turn_num AND bb.s_id = #{s_id}) j_count
+		FROM 
+				a_league_auction aa 
+		WHERE 
+				aa.status = 1 AND aa.s_id = #{s_id}
+		GROUP BY 
+				aa.turn_num
+		ORDER BY 
+				aa.turn_num
+	</select>
+	
+	<!-- 转会统计 -->
+	<select id="getMarketStatisticsData" resultType="hashmap">
+		SELECT 
+				aa.turn_num, 
+				count(aa.id) z_count
+		FROM 
+				a_league_market aa 
+		WHERE 
+				aa.status = 1 AND aa.s_id = #{s_id}
+		GROUP BY 
+				aa.turn_num
+		ORDER BY 
+				aa.turn_num
+	</select>
+	
+	<!-- 租借统计 -->
+	<select id="getTeamLoanStatisticsData" resultType="hashmap">
+		SELECT 
+				c.turn_num,
+				count(m.id) z_count
+		FROM 
+				t_teamloan_msg m,
+				a_marketcfg c 
+		WHERE 
+				c.id = m.cfg_id AND c.s_id = #{s_id} AND if_ok = 1 
+		GROUP BY 
+				c.turn_num 
+		ORDER BY 
+				c.turn_num
+	</select>
+	
+	
+</mapper>

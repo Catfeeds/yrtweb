@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.SysDictMapper">
+	<insert id="saveDict" parameterType="com.yt.framework.persistent.entity.SysDict" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO m_dict(
+			dict_column,
+			dict_desc,
+			dict_value,
+			dict_value_desc,
+			dict_flag,
+			dict_sort,
+			parent_id,
+			if_leaf		
+		)VALUES(
+			#{dict_column},
+			#{dict_desc},
+			#{dict_value},
+			#{dict_value_desc},
+			#{dict_flag},
+			#{dict_sort},
+			#{parent_id},
+			#{if_leaf}		
+		)
+	</insert>
+	
+	<update id="updateDict" parameterType="com.yt.framework.persistent.entity.SysDict">
+		UPDATE m_dict
+			SET
+				dict_column = #{dict_column},
+				dict_desc = #{dict_desc},
+				dict_value = #{dict_value},
+				dict_value_desc = #{dict_value_desc},
+				dict_flag = #{dict_flag},
+				dict_sort = #{dict_sort},
+				parent_id = #{parent_id},
+				if_leaf = #{if_leaf}		
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.SysDict">
+		SELECT * FROM m_dict WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPage" resultType="com.yt.framework.persistent.entity.SysDict">
+		SELECT * FROM m_dict 
+			WHERE 1=1
+			<if test="maps.dict_desc!=null and maps.dict_desc!=''">
+				AND dict_desc like CONCAT(CONCAT('%', #{maps.dict_desc}),'%')
+			</if>
+			<if test="maps.dict_column!=null and maps.dict_column!=''">
+				AND dict_column = #{maps.dict_column}
+			</if>
+			<if test="maps.parent_id!=null and maps.parent_id!=''">
+				AND parent_id = #{maps.parent_id}
+			</if>
+				ORDER BY dict_sort 
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(id) FROM m_dict 
+			WHERE 1=1
+			<if test="maps.dict_desc!=null and maps.dict_desc!=''">
+				AND dict_desc like CONCAT(CONCAT('%', #{maps.dict_desc}),'%')
+			</if>
+			<if test="maps.dict_column!=null and maps.dict_column!=''">
+				AND dict_column = #{maps.dict_column}
+			</if>
+			<if test="maps.parent_id!=null and maps.parent_id!=''">
+				AND parent_id = #{maps.parent_id}
+			</if>
+	</select>
+	
+	<select id="queryDicts" resultType="hashmap">
+		SELECT * FROM m_dict WHERE dict_column=#{clm} ORDER BY dict_sort
+	</select>
+	
+	<select id="queryDictsKey" resultType="String">
+		SELECT dict_column FROM m_dict GROUP BY dict_column
+	</select>
+	
+	<select id="dictList" resultType="com.yt.framework.persistent.entity.SysDict">
+		SELECT * FROM m_dict WHERE dict_column = #{clm} ORDER BY dict_sort
+	</select>
+	
+	<select id="dictName" resultType="String">
+		SELECT dict_value_desc FROM m_dict WHERE dict_value = #{dictId} and dict_column = #{dict_column} ORDER BY dict_sort
+	</select>
+	
+	<select id="allDict" resultType="com.yt.framework.persistent.entity.SysDict">
+		SELECT * FROM m_dict ORDER BY dict_sort
+	</select>
+</mapper>

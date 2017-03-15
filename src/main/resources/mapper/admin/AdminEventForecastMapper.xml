@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminEventForecastMapper">
+	<sql id="eventForecast">
+		id,
+		league_id,
+		m_teaminfo_id,
+		m_team_name,
+		g_teaminfo_id,
+		g_team_name,
+		play_time,
+		ball_format,
+		rounds,
+		group_id
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.AdminEventForecast">
+		INSERT INTO a_event_forecast(
+			id,
+			league_id,
+			m_teaminfo_id,
+			m_team_name,
+			g_teaminfo_id,
+			g_team_name,
+			play_time,
+			ball_format,
+			group_id,
+			position,
+			rounds
+		)VALUES(
+			#{id},
+			#{league_id},
+			#{m_teaminfo_id},
+			#{m_team_name},
+			#{g_teaminfo_id},
+			#{g_team_name},
+			#{play_time},
+			#{ball_format},
+			#{group_id},
+			#{position},
+			#{rounds}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.AdminEventForecast">
+		UPDATE a_event_forecast
+		SET
+			league_id=#{league_id},
+			m_teaminfo_id=#{m_teaminfo_id},
+			m_team_name=#{m_team_name},
+			g_teaminfo_id=#{g_teaminfo_id},
+			g_team_name=#{g_team_name},
+			play_time=#{play_time},
+			ball_format=#{ball_format},
+			rounds=#{rounds},
+			positoin=#{position}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_event_forecast WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.AdminEventForecast">
+		SELECT
+		<include refid="eventForecast" />
+		FROM a_event_forecast WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT <include refid="eventForecast" /> from a_event_forecast
+			<where>
+	   		 	<if test="maps.teaminfo_name !=null and maps.teaminfo_name !='' ">
+					and m_team_name like CONCAT('%',#{maps.teaminfo_name},'%') or  g_team_name like CONCAT('%',#{maps.teaminfo_name},'%')
+				</if>
+	   		 </where>
+   		ORDER BY play_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT * from a_event_forecast
+			<where>
+	   		 	<if test="maps.teaminfo_name !=null and maps.teaminfo_name !='' ">
+					and m_team_name like CONCAT('%',#{maps.teaminfo_name},'%') or  g_team_name like CONCAT('%',#{maps.teaminfo_name},'%')
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="getForecastByTeam" resultType="com.yt.framework.persistent.entity.AdminEventForecast">
+		SELECT
+			<include refid="eventForecast" />
+			FROM a_event_forecast
+			WHERE league_id = #{league_id} 
+				AND g_teaminfo_id = #{g_teaminfo_id} 
+				AND m_teaminfo_id = #{m_teaminfo_id}
+				AND rounds = #{rounds}
+	</select>
+</mapper>

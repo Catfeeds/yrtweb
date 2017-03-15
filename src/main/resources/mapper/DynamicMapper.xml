@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.DynamicMapper">
+	<sql id="dynamic">
+		id,
+		user_id,
+		text,
+		image,
+		video,
+		create_time,
+		praise_count,
+		type,
+		del,
+		top_count,
+		set_top_time,
+		is_top
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.Dynamic">
+		INSERT INTO m_dynamic(
+			id,
+			user_id,
+			text,
+			image,
+			video,
+			create_time,
+			praise_count,
+			type,
+			del,
+			top_count,
+			set_top_time,
+			is_top
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{text},
+			#{image},
+			#{video},
+			NOW(),
+			0,
+			#{type},
+			0,
+			#{top_count},
+			#{set_top_time},
+			#{is_top}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.Dynamic">
+		UPDATE m_dynamic
+		SET
+			user_id=#{user_id},
+			text=#{text},
+			image=#{image},
+			video=#{video},
+			set_top_time=#{set_top_time},
+			is_top=#{is_top},
+			top_count=#{top_count},
+			praise_count=#{praise_count},
+			type=#{type}
+		WHERE
+		id = #{id}
+	</update>
+
+	<update id="deleteDynamic">
+		UPDATE m_dynamic SET del=1 WHERE id = #{dynId}
+	</update>
+	<delete id="delete">
+		DELETE FROM m_dynamic WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.Dynamic">
+		SELECT
+		<include refid="dynamic" />
+		FROM m_dynamic WHERE id = #{id}
+	</select>
+	
+	<!-- <select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT d.id,d.user_id,d.text,d.image,d.video,d.create_time,d.praise_count,d.type,
+		(CASE WHEN d.user_id=#{maps.id} THEN 1 ELSE 0 END) isme, 
+		(CASE WHEN d.user_id=#{maps.id} THEN (CASE WHEN d.type=1 THEN t.name ELSE u.usernick END) ELSE (CASE WHEN f.f_type=1 THEN t.name ELSE u.usernick END) END) usernick,
+		(CASE WHEN d.user_id=#{maps.id} THEN (CASE WHEN d.type=1 THEN t.logo ELSE u.head_icon END) ELSE (CASE WHEN f.f_type=1 THEN t.logo ELSE u.head_icon END) END) head_icon
+		FROM m_dynamic d 
+		LEFT JOIN m_user u ON u.id=d.user_id 
+		LEFT JOIN t_team_info t ON t.user_id=d.user_id 
+		LEFT JOIN m_focus f ON d.user_id=f.f_user_id AND f.status!=1 AND f.f_type=d.type 
+		WHERE (d.user_id=#{maps.id} OR f.user_id=#{maps.id}) 
+		ORDER BY d.create_time DESC 
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select> -->
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT *,(CASE WHEN user_id=#{maps.id} THEN 1 ELSE 0 END) isme FROM (SELECT d.id,d.user_id,null teaminfo_id,d.text,d.image,d.video,d.create_time,d.praise_count,u.usernick,u.head_icon,u.role_name,1 dtype,
+				<if test="maps.meid!=null">
+				(CASE WHEN pr.user_id=#{maps.meid} THEN 1 ELSE 0 END) ispraise
+				</if>
+				<if test="maps.meid==null">
+				0 ispraise
+				</if>
+				FROM m_dynamic d 
+				LEFT JOIN (SELECT u.id,u.usernick,u.head_icon,GROUP_CONCAT(r.role_name) role_name FROM m_user_role ur,m_user u,m_role r WHERE ur.user_id=u.id AND ur.role_id=r.role_id GROUP BY u.id) u ON u.id=d.user_id 
+				LEFT JOIN m_focus f ON d.user_id=f.f_user_id AND f.status!=1 AND f.f_type=0 AND f.f_user_id!=#{maps.id} 
+				LEFT JOIN m_praise_record pr ON pr.dynamic_id=d.id AND pr.user_id=#{maps.id} 
+				WHERE (d.user_id=#{maps.id} OR f.user_id=#{maps.id}) AND d.del=0
+		UNION ALL
+		SELECT d.id,t.user_id,d.teaminfo_id,d.text,d.image,d.video,d.create_time,d.praise_count,t.name usernick,t.logo head_icon,'俱乐部' role_name,0 dtype,0 ispraise
+				FROM t_team_dynamic d 
+				LEFT JOIN t_team_info t ON t.id=d.teaminfo_id 
+				LEFT JOIN m_focus f ON d.teaminfo_id=f.f_teaminfo_id  AND f.status!=1 
+				WHERE f.user_id=#{maps.id} AND f.f_type=#{maps.id} AND d.del!=1 
+				) dyn
+		ORDER BY create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT *,(CASE WHEN user_id=#{maps.id} THEN 1 ELSE 0 END) isme FROM (SELECT d.id,d.user_id,null teaminfo_id,d.text,d.image,d.video,d.create_time,d.praise_count,u.usernick,u.head_icon,u.role_name,1 dtype,
+					<if test="maps.meid!=null">
+					(CASE WHEN pr.user_id=#{maps.meid} THEN 1 ELSE 0 END) ispraise
+					</if>
+					<if test="maps.meid==null">
+					0 ispraise
+					</if>
+					FROM m_dynamic d 
+					LEFT JOIN (SELECT u.id,u.usernick,u.head_icon,GROUP_CONCAT(r.role_name) role_name FROM m_user_role ur,m_user u,m_role r WHERE ur.user_id=u.id AND ur.role_id=r.role_id GROUP BY u.id) u ON u.id=d.user_id 
+					LEFT JOIN m_focus f ON d.user_id=f.f_user_id AND f.status!=1 AND f.f_type=0 AND f.f_user_id!=#{maps.id} 
+					LEFT JOIN m_praise_record pr ON pr.dynamic_id=d.id AND pr.user_id=#{maps.id} 
+					WHERE (d.user_id=#{maps.id} OR f.user_id=#{maps.id}) AND d.del=0
+			UNION ALL
+			SELECT d.id,t.user_id,d.teaminfo_id,d.text,d.image,d.video,d.create_time,d.praise_count,t.name usernick,t.logo head_icon,'俱乐部' role_name,0 dtype,0 ispraise
+					FROM t_team_dynamic d 
+					LEFT JOIN t_team_info t ON t.id=d.teaminfo_id 
+					LEFT JOIN m_focus f ON d.teaminfo_id=f.f_teaminfo_id  AND f.status!=1 
+					WHERE f.user_id=#{maps.id} AND f.f_type=#{maps.id} AND d.del!=1 
+					) dyn
+		) cot_t)
+	</select>
+	
+	
+	<select id="queryComments" parameterType="hashmap" resultType="hashmap">
+		SELECT dc.id,dc.user_id,u.usernick,u.head_icon,dc.dynamic_id,dc.content,dc.create_time 
+		FROM m_dynamic_comments dc,m_user u
+		WHERE dc.user_id=u.id 
+		AND dc.dynamic_id=#{maps.dynId} 
+		ORDER BY dc.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="commentCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT dc.id,dc.user_id,u.usernick,u.head_icon,dc.dynamic_id,dc.content,dc.create_time 
+			FROM m_dynamic_comments dc,m_user u
+			WHERE dc.user_id=u.id 
+			AND dc.dynamic_id=#{maps.dynId} 
+		) cot_t)
+	</select>
+	
+	<select id="queryMyDynamic" parameterType="hashmap" resultType="hashmap">
+		SELECT d.id,d.user_id,d.text,d.image,d.video,d.create_time,d.praise_count,d.type,u.usernick,u.head_icon 
+		FROM m_dynamic d
+		LEFT JOIN m_user u ON u.id=d.user_id 
+		WHERE d.user_id=#{maps.id} AND d.del=0 
+		ORDER BY d.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="myDataCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT d.id,d.user_id,d.text,d.image,d.video,d.create_time,d.praise_count,d.type,u.usernick,u.head_icon 
+			FROM m_dynamic d
+			LEFT JOIN m_user u ON u.id=d.user_id 
+			WHERE d.user_id=#{maps.id} AND d.del=0 
+		) cot_t)
+	</select>
+	
+	<select id="newDataCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT d.id,d.user_id,d.text,d.image,d.video,d.create_time,d.praise_count,d.type,u.usernick,u.head_icon 
+			FROM m_dynamic d
+			LEFT JOIN m_user u ON u.id=d.user_id 
+			WHERE d.del=0 
+		) cot_t)
+	</select>
+	
+	<select id="queryNewDynamic" parameterType="hashmap" resultType="hashmap">
+		SELECT d.id,d.user_id,d.text,d.image,d.video,d.create_time,d.praise_count,d.type,u.usernick,u.head_icon, 
+		<if test="maps.id!=null">
+		(CASE WHEN d.user_id=#{maps.id} THEN 1 ELSE 0 END) isme 
+		</if>
+		<if test="maps.id==null">
+		0 isme
+		</if>
+		FROM m_dynamic d
+		LEFT JOIN m_user u ON u.id=d.user_id 
+		WHERE d.del=0 
+		ORDER BY d.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	
+	<insert id="replyComment" parameterType="com.yt.framework.persistent.entity.Comment">
+		INSERT INTO m_dynamic_comments(
+			id,
+			user_id,
+			dynamic_id,
+			content,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{dynamic_id},
+			#{content},
+			NOW()
+		)
+	</insert>
+	
+	<select id="dynCount" parameterType="hashmap" resultType="String">
+		SELECT count(*) num FROM m_focus WHERE user_id=#{userId} AND f_type=0
+		UNION ALL
+		SELECT count(*) FROM m_focus WHERE f_user_id=#{userId}
+		UNION ALL
+		SELECT count(*) FROM m_dynamic WHERE user_id=#{userId}
+	</select>
+	
+	<update id="praiseDyn">
+		update m_dynamic set praise_count=#{praise_count} WHERE id=#{dynId}
+	</update>
+	
+	<select id="queryHotDynamic" resultType="hashmap">
+		<!-- SELECT dyn.*,u.usernick,u.head_icon FROM (
+		SELECT * FROM (SELECT * FROM m_dynamic ORDER BY praise_count DESC,create_time DESC LIMIT 5) t1
+		UNION
+		SELECT * FROM (select d.* from m_dynamic d where NOT EXISTS (SELECT * FROM (select md.id from m_dynamic md ORDER BY praise_count DESC,create_time DESC LIMIT 5) t where t.id=d.id) ORDER BY d.create_time DESC LIMIT 5) t2
+		) dyn LEFT JOIN m_user u ON dyn.user_id=u.id -->
+		SELECT d.id,d.user_id,d.text,d.image,d.video,d.create_time,d.praise_count,d.type,u.usernick,u.head_icon 
+		FROM m_dynamic d 
+		LEFT JOIN m_user u ON d.user_id=u.id 
+		WHERE d.del=0 
+		ORDER BY d.praise_count DESC,d.create_time DESC 
+		<choose>
+			<when test="maps!=null and maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</when>
+			<otherwise>
+				LIMIT 5
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryHotDynamicCount" resultType="int">
+		SELECT COUNT(*)
+		FROM m_dynamic d 
+		LEFT JOIN m_user u ON d.user_id=u.id 
+		WHERE d.del=0 
+	</select>
+	
+	<select id="queryHotTeamDynamic" resultType="hashmap">
+		SELECT t1.*,t2.name,t2.id,t2.logo FROM t_team_dynamic t1,t_team_info t2 WHERE 1=1 AND t1.teaminfo_id = t2.id
+		 ORDER BY t2.score DESC ,t1.create_time 
+		 <choose>
+			<when test="maps!=null and maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</when>
+			<otherwise>
+				LIMIT 5
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryHotTeamDynamicCount" resultType="int">
+		SELECT COUNT(*) FROM t_team_dynamic t1,t_team_info t2 WHERE 1=1 AND t1.teaminfo_id = t2.id
+	</select>
+	
+	<select id="queryNewTeamDynamic" resultType="hashmap">
+		SELECT td.* FROM t_team_dynamic AS td 
+		LEFT JOIN t_team_info AS ti ON ti.id = td.teaminfo_id
+		WHERE 1=1
+		AND ti.id= #{maps.teaminfo_id}
+		ORDER BY td.create_time DESC
+		<if test="maps!=null and maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="queryNewTeamDynamicCount" resultType="int">
+		SELECT COUNT(*) FROM t_team_dynamic AS td 
+		LEFT JOIN t_team_info AS ti ON ti.id = td.teaminfo_id
+		WHERE 1=1
+		AND ti.id = #{maps.teaminfo_id}
+	</select>
+	
+	
+	<insert id="saveTeamDynamic" parameterType="com.yt.framework.persistent.entity.TeamDynamic">
+		INSERT INTO t_team_dynamic(
+			id,
+			teaminfo_id,
+			text,
+			image,
+			video,
+			create_time,
+			praise_count,
+			type,
+			del
+		)VALUES(
+			#{id},
+			#{teaminfo_id},
+			#{text},
+			#{image},
+			#{video},
+			NOW(),
+			0,
+			#{type},
+			0
+		)
+	</insert>
+	<select id="queryTopDynamics" parameterType="int" resultType="com.yt.framework.persistent.entity.Dynamic">
+		SELECT <include refid="dynamic" />
+		FROM m_dynamic d 
+		WHERE d.is_top=1 order by d.set_top_time desc LIMIT #{size}
+	</select>
+	
+	<select id="queryDynamicsDef" resultType="com.yt.framework.persistent.entity.Dynamic">
+		SELECT <include refid="dynamic" />
+		FROM m_dynamic d where d.create_time>=#{maps.sDate} and d.create_time&lt;=#{maps.eDate}
+		order by d.create_time desc LIMIT 50
+	</select>
+	
+	<select id="queryMessageDef" resultType="com.yt.framework.persistent.entity.Message">
+		SELECT *
+		FROM m_message d where d.create_time>=#{maps.sDate} and d.create_time&lt;=#{maps.eDate}
+		order by d.create_time desc LIMIT 30
+	</select>
+	<select id="queryTeamDynamicDef" resultType="com.yt.framework.persistent.entity.TeamDynamic">
+		SELECT *
+		FROM t_team_dynamic d where d.create_time>=#{maps.sDate} and d.create_time&lt;=#{maps.eDate}
+		order by d.create_time desc LIMIT 30
+	</select>
+</mapper>

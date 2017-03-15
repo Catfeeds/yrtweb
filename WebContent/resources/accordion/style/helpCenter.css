@@ -1,0 +1,21 @@
+*{margin:0; padding:0;}
+li{list-style:none;}
+h1,.jqcool{text-align:center; margin:30px auto;}
+.clear{clear:both;}
+.w990{width:990px; margin:0 auto;}
+.foldList li{border-bottom:1px solid #e7e7e7;padding:0 14px;_width:742px;_overflow:hidden;}
+.foldList li.last{border:none;}
+.foldList li h5{height:40px;position:relative;color:#666;font-size:14px;cursor:pointer;line-height:40px;text-indent:26px;background: #008080;color: white;}
+.foldContent{/*border:1px solid #018ccb;*/padding:10px 26px;border-top:1px dashed #e2e2e2;line-height:2em;background:#f3f3f3;color:#888; display:none;padding-bottom: 20px;}
+
+#questions{margin-left:28px;width:872px;float:left;}
+#questions h2{position:relative;height:30px;background:#f3f3f3;color:#555;line-height:30px;text-indent:35px;}
+#questions h2 .UI-home{position:absolute;left:14px;top:7px;}
+#questionList{/*border:1px solid #e7e7e7;*/padding-top:14px;margin-top:20px;}
+#questionList a{color:#FFA012}
+#questionList a:hover{text-decoration:underline;}
+#questionList li h5 .UI-ask,#questionList li h5 .UI-bubble{position:absolute;left:0px;}
+
+
+
+

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminLeagueGroupMapper">
+	<sql id="leagueGroup">
+		id,
+		league_id,
+		name,
+		sort
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.LeagueGroup">
+		INSERT INTO a_league_group(
+			id,
+			league_id,
+			name,
+			sort,
+			create_time
+		)VALUES(
+			#{id},
+			#{league_id},
+			#{name},
+			#{sort},
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.LeagueGroup">
+		UPDATE a_league_group
+		SET
+			league_id = #{league_id},
+			name = #{name},
+			sort = #{sort}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_league_group WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.LeagueGroup">
+		SELECT
+		<include refid="leagueGroup" />
+		FROM a_league_group WHERE id = #{id}
+	</select>
+	
+	<select id="getLeagues" resultType="com.yt.framework.persistent.entity.League">
+		SELECT * FROM a_league
+	</select>
+	<select id="getGroupsByLid" resultType="com.yt.framework.persistent.entity.LeagueGroup">
+		SELECT * FROM a_league_group WHERE league_id=#{league_id} ORDER BY name ASC
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT lg.id,lg.league_id,lg.name,l.`name` lname,l.status l_status,l.ball_format ball_format from a_league_group lg,a_league l 
+		<where>
+			lg.league_id=l.id 
+   		 	<if test="maps.name !=null and maps.name !='' ">
+				AND lg.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+			<if test="maps.league_name !=null and maps.league_name !='' ">
+				AND l.name LIKE CONCAT(CONCAT('%', #{maps.league_name}),'%')
+			</if>
+			<if test="maps.league_id !=null and maps.league_id !='' ">
+				AND l.id = #{maps.league_id}
+			</if>
+   		 </where>
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT lg.id,lg.league_id,lg.name,l.`name` lname from a_league_group lg,a_league l 
+			<where>
+				lg.league_id=l.id 
+	   		 	<if test="maps.name !=null and maps.name !='' ">
+					AND lg.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.league_name !=null and maps.league_name !='' ">
+					AND l.name LIKE CONCAT(CONCAT('%', #{maps.league_name}),'%')
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND l.id = #{maps.league_id}
+			</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="getGroupEvent" resultType="com.yt.framework.persistent.entity.LeagueGroupEvent">
+		SELECT ae.* FROM a_group_event ae ,a_league_group ag 
+			WHERE ag.league_id = #{league_id} AND ae.teaminfo_id = #{teaminfo_id} AND ae.group_id = ag.id LIMIT 1
+	</select>
+	
+	<select id="getGroupName" resultType="hashmap">
+		SELECT ae.*,ag.name FROM a_group_event ae ,a_league_group ag 
+			WHERE ag.league_id = #{league_id} AND ae.teaminfo_id = #{teaminfo_id} AND ae.group_id = ag.id LIMIT 1
+	</select>
+	
+	<select id="getGroupEventByGroupId" resultType="com.yt.framework.persistent.entity.LeagueGroupEvent">
+		SELECT * FROM a_group_event
+			WHERE group_id = #{group_id}
+	</select>
+	
+	<insert id="saveGroupEvent" parameterType="com.yt.framework.persistent.entity.LeagueGroupEvent">
+		INSERT INTO a_group_event(
+			id,
+			teaminfo_id,
+			group_id
+		)VALUES(
+			#{id},
+			#{teaminfo_id},
+			#{group_id}
+		)
+	</insert>
+	
+	<update id="updateGroupEvent" parameterType="com.yt.framework.persistent.entity.LeagueGroupEvent">
+		UPDATE a_group_event
+			SET
+				teaminfo_id = #{teaminfo_id},
+				group_id = #{group_id}
+			WHERE
+			id = #{id}
+	</update>
+	
+	<delete id="deleteGroupEvent">
+		DELETE FROM a_group_event WHERE id = #{id}
+	</delete>
+	
+	<insert id="saveSalaryMsg" parameterType="com.yt.framework.persistent.entity.SalaryMsg">
+		INSERT INTO a_salary_msg(
+			id,
+			teaminfo_id,
+			league_id,
+			event_id,
+			turn_num,
+			status,
+			is_send,
+			create_time
+		)VALUES(
+			#{id},
+			#{teaminfo_id},
+			#{league_id},
+			#{event_id},
+			#{turn_num},
+			#{status},
+			#{is_send},
+			now()
+		)
+	</insert>
+	
+	<select id="loadAllSalaryMsgList" resultType="hashmap">
+		SELECT sm.*,lea.name AS league_name,t.name AS team_name FROM a_salary_msg AS sm
+			LEFT JOIN a_league AS lea ON lea.id = sm.league_id
+			LEFT JOIN t_team_info AS t on t.id = sm.teaminfo_id
+		where 1=1
+			and sm.league_id = #{maps.league_id}
+		<if test="maps.rounds!=null and maps.rounds!=''">
+			and sm.turn_num = #{maps.rounds}
+		</if>	
+		ORDER BY sm.create_time DESC	
+		<if test="maps.firstNum!=null and maps.pageSize!=null">
+			LIMIT #{maps.firstNum},#{maps.pageSize}
+		</if>				
+	</select>
+	
+	<select id="loadAllSalaryMsgListCount" resultType="int">
+	SELECT COUNT(*) FROM a_salary_msg AS sm
+			LEFT JOIN a_league AS lea ON lea.id = sm.league_id
+			LEFT JOIN t_team_info AS t on t.id = sm.teaminfo_id
+		where 1=1
+			and sm.league_id = #{maps.league_id}
+			<if test="maps.rounds!=null and maps.rounds!=''">
+			and sm.turn_num = #{maps.rounds}
+			</if>	
+	</select>
+	
+	<insert id="saveSalaryRecord" parameterType="com.yt.framework.persistent.entity.SalaryRecord">
+		INSERT INTO a_salary_record(
+			id,
+			srmsg_id,
+			league_id,
+			turn_num,
+			teaminfo_id,
+			user_id,
+			salary,
+			event_id,
+			create_time
+		)VALUES(
+			#{id},
+			#{srmsg_id},
+			#{league_id},
+			#{turn_num},
+			#{teaminfo_id},
+			#{user_id},
+			#{salary},
+			#{event_id},
+			NOW()
+		)
+	</insert>
+	
+	<select id="loadAllSalaryTable" resultType="hashmap">
+		SELECT sm.turn_num,COUNT(sm.turn_num)AS teams,SUM(sm.is_send)AS is_send,SUM(sm.`status`)AS `status`,sm.league_id,sm.event_id,
+		(SELECT SUM(sr.salary)AS sumsalary FROM  a_salary_record AS sr WHERE sr.turn_num=sm.turn_num AND sr.league_id = #{maps.league_id})AS sumsalary,
+		(SELECT SUM(sr.real_salary)AS sumreal_salary FROM a_salary_record AS sr WHERE sr.turn_num=sm.turn_num AND sr.league_id = #{maps.league_id})AS sumreal_salary
+		 FROM a_salary_msg AS sm 
+			WHERE 1=1
+			AND sm.league_id=#{maps.league_id}	
+			GROUP BY sm.turn_num
+			<if test="maps.firstNum!=null and maps.firstNum!=''">
+				limit #{maps.firstNum},#{maps.pageSize}
+			</if>
+	</select>
+	
+	<select id="loadAllSalaryTableCount" resultType="int">
+		SELECT COUNT(*) FROM (
+			SELECT sm.turn_num
+				 FROM a_salary_msg AS sm 
+					WHERE 1=1
+					AND sm.league_id=#{maps.league_id}	
+					GROUP BY sm.turn_num
+		)AS aa
+	</select>
+	
+	<delete id="deleteSalaryMsgRecord">
+		DELETE FROM a_salary_msg
+			WHERE 1=1
+				AND league_id = #{maps.league_id}
+				AND turn_num = #{maps.turn_num}
+				AND event_id = #{maps.event_id}
+	</delete>
+	
+	<delete id="deleteSalaryTableByParasm">
+		DELETE FROM a_salary_record
+			 WHERE 1=1
+			 	AND league_id = #{maps.league_id}
+			 	AND turn_num = #{maps.turn_num} 
+			 	AND event_id = #{maps.event_id}
+	</delete>
+	
+	<select id="loadLeagueTurnDetail" resultType="hashmap">
+		SELECT sm.*,t.name AS teamname,
+			(
+				SELECT COUNT(sr.user_id) FROM a_salary_record AS sr 
+					WHERE sr.srmsg_id=sm.id
+			)AS userCount,
+			(
+			SELECT SUM(sr.salary) FROM a_salary_record AS sr 
+					WHERE sr.srmsg_id=sm.id
+			)AS sumsalary,
+			(
+			SELECT SUM(sr.real_salary) FROM a_salary_record AS sr 
+					WHERE sr.srmsg_id=sm.id
+			)AS sum_realsalary
+			FROM a_salary_msg AS sm
+			LEFT JOIN t_team_info AS t ON t.id = sm.teaminfo_id
+		  WHERE 1=1
+		  	AND sm.league_id = #{maps.league_id}
+		  	AND sm.turn_num = #{maps.turn_num}
+		  	GROUP BY sm.teaminfo_id
+		  	ORDER BY sm.status
+		  	<if test="maps.firstNum!=null and maps.firstNum!=''">
+		  		limit #{maps.firstNum},#{maps.pageSize}
+		  	</if>
+	</select>
+	
+	<select id="loadLeagueTurnDetailCount" resultType="int">
+		SELECT COUNT(*) FROM a_salary_msg AS sm
+		  WHERE 1=1
+		  	AND sm.league_id = #{maps.league_id}
+		  	AND sm.turn_num = #{maps.turn_num}
+		  	AND sm.event_id = #{maps.event_id}
+	</select>
+	
+	<update id="updateSalarySend">
+		UPDATE a_salary_msg
+			SET 
+				is_send = 1
+			WHERE 1=1
+				AND league_id = #{maps.league_id}
+				AND turn_num = #{maps.turn_num}	
+	</update>
+	
+	<select id="getSalaryMsgByParams" resultType="com.yt.framework.persistent.entity.SalaryMsg">
+		SELECT * FROM a_salary_msg AS sm
+			where 1=1
+				and sm.teaminfo_id = #{maps.teaminfo_id}
+				and sm.league_id = #{maps.league_id}
+				and sm.turn_num = #{maps.turn_num}
+				and sm.event_id = #{maps.event_id}
+	</select>
+	
+	<select id="getSalaryRecordByParams" resultType="com.yt.framework.persistent.entity.SalaryRecord">
+		SELECT * FROM a_salary_record AS sr
+			where 1=1
+				and sr.teaminfo_id = #{maps.teaminfo_id}
+				and sr.league_id = #{maps.league_id}
+				and sr.turn_num = #{maps.turn_num}
+				and sr.event_id = #{maps.event_id} 
+	</select>
+	
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminSysAreaMapper">
+	<insert id="saveSysArea" parameterType="com.yt.framework.persistent.entity.SysArea" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO m_sys_area(
+			area_name,
+			area_code,
+			parent_code,
+			area_sort,
+			first_letter,
+			area_level,
+			leaf
+		)VALUES(
+			#{area_name},
+			#{area_code},
+			#{parent_code},
+			#{area_sort},
+			#{first_letter},
+			#{area_level},
+			#{leaf}
+		)
+	</insert>
+	
+	<update id="updateSysArea" parameterType="com.yt.framework.persistent.entity.SysArea">
+		UPDATE m_sys_area
+			SET
+				area_name = #{area_name},
+				area_code = #{area_code},
+				parent_code = #{parent_code},
+				area_sort = #{area_sort},
+				first_letter = #{first_letter},
+				area_level = #{area_level},
+				leaf = #{leaf}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<delete id="delSysArea">
+		delete from m_sys_area where id = #{id}
+	</delete>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.SysArea">
+		SELECT * FROM m_sys_area WHERE id = #{id}
+	</select>
+	
+	<select id="getAreaByCode" resultType="com.yt.framework.persistent.entity.SysArea">
+		SELECT * FROM m_sys_area WHERE area_code = #{area_code}
+	</select>
+	
+	<select id="queryForPage" resultType="com.yt.framework.persistent.entity.SysArea">
+		SELECT * FROM m_sys_area 
+			WHERE 1=1
+			<if test="maps.parent_code!=null and maps.parent_code!=''">
+				AND parent_code = #{maps.parent_code}
+			</if>
+			<if test="maps.leaf!=null and maps.leaf!=''">
+				AND leaf = #{maps.leaf}
+			</if>
+				ORDER BY area_sort 
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(id) FROM m_sys_area 
+			WHERE 1=1
+			<if test="maps.parent_code!=null and maps.parent_code!=''">
+				AND parent_code = #{maps.parent_code}
+			</if>
+			<if test="maps.leaf!=null and maps.leaf!=''">
+				AND leaf = #{maps.leaf}
+			</if>
+	</select>
+	
+	<select id="querySysArea" resultType="hashmap">
+		SELECT * FROM m_sys_area WHERE parent_code=#{parent_code} ORDER BY area_sort
+	</select>
+	
+	<select id="sysAreaList" resultType="com.yt.framework.persistent.entity.SysArea">
+		SELECT * FROM m_sys_area WHERE parent_code=#{parent_code} ORDER BY area_sort
+	</select>
+	
+	<select id="id2Name" resultType="string">
+		SELECT area_name FROM m_sys_area WHERE area_code = #{area_code}
+	</select>
+	
+	<select id="allSysArea" resultType="com.yt.framework.persistent.entity.SysArea">
+		SELECT * FROM m_sys_area ORDER BY area_sort
+	</select>
+</mapper>

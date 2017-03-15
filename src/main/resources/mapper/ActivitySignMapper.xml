@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.ActivitySignMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.ActivitySign"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO a_activity_sign
+		(
+		id,
+		name,
+		phone,
+		activity_name,
+		create_time
+		)
+		VALUES
+		(
+		#{id},
+		#{name},
+		#{phone},
+		#{activity_name},
+		NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.ActivitySign">
+		UPDATE a_activity_sign
+		SET
+		name = #{name},
+		phone = #{phone},
+		activity_name = #{activity_name}
+		WHERE
+		id = #{id}
+	</update>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.ActivitySign">
+		SELECT * FROM
+		a_activity_sign WHERE id = #{id}
+	</select>
+	
+	<select id="getActivitySignByPhone" resultType="com.yt.framework.persistent.entity.ActivitySign">
+     		SELECT * FROM a_activity_sign WHERE phone = #{phone}
+     </select>
+
+</mapper>

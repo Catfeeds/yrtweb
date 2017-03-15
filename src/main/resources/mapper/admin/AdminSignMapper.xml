@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminSignMapper">
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.AdminSign">
+		INSERT INTO a_admin_sign(
+			id,
+			s_id,
+			username,
+			mobile,
+			idcard,
+			input_type,
+			if_pay,
+			sign_id,
+			createTime
+		)VALUES(
+			#{id},
+			#{s_id},
+			#{username},
+			#{mobile},
+			#{idcard},
+			#{input_type},
+			#{if_pay},
+			#{sign_id},
+			NOW()
+		)
+	</insert>
+	
+	
+	<insert id="saveAdminSignCfg" parameterType="com.yt.framework.persistent.entity.AdminSignCfg">
+		INSERT INTO a_admin_signcfg(
+			id,
+			title,
+			description,
+			images,
+			user_id,
+			start_time,
+			end_time,
+			if_show,
+			keyword,
+			s_id,
+			create_time
+		)VALUES(
+			#{id},
+			#{title},
+			#{description},
+			#{images},
+			#{user_id},
+			#{start_time},
+			#{end_time},
+			#{if_show},
+			#{keyword},
+			#{s_id},
+			NOW()
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.AdminSign">
+		UPDATE a_admin_sign
+		SET
+			s_id = #{s_id},
+			username = #{username},
+			idcard = #{idcard}, 
+			mobile = #{mobile},
+			input_type = #{input_type},
+			if_pay = #{if_pay}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="updateAdminSignCfg" parameterType="com.yt.framework.persistent.entity.AdminSignCfg">
+		UPDATE a_admin_signcfg
+		SET
+			title = #{title},
+			description = #{description},
+			images = #{images},
+			start_time = #{start_time},
+			end_time = #{end_time},
+			if_show = #{if_show},
+			s_id = #{s_id},
+			keyword = #{keyword}
+		WHERE
+			id = #{id}
+	</update>
+	
+	
+	<delete id="delete">
+		DELETE FROM a_admin_sign WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteAdminSignCfg">
+		DELETE FROM a_admin_signcfg WHERE id = #{id}
+	</delete>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT a.* FROM a_admin_sign a
+			WHERE 1=1
+			<if test="maps.idcard!='' and maps.idcard!=null">
+				AND a.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.mobile!='' and maps.mobile!=null">
+				AND a.mobile = #{maps.mobile}
+			</if>
+			<if test="maps.s_id!='' and maps.s_id!=null">
+				AND a.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.input_type!='' and maps.input_type!=null">
+				AND a.input_type = #{maps.input_type}
+			</if>
+			<if test="maps.sign_id!='' and maps.sign_id!=null">
+				AND a.sign_id = #{maps.sign_id}
+			</if>
+				ORDER BY a.createTime
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(a.id) FROM a_admin_sign a
+			WHERE 1=1
+			<if test="maps.idcard!='' and maps.idcard!=null">
+				AND a.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.mobile!='' and maps.mobile!=null">
+				AND a.mobile = #{maps.mobile}
+			</if>
+			<if test="maps.s_id!='' and maps.s_id!=null">
+				AND a.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.input_type!='' and maps.input_type!=null">
+				AND a.input_type = #{maps.input_type}
+			</if>
+			<if test="maps.sign_id!='' and maps.sign_id!=null">
+				AND a.sign_id = #{maps.sign_id}
+			</if>
+	</select>
+	
+	<select id="getAdminSign" resultType="com.yt.framework.persistent.entity.AdminSign">
+		SELECT * FROM a_admin_sign 
+			WHERE s_id = #{s_id} AND mobile = #{mobile}
+	</select>
+	
+	<select id="getAdminSignBySign" resultType="com.yt.framework.persistent.entity.AdminSign">
+		SELECT * FROM a_admin_sign a
+			<where>
+				<if test="maps.mobile!='' and maps.mobile!=null">
+					AND a.mobile = #{maps.mobile}
+				</if>
+				<if test="maps.sign_id!='' and maps.sign_id!=null">
+					AND a.sign_id = #{maps.sign_id}
+				</if>
+			</where>
+	</select>
+	
+	<select id="getCfgById" resultType="com.yt.framework.persistent.entity.AdminSignCfg">
+		SELECT * FROM a_admin_signcfg
+			WHERE id = #{id}
+	</select>
+	
+	<select id="queryCfgForPage" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.AdminSignCfg">
+		SELECT * from a_admin_signcfg a
+		<where>
+   		 	<if test="maps.title !=null and maps.title !='' ">
+				AND a.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')  
+			</if>
+			<if test="maps.keyword !=null and maps.keyword !='' ">
+				AND a.keyword = #{maps.keyword}
+			</if>
+			<if test="maps.if_show !=null and maps.if_show !='' ">
+				AND a.if_show  = #{maps.if_show}
+			</if>
+   	  	</where>
+   		 ORDER BY a.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="countCfg" parameterType="hashmap" resultType="int">
+		SELECT count(id) from a_admin_signcfg a
+		<where>
+   		 	<if test="maps.title !=null and maps.title !='' ">
+				AND a.title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')  
+			</if>
+			<if test="maps.if_show !=null and maps.if_show !='' ">
+				AND a.if_show  = #{maps.if_show}
+			</if>
+			<if test="maps.keyword !=null and maps.keyword !='' ">
+				AND a.keyword = #{maps.keyword}
+			</if>
+   	  	</where>
+	</select>
+	
+	<select id="queryKeyword" resultType="int">
+		SELECT count(id) from a_admin_signcfg a 
+			WHERE a.keyword = #{keyword}
+	</select>
+</mapper>

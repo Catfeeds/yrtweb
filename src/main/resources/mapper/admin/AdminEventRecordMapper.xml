@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminEventRecordMapper">
+	<sql id="adminEventRecord">
+		id,
+		league_id,
+		m_teaminfo_id,
+		m_team_name,
+		g_teaminfo_id,
+		g_team_name,
+		play_time,
+		ball_format,
+		position,
+		rounds,
+		group_id,
+		m_score,
+		win_teaminfo_id,
+		g_score,
+		status
+	</sql>
+
+	<insert id="save"
+		parameterType="com.yt.framework.persistent.entity.AdminEventRecord">
+		INSERT INTO a_event_record(
+		id,
+		league_id,
+		game_id,
+		m_teaminfo_id,
+		m_team_name,
+		g_teaminfo_id,
+		g_team_name,
+		play_time,
+		ball_format,
+		position,
+		rounds,
+		group_id,
+		m_score,
+		win_teaminfo_id,
+		g_score,
+		status
+		)VALUES(
+		#{id},
+		#{league_id},
+		#{game_id},
+		#{m_teaminfo_id},
+		#{m_team_name},
+		#{g_teaminfo_id},
+		#{g_team_name},
+		#{play_time},
+		#{ball_format},
+		#{position},
+		#{rounds},
+		#{group_id},
+		#{m_score},
+		#{win_teaminfo_id},
+		#{g_score},
+		#{status}
+		)
+	</insert>
+
+	<update id="update"
+		parameterType="com.yt.framework.persistent.entity.AdminEventRecord">
+		UPDATE a_event_record
+		SET
+		game_id = #{game_id},
+		league_id=#{league_id},
+		m_teaminfo_id=#{m_teaminfo_id},
+		m_team_name=#{m_team_name},
+		g_teaminfo_id=#{g_teaminfo_id},
+		g_team_name=#{g_team_name},
+		play_time=#{play_time},
+		ball_format=#{ball_format},
+		position=#{position},
+		rounds=#{rounds},
+		<if test="group_id!=null and group_id!=''">
+			group_id = #{group_id},
+		</if>
+			m_score = #{m_score},
+		<if test="win_teaminfo_id!=null and win_teaminfo_id!=''">
+			win_teaminfo_id = #{win_teaminfo_id},
+		</if>
+			g_score = #{g_score},
+		status = #{status}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM a_event_record WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById"
+		resultType="com.yt.framework.persistent.entity.AdminEventRecord">
+		SELECT * FROM a_event_record WHERE id = #{id}
+	</select>
+
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT mt.name mname,gt.name gname,mt.logo mlogo,gt.logo glogo,lg.name,e.* 
+		FROM a_event_record e 
+		LEFT JOIN a_league_group AS lg ON lg.id = e.group_id 
+		LEFT JOIN t_team_info mt ON mt.id=e.m_teaminfo_id 
+		LEFT JOIN t_team_info gt ON gt.id=e.g_teaminfo_id 
+		<where>
+			e.league_id=#{maps.league_id}
+			<if test="maps.teaminfo_name !=null and maps.teaminfo_name !='' ">
+				and (mt.name like CONCAT('%',#{maps.teaminfo_name},'%') or gt.name like CONCAT('%',#{maps.teaminfo_name},'%'))
+			</if>
+		</where>
+		ORDER BY e.play_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT mt.name mname,gt.name gname,mt.logo mlogo,gt.logo glogo,lg.name,e.* 
+			FROM a_event_record e 
+			LEFT JOIN a_league_group AS lg ON lg.id = e.group_id 
+			LEFT JOIN t_team_info mt ON mt.id=e.m_teaminfo_id 
+			LEFT JOIN t_team_info gt ON gt.id=e.g_teaminfo_id 
+			<where>
+				e.league_id=#{maps.league_id}
+				<if test="maps.teaminfo_name !=null and maps.teaminfo_name !='' ">
+					and (mt.name like CONCAT('%',#{maps.teaminfo_name},'%') or gt.name like CONCAT('%',#{maps.teaminfo_name},'%'))
+				</if>
+			</where>
+		) cot_t)
+	</select>
+	
+	<select id="queryEventRecordByLeague" resultType="hashmap">
+		SELECT ae.id,ae.league_id,ae.m_teaminfo_id,ae.m_team_name,ae.g_teaminfo_id,ae.g_team_name,
+			   ae.play_time,ae.ball_format,ae.position,ae.rounds,ae.status,ag.`name`,ae.group_id
+			FROM a_event_record ae,a_league_group ag
+			<where>
+				 ag.id = ae.group_id AND ae.league_id = #{maps.league_id} 
+				<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND ag.id = #{maps.group_id} 
+				</if>
+			</where>
+			ORDER BY ae.group_id,ae.rounds
+	</select>
+	
+    <select id="getEventRecordByTidAndVid" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.AdminEventRecord">
+         SELECT * FROM a_event_record 
+         	WHERE m_teaminfo_id = #{maps.m_teaminfo_id} AND g_teaminfo_id = #{maps.g_teaminfo_id} 
+         	AND  league_id = #{maps.league_id} LIMIT 1;
+    </select>
+</mapper>
+		

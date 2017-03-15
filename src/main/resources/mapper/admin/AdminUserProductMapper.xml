@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminUserProductMapper">
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.UserProduct">
+		SELECT * FROM product WHERE product_id = #{id}
+	</select>
+	
+	<select id="queryProducts" parameterType="hashmap" resultType="hashmap">
+		SELECT p.*,pc.category_name FROM product p 
+		LEFT JOIN product_category pc ON pc.category_id=p.category_id
+		<where>
+			<if test="product_ifdel !=null and product_ifdel !='' ">
+				AND p.product_ifdel=#{product_ifdel} 
+			</if>
+			<if test="product_type !=null and product_type !='' ">
+				AND p.product_type=#{product_type} 
+			</if>
+   		 	<if test="product_title !=null and product_title !='' ">
+				AND p.product_title LIKE CONCAT(CONCAT('%', #{product_title}),'%')
+			</if>
+			<if test="product_no !=null and product_no !='' ">
+				AND p.product_no LIKE CONCAT(CONCAT('%', #{product_no}),'%')
+			</if>
+			<if test="product_status !=null and product_status !='' ">
+				AND p.product_status=#{product_status} 
+			</if>
+			<if test="product_ifopen !=null and product_ifopen !='' ">
+				AND p.product_ifopen=#{product_ifopen} 
+			</if>
+			<if test="category_id !=null and category_id !='' ">
+				AND p.category_id=#{category_id} 
+			</if>
+   		</where>
+   		ORDER BY p.create_time DESC	
+   		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryProductsCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT p.*,pc.category_name FROM product p 
+			LEFT JOIN product_category pc ON pc.category_id=p.category_id
+			<where>
+				<if test="product_ifdel !=null and product_ifdel !='' ">
+					AND p.product_ifdel=#{product_ifdel} 
+				</if>
+				<if test="product_type !=null and product_type !='' ">
+					AND p.product_type=#{product_type} 
+				</if>
+	   		 	<if test="product_title !=null and product_title !='' ">
+					AND p.product_title LIKE CONCAT(CONCAT('%', #{product_title}),'%')
+				</if>
+				<if test="product_no !=null and product_no !='' ">
+					AND p.product_no LIKE CONCAT(CONCAT('%', #{product_no}),'%')
+				</if>
+				<if test="product_status !=null and product_status !='' ">
+					AND p.product_status=#{product_status} 
+				</if>
+				<if test="product_ifopen !=null and product_ifopen !='' ">
+					AND p.product_ifopen=#{product_ifopen} 
+				</if>
+				<if test="category_id !=null and category_id !='' ">
+					AND p.category_id=#{category_id} 
+				</if>
+	   		</where>
+		) cot_t)
+	</select>
+	
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.UserProduct">
+		insert into product(
+			product_id,	
+			product_no,
+			product_title,	
+			category_id,	
+			product_banner,	
+			product_header,	
+			product_second_title,	
+			product_desc,
+			product_in_price,	
+			product_single_price,	
+			product_total_price,
+			product_total_count,	
+			product_recommend_sort,	
+			product_status,	
+			product_keyword,
+			product_hot,
+			product_recommend,
+			product_ifopen,
+			product_ifdel,
+			product_type,
+			product_rate,
+			product_final_price,
+			product_remark,
+			create_time
+		) values (
+			#{product_id},	
+			#{product_no},	
+			#{product_title},	
+			#{category_id},	
+			#{product_banner},	
+			#{product_header},	
+			#{product_second_title},	
+			#{product_desc},	
+			#{product_in_price},	
+			#{product_single_price},
+			#{product_total_price},	
+			#{product_total_count},	
+			#{product_recommend_sort},	
+			0,	
+			#{product_keyword},
+			#{product_hot},
+			#{product_recommend},
+			0,
+			0,
+			#{product_type},
+			#{product_rate},
+			#{product_final_price},
+			#{product_remark},
+			NOW()
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.UserProduct">
+		update  product
+			set 
+				product_no = #{product_no},
+				product_title = #{product_title},	
+				category_id = #{category_id},	
+				product_banner = #{product_banner},	
+				product_header = #{product_header},	
+				product_second_title = #{product_second_title},	
+				product_desc = #{product_desc},	
+				product_in_price = #{product_in_price},	
+				product_single_price = #{product_single_price},	
+				product_total_price = #{product_total_price},	
+				product_total_count = #{product_total_count},	
+				product_recommend_sort = #{product_recommend_sort},	
+				product_status = #{product_status},	
+				product_keyword = #{product_keyword},
+				product_hot = #{product_hot},
+				product_recommend = #{product_recommend},
+				product_type = #{product_type},
+				product_rate = #{product_rate},
+				product_final_price = #{product_final_price},
+				product_remark = #{product_remark}
+				<if test="product_ifopen!=null and product_ifopen!=''">
+		 		,product_ifopen=#{product_ifopen}
+		 		</if>
+		 		<if test="product_ifdel!=null and product_ifdel!=''">
+		 		,product_ifdel=#{product_ifdel}
+		 		</if>
+			where 
+				product_id = #{product_id}
+	</update>
+	
+	<update id="deleteProduct">
+		update  product
+			set 
+				product_ifdel = 1	
+			where 
+				product_id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from product
+		where 
+			product_id = #{id}
+	</delete>
+	
+	<select id="queryProductCategorys" parameterType="hashmap" resultType="hashmap">
+		SELECT pc.*,pr.category_name parent_name FROM product_category pc 
+		LEFT JOIN product_category pr ON pr.category_id=pc.parent_id 
+		<where>
+   		 	<if test="product_title !=null and product_title !='' ">
+				AND pc.category_name LIKE CONCAT(CONCAT('%', #{category_name}),'%')
+			</if>
+			<if test="currentId !=null and currentId !='' ">
+				AND pc.category_id!=#{currentId} 
+			</if>
+			<if test="if_parent !=null and if_parent !='' ">
+				AND pc.parent_id!=#{if_parent} 
+			</if>
+   		</where>
+		ORDER BY pc.parent_id,pc.category_sort ASC
+   		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryProductCategorysCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT pc.*,pr.category_name parent_name FROM product_category pc 
+			LEFT JOIN product_category pr ON pr.category_id=pc.parent_id 
+			<where>
+	   		 	<if test="product_title !=null and product_title !='' ">
+					AND pc.category_name LIKE CONCAT(CONCAT('%', #{category_name}),'%')
+				</if>
+	   		</where>
+		) cot_t)
+	</select>
+	
+	<select id="getProductCategory" resultType="com.yt.framework.persistent.entity.UserProductCategory">
+		SELECT * FROM product_category WHERE category_id = #{id}
+	</select>
+	<select id="queryCategoryChilds" resultType="com.yt.framework.persistent.entity.UserProductCategory">
+		SELECT * FROM product_category WHERE parent_id = #{parentId}
+	</select>
+	
+	<insert id="saveCategory" parameterType="com.yt.framework.persistent.entity.UserProductCategory">
+		insert into product_category(
+			category_id,	
+			parent_id,	
+			category_name,	
+			category_sort,
+			category_header
+		) values (
+			#{category_id},	
+			#{parent_id},	
+			#{category_name},	
+			#{category_sort},
+			#{category_header}
+		)
+	</insert>
+	<update id="updateCategory" parameterType="com.yt.framework.persistent.entity.UserProductCategory">
+		update  product_category
+			set 
+				parent_id = #{parent_id},
+				category_name = #{category_name},
+				category_sort = #{category_sort},
+				category_header = #{category_header}
+			where 
+				category_id = #{category_id}
+	</update>
+	<delete id="deleteCategory">
+		delete from product_category
+		where 
+			category_id = #{id}
+	</delete>
+	
+	
+	<select id="queryProductDatas" parameterType="hashmap" resultType="hashmap">
+		SELECT pd.*,p.product_title,u.usernick,u.username,u.phone,u.email FROM product_data pd
+		LEFT JOIN product p ON p.product_id=pd.product_id
+		LEFT JOIN m_user u ON u.id=pd.data_win_user 
+		<where>
+			<if test="product_id !=null and product_id !='' ">
+				AND pd.product_id=#{product_id} 
+			</if>
+			<if test="name !=null and name !='' ">
+				AND (u.username LIKE CONCAT(CONCAT('%', #{name}),'%') OR u.usernick LIKE CONCAT(CONCAT('%', #{name}),'%')) 
+			</if>
+			<if test="username !=null and username !='' ">
+				AND (u.phone LIKE CONCAT(CONCAT('%', #{username}),'%') OR u.email LIKE CONCAT(CONCAT('%', #{username}),'%')) 
+			</if>
+   		 	<if test="data_status !=null and data_status !='' ">
+				AND pd.data_status=#{data_status}
+			</if>
+   		</where>
+   		<choose>
+   			<when test="group_by !=null and group_by =='asc' ">
+   		ORDER BY pd.data_turn ASC 
+   			</when>
+   			<otherwise>
+		ORDER BY pd.data_turn DESC	
+   			</otherwise>
+   		</choose>
+   		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryProductDatasCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT pd.*,p.product_title,u.usernick,u.username,u.phone,u.email FROM product_data pd
+			LEFT JOIN product p ON p.product_id=pd.product_id
+			LEFT JOIN m_user u ON u.id=pd.data_win_user 
+			<where>
+				<if test="product_id !=null and product_id !='' ">
+					AND pd.product_id=#{product_id} 
+				</if>
+				<if test="name !=null and name !='' ">
+					AND (u.username LIKE CONCAT(CONCAT('%', #{name}),'%') OR u.usernick LIKE CONCAT(CONCAT('%', #{name}),'%')) 
+				</if>
+				<if test="username !=null and username !='' ">
+					AND (u.phone LIKE CONCAT(CONCAT('%', #{username}),'%') OR u.email LIKE CONCAT(CONCAT('%', #{username}),'%')) 
+				</if>
+	   		 	<if test="data_status !=null and data_status !='' ">
+					AND pd.data_status=#{data_status}
+				</if>
+	   		</where>
+		) cot_t)
+	</select>
+	
+	<select id="queryProductData" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.UserProductData">
+		SELECT pd.* FROM product_data pd
+		<where>
+			<if test="product_id !=null and product_id !='' ">
+				AND pd.product_id=#{product_id} 
+			</if>
+   		 	<if test="data_status !=null and data_status !='' ">
+				AND pd.data_status=#{data_status}
+			</if>
+			<if test="not_end !=null and not_end !='' ">
+				AND pd.data_status!=4
+			</if>
+   		</where>
+   		<choose>
+   			<when test="group_by !=null and group_by =='asc' ">
+   		ORDER BY pd.data_turn ASC 
+   			</when>
+   			<otherwise>
+		ORDER BY pd.data_turn DESC	
+   			</otherwise>
+   		</choose>
+	</select>
+	
+	<select id="getProductData" resultType="com.yt.framework.persistent.entity.UserProductData">
+		SELECT * FROM product_data WHERE data_id = #{id}
+	</select>
+	
+	<delete id="deleteProductData">
+		delete from product_data
+		where 
+			data_id = #{id}
+	</delete>
+	
+	
+	<insert id="saveProductData" parameterType="com.yt.framework.persistent.entity.UserProductData">
+		insert into product_data(
+			data_id,	
+			data_sn,	
+			product_id,	
+			data_total_count,
+			category_id,
+			data_total_price,
+			data_single_price,
+			data_count,
+			data_status,
+			data_turn,
+			create_time
+		) values (
+			#{data_id},	
+			#{data_sn},	
+			#{product_id},	
+			#{data_total_count},
+			#{category_id},
+			#{data_total_price},
+			#{data_single_price},
+			#{data_count},
+			#{data_status},
+			#{data_turn},
+			NOW()
+		)
+	</insert>
+	<update id="updateProductData" parameterType="com.yt.framework.persistent.entity.UserProductData">
+		update  product_data
+			set 
+				data_count = #{data_count},
+				data_status = #{data_status},
+				data_start_time = #{data_start_time},
+				data_finish_time = #{data_finish_time},
+				data_win_num = #{data_win_num},
+				data_win_user = #{data_win_user}
+			where 
+				data_id = #{data_id}
+	</update>
+</mapper>

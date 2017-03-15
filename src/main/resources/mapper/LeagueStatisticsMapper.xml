@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.LeagueStatisticsMapper">
+	<!--赛事数据-->
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.LeagueStatistics">
+		SELECT * FROM a_league_statistics WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPage" resultType="com.yt.framework.persistent.entity.LeagueStatistics">
+		SELECT * FROM a_league_statistics 
+			WHERE 1=1
+			<if test="maps.league_id!='' and maps.league_id!=null">
+				AND league_id = #{maps.league_id}
+			</if>
+			<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+				AND teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="queryForPageForMap" resultType="hashmap">
+		SELECT mu.username,mu.head_icon,ti.name,al.* FROM a_league_statistics al
+			LEFT JOIN t_team_info ti ON al.teaminfo_id = ti.id
+			LEFT JOIN m_user mu ON al.user_id = mu.id
+			WHERE 1=1
+			<if test="maps.league_id!='' and maps.league_id!=null">
+				AND al.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+				AND al.teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<trim suffixOverrides=",">
+				<if test="maps.sort!=null and maps.sort!=''">
+					ORDER BY
+					<choose>
+						<when test="maps.zg_sort=='true'">
+							al.zg_sort DESC,	
+						</when>
+						<when test="maps.hop_sort=='true'">
+							al.hop_sort DESC,
+						</when>
+						<when test="maps.hup_sort=='true'">
+							al.hup_sort DESC,	
+						</when>
+						<when test="maps.shup_sort=='true'">
+							al.shup_sort DESC,		
+						</when>
+						<otherwise>
+							al.zg_sort DESC,
+						</otherwise>
+					</choose>
+				</if>
+			</trim>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(al.id) FROM a_league_statistics al
+			LEFT JOIN t_team_info ti ON al.teaminfo_id = ti.id
+			LEFT JOIN m_user mu ON al.user_id = mu.id
+			WHERE 1=1
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND al.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+				AND al.teaminfo_id = #{maps.teaminfo_id}
+			</if>
+	</select>
+	
+	
+	
+</mapper>

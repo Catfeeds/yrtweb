@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="../../../themes/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../../../themes/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../../../themes/css/common.css" rel="stylesheet" type="text/css">
+<!------------------------------------------------------------------------>
+<script>var base = 'http://192.168.2.36';</script>
+<script type="text/javascript" src="../../../core/require/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../../core/widget/widget.factory.js"></script>
+<script type="text/javascript" src="../../../core/require/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="../../../core/require/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" src="../../../plugin/layer/layer.min.js"></script>
+<link href="../../../plugin/layer/skin/layer.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../plugin/webuploader/webuploader.js"></script>
+<link href="../../../core/widget/fileUploader/fileUploader.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../core/widget/fileUploader/fileUploader.js"></script>
+</head>
+
+<body>
+<div class="container">
+  <div class="panel panel-primary mt-xl">
+    <div class="panel-heading"><div class="h3">上传控件整合: fileUploader</div></div>
+    <div class="panel-body">
+    	<div class="h4"><i class="icon-hand-right mr-sm"></i>图片上传控件：imgUploader</div>
+    	<div class="alert alert-danger alert-dismissible">图片编辑器功能支持浏览器有Chrome,firefox,IE10以及IE10以上 ，如果您使用的浏览器有极速模式，请开启！</div>
+    	<div id="carImages"></div>
+<pre class="mt-sm">
+$('#carImages').fileUploader({
+	uploaderType: 'imgUploader',
+	itemWidth: 120,
+	itemHeight: 70,
+	fileNumLimit: 2,
+	fileSingleSizeLimit: 2*1024*1024, /*2M*/
+	fileVal: 'myFiles',
+	inputName: 'carImages',
+	server: base + '/member/ajaxImageUpload',
+	toolbar:{
+		edit: {
+			width:480,
+			height:280
+		},
+		move: true,
+		del: true
+	}
+});
+</pre>
+        <div id="etcImages"></div>
+<pre class="mt-sm">
+$('#etcImages').fileUploader({
+	uploaderType: 'imgUploader',
+	itemWidth: 120,
+	itemHeight: 120,
+	fileNumLimit: 6,
+	fileSingleSizeLimit: 2*1024*1024, /*2M*/
+	fileVal: 'myFiles',
+	inputName: 'etcImages',
+	server: base + '/member/ajaxImageUpload',
+	toolbar:{
+		edit: {
+			width:600,
+			height:600
+		},
+		move: true,
+		del: true
+	}
+});
+</pre>
+    <table class="table table-bordered table-hover">
+    	<thead>
+        	<tr class="info"><th>参数名</th><th>默认值</th><th>介绍</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>uploaderType</td><td>无默认值，请设置(imgUploader:图片上传控件)</td><td>上传控件UI选择</td></tr>
+            <tr><td>itemWidth</td><td>(imgUploader的情况下，无默认值，请设置)</td><td>单个上传单位隐藏input所在区域的宽</td></tr>
+            <tr><td>itemHeight</td><td>(imgUploader的情况下，无默认值，请设置)</td><td>单个上传单位隐藏input所在区域的高</td></tr>
+            <tr><td>fileNumLimit</td><td>无默认值，请设置</td><td>上传文件数量限制</td></tr>
+            <tr><td>fileSingleSizeLimit</td><td>无默认值，请设置</td><td>单个文件大小限制</td></tr>
+            <tr><td>inputName</td><td>无默认值，请设置</td><td>表单中隐藏input的name</td></tr>
+            <tr><td>fileVal</td><td>无默认值，请设置</td><td>文件上传时的name</td></tr>
+            <tr><td>server</td><td>无默认值，请设置</td><td>后台处理上传请求的URL</td></tr>
+            <tr><td>toolbar</td><td>对象，默认值{edit:{width:400,height:400},move:true,del:true}</td><td>工具栏配置：edit配置裁切画布大小，move配置左右移动，del配置删除，设置为false是关闭功能</td></tr>
+        </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$('#carImages').fileUploader({
+	uploaderType: 'imgUploader',
+	itemWidth: 120,
+	itemHeight: 70,
+	fileNumLimit: 2,
+	fileSingleSizeLimit: 2*1024*1024, /*2M*/
+	fileVal: 'myFiles',
+	inputName: 'carImages',
+	server: base + '/member/ajaxImageUpload',
+	toolbar:{
+		edit: {
+			width:480,
+			height:280
+		},
+		move: true,
+		del: true
+	}
+});
+$('#etcImages').fileUploader({
+	uploaderType: 'imgUploader',
+	itemWidth: 120,
+	itemHeight: 120,
+	fileNumLimit: 6,
+	fileSingleSizeLimit: 2*1024*1024, /*2M*/
+	fileVal: 'myFiles',
+	inputName: 'etcImages',
+	server: base + '/member/ajaxImageUpload',
+	toolbar:{
+		edit: {
+			width:600,
+			height:600
+		},
+		move: true,
+		del: true
+	}
+});
+</script>
+</body>
+</html>

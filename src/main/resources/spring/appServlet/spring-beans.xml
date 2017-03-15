@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" 
+"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yt.framework.mapper" />
+	</bean>
+	<bean id="SpringContextUtil" class="com.yt.framework.utils.SpringContextUtil" scope="singleton"></bean>
+	<!-- rpc 接口服务端  -->
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	<bean class="com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceExporter"/> 
+	
+</beans>

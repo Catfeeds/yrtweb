@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	    <property name="triggers">
+	        <list>
+	            <!-- <ref bean="teamScoreScheduleTrigger"/>
+	            <ref bean="babyTeamScheduleTrigger"/>
+	            <ref bean="dressupScheduleTrigger"/>
+	            <ref bean="teamGameResultScheduleTrigger"/> -->
+	        </list>
+	    </property>
+	</bean>
+	
+	<!-- <bean name="exampleJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+	    <property name="jobClass" value="com.yt.framework.service.schedule.DemoSchedule"/>
+	    <property name="jobDataAsMap">
+	        <map>
+	            <entry key="timeout" value="15"/>
+	        </map>
+	    </property>
+	</bean> -->
+	
+	<!--俱乐部比分短信通知 -->
+	<bean id="teamScoreSchedule" class="com.yt.framework.service.schedule.TeamScoreSchedule"></bean>
+	<bean id="teamScoreDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="teamScoreSchedule"/>
+	    <property name="targetMethod" value="sendSMS"/>
+	</bean>
+	<bean id="teamScoreScheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="teamScoreDetail"/>
+	    <property name="cronExpression" value="0 30 9 * * ?"/>
+	</bean>
+	
+	<!-- 比赛比分自动确认 -->
+	<bean id="teamGameResultSchedule" class="com.yt.framework.service.schedule.TeamResultSchedule"></bean>
+	<bean id="teamGameResultDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="teamGameResultSchedule"/>
+	    <property name="targetMethod" value="autorTeamGameResult"/>
+	</bean>
+	<bean id="teamGameResultScheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="teamGameResultDetail"/>
+	    <property name="cronExpression" value="0 05 00 * * ?"/>
+	</bean>
+	
+	<!-- 宝贝代言俱乐部计划任务 -->
+	<bean id="babyTeamSchedule" class="com.yt.framework.service.schedule.BabyTeamSchedule"></bean>
+	<bean id="babyTeamDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="babyTeamSchedule"/>
+	    <property name="targetMethod" value="autorBabyteam"/>
+	</bean>
+	<bean id="babyTeamScheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="babyTeamDetail"/>
+	    <property name="cronExpression" value="0 01 01 * * ?"/>
+	</bean>
+	
+	<!-- 购买装扮到期自动更新已购买装扮状态 -->
+	<bean id="dressupSchedule" class="com.yt.framework.service.schedule.DressupSchedule"></bean>
+	<bean id="dressupDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="dressupSchedule"/>
+	    <property name="targetMethod" value="autorUpdateEnable"/>
+	</bean>
+	<bean id="dressupScheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="dressupDetail"/>
+	    <property name="cronExpression" value="0 01 00 * * ?"/>
+	</bean>
+</beans> 

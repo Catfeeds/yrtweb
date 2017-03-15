@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AccountMapper">
+
+	<select id="loadPayRecords" resultType="hashmap">
+		SELECT 
+			u.username,
+			TIMESTAMPDIFF(YEAR,u.borndate, NOW())AS age,
+			(CASE WHEN u.sex='1' THEN '男' WHEN u.sex='0' THEN '女' END)AS sex,
+			CONCAT(u.province ,u.city)AS city ,
+			u.phone,pr.amount,pr.real_amount,pr.order_no,pr.third_part,
+		    (CASE WHEN pr.`status`=1 THEN '充值成功' WHEN pr.`status`=0 THEN '充值失败' END)AS 'status',
+		    (CASE WHEN pr.way='ONLINE' THEN '线上充值' WHEN pr.way='OFFLINE' THEN '线下充值' END)AS way,
+		    DATE_FORMAT(pr.submit_time,'%Y-%m-%d %T')AS submit_time
+		FROM 
+			m_pay_record AS pr LEFT JOIN m_user AS u ON u.id = pr.user_id
+		WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND u.username = #{maps.username}
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone = #{maps.phone}
+			</if>
+			<if test="maps.way!=null and maps.way!=''">
+				AND pr.way = #{maps.way}
+			</if>
+			<if test="maps.orderNo!=null and maps.orderNo!=''">
+				AND pr.order_no = #{maps.orderNo}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND pr.`status` = #{maps.status}
+			</if>
+			<if test="maps.minAge!=null and maps.minAge!='' and maps.maxAge!=null and maps.maxAge!=''">
+				AND age BETWEEN #{maps.minAge} AND #{maps.maxAge}
+			</if>
+			<if test="maps.bgtime!=null and maps.bgtime!='' and maps.edtime!=null and maps.edtime!=''">
+				AND pr.submit_time BETWEEN #{maps.bgtime} AND #{maps.edtime}
+			</if>
+			ORDER BY pr.submit_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="getPayRecordsCount" resultType="int">
+		SELECT COUNT(*) FROM 
+			m_pay_record AS pr LEFT JOIN m_user AS u ON u.id = pr.user_id
+		WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND u.username = #{maps.username}
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone = #{maps.phone}
+			</if>
+			<if test="maps.way!=null and maps.way!=''">
+				AND pr.way = #{maps.way}
+			</if>
+			<if test="maps.orderNo!=null and maps.orderNo!=''">
+				AND pr.order_no = #{maps.orderNo}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND pr.`status` = #{maps.status}
+			</if>
+			<if test="maps.minAge!=null and maps.minAge!='' and maps.maxAge!=null and maps.maxAge!=''">
+				AND age BETWEEN #{maps.minAge} AND #{maps.maxAge}
+			</if>
+			<if test="maps.bgtime!=null and maps.bgtime!='' and maps.edtime!=null and maps.edtime!=''">
+				AND pr.submit_time BETWEEN #{maps.bgtime} AND #{maps.edtime}
+			</if>
+	</select>
+	
+	<select id="getPayRecordSum" resultType="decimal">
+		SELECT SUM(amount) FROM m_pay_record AS pr WHERE pr.`status` = #{status}
+	</select>
+	
+	<select id="loadCostRecord" resultType="hashmap">
+		SELECT 
+			u.username,
+			TIMESTAMPDIFF(YEAR,u.borndate, NOW())AS age,
+			(CASE WHEN u.sex='1' THEN '男' WHEN u.sex='0' THEN '女' END)AS sex,
+			CONCAT(u.province ,u.city)AS city ,
+			u.phone,pc.amount,pc.num_str as order_no,pc.describle, DATE_FORMAT(pc.create_time,'%Y-%m-%d %T')AS create_time,
+		    (CASE WHEN pc.`status`=1 THEN '消费成功' WHEN pc.`status`=0 THEN '消费失败' END)AS 'status'
+		FROM m_pay_cost AS pc LEFT JOIN m_user AS u ON u.id = pc.user_id
+		WHERE 1=1
+		<if test="maps.username!=null and maps.username!=''">
+			AND u.username = #{maps.username}
+		</if>
+		<if test="maps.phone!=null and maps.phone!=''">
+			AND u.phone = #{maps.phone}
+		</if>
+		<if test="maps.orderNo!=null and maps.orderNo!=''">
+			AND pc.num_str = #{maps.orderNo}
+		</if>
+		<if test="maps.status!=null and maps.status!=''">
+			AND pc.`status` = #{maps.status}
+		</if>
+		<if test="maps.minAge!=null and maps.minAge!='' and maps.maxAge!=null and maps.maxAge!=''">
+			AND age BETWEEN #{maps.minAge} AND #{maps.maxAge}
+		</if>
+		<if test="maps.bgtime!=null and maps.bgtime!='' and maps.edtime!=null and maps.edtime!=''">
+			AND pc.create_time BETWEEN #{maps.bgtime} AND #{maps.edtime}
+		</if>	
+			ORDER BY pc.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="getPayCostCount" resultType="int">
+		SELECT COUNT(*) 
+			FROM
+				m_pay_cost AS pc LEFT JOIN m_user AS u ON u.id = pc.user_id
+			WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND u.username = #{maps.username}
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone = #{maps.phone}
+			</if>
+			<if test="maps.orderNo!=null and maps.orderNo!=''">
+				AND pc.num_str = #{maps.orderNo}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND pc.`status` = #{maps.status}
+			</if>
+			<if test="maps.minAge!=null and maps.minAge!='' and maps.maxAge!=null and maps.maxAge!=''">
+				AND age BETWEEN #{maps.minAge} AND #{maps.maxAge}
+			</if>
+			<if test="maps.bgtime!=null and maps.bgtime!='' and maps.edtime!=null and maps.edtime!=''">
+				AND pc.create_time BETWEEN #{maps.bgtime} AND #{maps.edtime}
+			</if>	
+	</select>
+	
+	<insert id="saveUserAmount" parameterType="com.yt.framework.persistent.entity.UserAmount">
+		INSERT INTO m_user_amount(
+			id,
+			user_id,
+			amount,
+			real_amount,
+			send_amount,
+			status
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{amount},
+			#{real_amount},
+			#{send_amount},
+			#{status}
+		)
+	</insert>
+	
+	<update id="updateUserAmount" parameterType="com.yt.framework.persistent.entity.UserAmount">
+		UPDATE m_user_amount
+			SET
+				amount=#{amount},
+				real_amount=#{real_amount},
+				send_amount=#{send_amount},
+				status=#{status}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="getUserAmount" resultType="com.yt.framework.persistent.entity.UserAmount">
+		SELECT * FROM m_user_amount WHERE id = #{id}
+	</select>
+	
+	<select id="getUserAmountByUserId" resultType="com.yt.framework.persistent.entity.UserAmount">
+		SELECT * FROM m_user_amount WHERE user_id = #{user_id}
+	</select>
+	
+	<select id="loadUserAmountDatas" resultType="hashmap">
+		SELECT ua.*,u.username,u.phone,u.id_card,
+		(<!-- 平台充值总金额 -->
+		SELECT SUM(py.amount) FROM m_pay_record AS py WHERE py.`status`=1
+		)AS sumAmount
+		 FROM m_user_amount AS ua 
+			LEFT JOIN m_user AS u ON u.id = ua.user_id
+			WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND u.username LIKE CONCAT('%',#{maps.username},'%')	
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone = #{maps.phone}
+			</if>
+			ORDER BY u.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="loadUserAmountDatasCount" resultType="int">
+		SELECT COUNT(*) FROM m_user_amount AS ua 
+			LEFT JOIN m_user AS u ON u.id = ua.user_id
+			WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND u.username LIKE CONCAT('%',#{maps.username},'%')	
+			</if>
+			<if test="maps.phone!=null and maps.phone!=''">
+				AND u.phone = #{maps.phone}
+			</if>
+	</select>
+	
+	<select id="loadTotalAmount" resultType="hashmap">
+		SELECT COUNT(id), SUM(amount) AS amount,sum(real_amount) AS real_amount,sum(send_amount) AS send_amount from m_user_amount 
+			<if test="maps.send_amount!=null and maps.send_amount!=''">
+				WHERE send_amount != #{maps.send_amount}
+			</if>
+	</select>
+	
+	<select id="loadTotalRecord" resultType="hashmap">
+		SELECT COUNT(id),SUM(amount) AS amount from m_pay_record 
+			WHERE status = 1 
+			<if test="maps.third_part!=null and maps.third_part!=''">
+				AND third_part = #{maps.third_part}
+			</if>
+	</select>
+	
+</mapper>

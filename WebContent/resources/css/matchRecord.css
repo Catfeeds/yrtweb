@@ -1,0 +1,319 @@
+.history{
+	width: 1000px;
+	height: 878px;
+	margin: 0 auto;
+	background: white;
+	margin-top: 23px;
+}
+
+.history_title{
+	text-align: center;
+  	color: white;
+	width: 100%;
+	height: 30px;
+	font-size: 16px;
+	padding-top: 10px;
+	background:#ADB2EF;
+}
+
+.record{
+	width: 852px;
+	height: 708px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.record ul{
+	margin-left: 12px;
+}
+
+.record ul li{
+	width: 400px;
+	height: 349px;
+	float: left;
+	margin-right: 20px;
+}
+
+/*閻樿埖锟戒焦鐖ｇ粵锟�/
+.record_status{
+	position: absolute;
+  margin-left: 338px;
+  margin-top: -30px;
+}
+
+/*閹垮秳缍旈幐澶愭尦鐏烇拷*/
+.score_operate{
+	width: 387px;
+  height: 45px;
+  background: black;
+  position: absolute;
+  opacity: 0.6;
+  margin: 0 auto;
+  margin-top: -32px;
+  display: none;
+}
+
+.score_operate input{
+	border: none;
+	font-size: 14px;
+	background: transparent;
+    color: white;
+}
+
+/*閸掑棝銆*/
+.pageTurn{
+	width: 340px;
+  margin: 0 auto;
+}
+
+
+/*娣囶喗鏁奸崥搴ｆ畱*/
+.history1{
+	width: 1000px;
+	/*height: 878px;*/
+	margin: 0 auto;
+	background: url(../images/hstoy.png) repeat-y;
+	opacity: 0.9;
+    filter:alpha(opacity=90);  /* ie 閺堝鏅*/
+	-moz-opacity:0.9; /* Firefox  閺堝鏅*/
+	margin-top: 23px;
+}
+
+.history_title1{
+	text-align: center;
+  	color: white;
+	width: 100%;
+	height: 30px;
+	font-size: 16px;
+	padding-top: 10px;
+	background:#233019;
+}
+
+.record1{
+	width: 800px;
+	/*height: 708px;*/
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.record1 li{
+	float: left;
+	margin-right: 80px;
+	margin-top: 50px;
+}
+
+.record_status1{
+	width: 68px;
+	height: 60px;
+  position: absolute;
+  margin-left: 267px;
+  margin-top: -21px;
+}
+
+.babyImg1{
+	width: 317px;
+	height: 60px;
+	margin-left: 80px;
+}
+
+.pingjia1{
+	border: none;
+  color: white;
+  background: transparent;
+}
+
+.babyImg1 img{
+	width: 40px;
+	height: 40px;
+	float: left;
+	margin-left: 10px;
+}
+
+/*閹垮秳缍旈幐澶愭尦鐏烇拷*/
+.score_operate1{
+	width: 317px;
+  height: 22px;
+  background: black;
+  position: absolute;
+  opacity: 0.6;
+  margin: 0 auto;
+  margin-top: 6px;
+  display: none;
+}
+	
+	.score_operate1 input{
+		border: none;
+		font-size: 14px;
+		background: transparent;
+	    color: white;
+}
+	
+	
+	/*.zhu2 p{
+		text-overflow: ellipsis;
+	  width: 60px;
+	  height: 20px;
+	  overflow: hidden;
+	}*/
+	
+.invite_top1 {
+  width: 317px;
+  height: 61px;
+  float: left;
+  margin-top: 15px;
+  margin-left: 20px;
+}
+
+.vs1{
+	width: 78px;
+	height: 36px;
+	
+}
+
+.vs1 img{
+  width: 78px;
+  height: 36px;
+  margin-top: 10px;
+}
+
+.zhu2 img{
+	width: 49px;
+	height: 48px;
+}
+
+.zhu2 p{
+	width:84px;
+	margin-left: -17px;
+    text-align: center;
+}
+
+.cl{
+	width: 317px;
+  height: 230px;
+  border: 1px dashed;
+  /*background: url(../images/xuk1.png);*/
+ 
+}
+
+.invite_bottom1 span{
+	font-size: 12px;
+    color: white;
+    
+}
+
+/*瀹濊礉璇勪环*/
+.baby_judge{
+	/*width: 678px;
+	height: 490px;*/
+	width: 386px;
+  height: 390px;
+	background: #434343;
+	margin: 0 auto;
+	margin-top: 200px;
+	
+  position: absolute;
+  top: 20%;
+  left: 40%;
+}
+
+.baby_judge .closeBtn {
+  position: absolute;
+  right: -13px;
+  top: -12px;
+  width: 30px;
+  height: 30px;
+  background: url(../images/closebtn.png) no-repeat;
+  cursor: pointer;
+}
+
+.judge_title{
+	width: 209px;
+	height: 38px;
+	margin: 0 auto;
+	background: url(../images/ping.png) no-repeat;
+	line-height: 38px;	
+}	
+
+.judge_title img{
+	width: 209px;
+	height: 38px;
+}
+
+.baby_info{
+	/*width: 550px;*/
+	width: 386px;
+	height: 95px;
+	border-bottom: 1px solid gray;
+	margin: 0 auto;
+	margin-top: 23px;
+}
+
+.babyHead{
+	width: 280px;
+	height: 100px;
+	margin: 0 auto;
+}
+	.babyHead img{
+		width: 80px;
+		height: 80px;
+		float: left;
+	}
+	
+	.babyName{
+		display: -webkit-inline-box;
+	}
+	
+.judge_bottom{
+	/*width: 550px;*/
+	width: 385px;
+	height: 284px;
+	margin: 0 auto;
+	margin-top: 15px;
+}	
+
+.judge_bottom img{
+	width: 34px;
+	height: 32px;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.judge_bottom textarea{
+	/*width: 482px;
+    height: 148px;*/
+   width: 278px;
+  height: 85px;
+    border-radius: 0px;
+    margin-top: 10px;
+}
+
+.judge_bottom input{
+	width: 88px;
+	height: 30px;
+	border: none;
+	background: #EA6200;
+	color: white;
+	border-radius: 4px;
+	font-size: 18px;
+}
+
+/*鏃犲姪濞佸疂璐濅俊鎭*/
+
+.noBaby img{
+	width: 63px;
+	height: 38px;
+	margin-left: 50px;
+}
+
+.noBaby{
+	width: 100px;
+}
+
+.wei_p{
+	margin-left: 30px;
+  	width: 100px;
+}
+
+.baby_h{
+	height: 38px;
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminPlayerInfoMapper">
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.PlayerInfo">
+		SELECT * FROM p_player_info WHERE id = #{id}
+	</select>
+
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT u.phone,u.email,u.usernick,u.username,t.teaminfo_id,p.* FROM p_player_info p 
+		LEFT JOIN m_user u ON u.id=p.user_id
+		LEFT JOIN t_team_player t ON p.user_id=t.user_id 
+		<where>
+   		 	<if test="maps.username !=null and maps.username !='' ">
+				AND (u.phone LIKE CONCAT(CONCAT('%', #{maps.username}),'%') OR u.email LIKE CONCAT(CONCAT('%', #{maps.username}),'%')) 
+			</if>
+			<if test="maps.name !=null and maps.name !='' ">
+				AND u.username LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+			<if test="maps.if_daji !=null and maps.if_daji !='' ">
+				AND p.if_daji= #{maps.if_daji}
+			</if>
+			<if test="maps.level !=null and maps.level !='' ">
+				AND p.`level`=#{maps.level}
+			</if>
+   		 </where>
+   		 ORDER BY p.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT u.phone,u.email,u.usernick,u.username,t.teaminfo_id,p.* FROM p_player_info p 
+			LEFT JOIN m_user u ON u.id=p.user_id
+			LEFT JOIN t_team_player t ON p.user_id=t.user_id 
+			<where>
+	   		 	<if test="maps.username !=null and maps.username !='' ">
+					AND (u.phone LIKE CONCAT(CONCAT('%', #{maps.username}),'%') OR u.email LIKE CONCAT(CONCAT('%', #{maps.username}),'%')) 
+				</if>
+				<if test="maps.name !=null and maps.name !='' ">
+					AND u.username LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.if_daji !=null and maps.if_daji !='' ">
+					AND p.if_daji= #{maps.if_daji}
+				</if>
+				<if test="maps.level !=null and maps.level !='' ">
+					AND p.`level`=#{maps.level}
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<update id="updatePlayerLevel" parameterType="com.yt.framework.persistent.entity.PlayerInfo">
+		UPDATE p_player_info
+		SET
+		level=#{level}
+		WHERE
+		id = #{id}
+	</update>
+</mapper>

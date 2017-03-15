@@ -1,0 +1,423 @@
+.videoList{
+	
+  width: 994px;
+  background: url(../images/sy_bg.png) repeat-y;
+  border: 3px solid rgba(255,255,255,0.2);
+ 
+}
+
+.video_title{
+	width: 1000px;
+  height: 38px;
+  line-height: 38px;
+  background: url(../images/bb_title.png) no-repeat center;
+  text-align: center;
+}
+
+.video_list{
+	width: 943px;
+	margin: -18px auto;
+	margin-bottom: 140px;
+	/*background: url(../images/xiantiao_video.png) no-repeat;*/
+}
+
+
+.video_list li{
+	float: left;
+	margin-left: 25px;
+	margin-top: 30px;
+}
+
+.video_play{
+	width: 40px;
+    height: 40px;
+    margin-top: 35px;
+    margin-left: 80px;
+	position: absolute;
+	background: url(../images/vedio_play.png) no-repeat;
+	display: none;
+}
+
+.video_icon{
+	width:100%;
+	height:20px;
+	line-height:20px;
+	position: absolute;
+	margin-top: 90px;
+ /*  margin-left: 5px; */
+}
+
+	.videoIcon1{
+		width: 15px;
+		height: 15px;
+		position: absolute;
+		margin-left:5px;
+		margin-top:3px;
+		background: url(../images/vedio_1.png) no-repeat;
+	}
+	
+	.videoIcon2{
+		width: 9px;
+		height: 9px;
+		position: absolute;
+		background: url(../images/vedio_2.png) no-repeat;
+		margin-top: 6px;
+  		margin-left: 5px;
+	}
+
+.videos_img{
+	position: relative;
+	height: 135px;
+	cursor: pointer;
+}
+
+.videos_img img{
+	width: 206px;
+	height: 111px;
+}
+
+/*详情*/
+
+.video_detail{
+	
+	position: absolute;
+	top: 30%;
+    left: 24%;
+    z-index: 1200;
+    border: 3px solid rgba(255,255,255,0.2);
+}
+
+.closeVideoDeatail{
+	position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 34px;
+  height: 34px;
+  background: url(../images/closeDeatail.png) no-repeat;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.videoTitle{
+	width: 662px;
+	height: 71px;
+	background: url(../images/videoTitle_bg.png) no-repeat;
+	/*opacity: 0.9;*/
+	position: absolute;
+	line-height: 60px;
+	text-align: center;
+	z-index: 1;
+}
+
+.commentIcon{
+	position: absolute;
+	margin-top: 497px;
+	margin-left: 410px;
+}
+
+	.goodComment{
+		width: 16px;
+		height: 24px;
+		background: url(../images/goodComment.png) no-repeat;
+		position: absolute;
+		margin: -5px;
+	}
+
+	.badComment{
+		width: 17px;
+		height: 24px;
+		background: url(../images/badComment.png) no-repeat;
+		position: absolute;
+		margin: 2px;
+	}
+.videoplay{
+	width: 662px;
+	height: 522px;
+	
+}
+
+.videoplay img{
+	width: 662px;
+	height: 522px;
+}
+
+.comment{
+	width: 318px;
+	height: 522px;
+	background: url(../images/right_bg.png);
+}
+
+.load{
+	width: 100px;
+	height: 20px;
+	margin: 15px auto;
+	text-align: center;
+}
+
+	.load a{
+		color: #666;
+		cursor: pointer;
+		font-size: 16px;	
+	}
+	
+.commentBox{
+	height: 390px;
+	overflow-y: auto;
+}	
+	
+	.publishComment{
+		width: 319px;
+		background: url(../images/right_xian.png) no-repeat;
+		margin-bottom: 5px;
+		position: absolute;
+    	bottom: 2px;
+	}
+	
+	.publishHead{
+		width: 40px;
+		height: 40px;
+		margin-left: 10px;
+		margin-top: 25px;
+		float: left;
+	}
+	
+	.publishComment textarea{
+		width: 175px;
+		height: 50px;
+		overflow-y: hidden;
+		background: transparent;
+	    margin-top: 10px;
+	    border: 1px solid #666;
+	    color: white;
+	    margin-left: 10px;
+	    float: left;
+	}
+	
+	.publisBtn{
+		width: 52px;
+		height: 28px;
+		border: none;
+	    background: #eb6100;
+	    border-radius: 6px;
+	    color: #fff;
+	    font-size: 18px;
+	    float: left;
+	    margin-top: 30px;
+    	margin-left: 10px;
+	}
+	
+/*.comment textarea{
+	width: 574px;
+	height: 98px;
+	overflow-y: hidden;
+	background: transparent;
+    margin-top: 10px;
+    border: 1px solid #666;
+    color: white;
+} */
+
+.myself{
+	width: 30px;
+	height: 30px;
+}
+
+/*.comment input{
+	width: 100px;
+	height: 30px;
+	border: none;
+    background: #eb6100;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 20px;
+}*/
+
+.reply{
+	width: 570px;
+	margin: 5px auto;
+	margin-top: 25px;
+}
+
+	.other{
+		width: 40px;
+		height: 40px;
+	}
+	
+	.otherName{
+		font-size: 18px;
+		color: #0085ff;
+	}
+	
+	.replyBtn{
+		background: transparent;
+		border: none;
+		color: white;
+	}
+
+.myself_reply{
+	width: 510px;
+	margin: 10px auto;
+	margin-left: 55px;
+	display: none;
+}	
+
+	.reply_txt{
+		width: 428px;
+		height: 20px;
+		background: transparent;
+		color: white;
+		border: 1px solid #666;
+	}
+	
+	.myselfReplyBtn{
+	   height: 28px;
+	   border: none;
+       background: #eb6100;
+       border-radius: 6px;
+       color: #fff;
+       font-size: 20px;
+       margin-left: 5px;
+	}
+	
+	.myselfName{
+		color:#0085ff;
+		font-size: 12px;
+	}	
+.w225{
+	width: 225px;
+	word-break: break-all;
+}
+
+.w408{
+	width:408px;
+	word-break: break-all;
+}
+
+/*  ��Ƶ�б��޸�1102*/
+.searchVideo{
+	width: 888px;
+	margin: 20px auto;
+}
+
+.tiaojian a{
+	color: #969494;
+	border-left: 1px solid gray;
+	font-size: 12px;
+	padding: 0px 1px;
+}
+
+
+
+.search_videoBtn{
+	width: 52px;
+    height: 20px;
+    border: none;
+    background: #eb6100;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    
+}
+
+.videoHot a{
+	color: #969494;
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
+	padding: 0px 5px;
+}
+
+.xiantiao_video{
+	width: 943px;
+	margin: 0 auto;
+	background: url(../images/xiantiao_video.png) no-repeat;
+	padding-bottom: 20px;
+}
+
+
+.zan{
+	width: 15px;
+	height: 15px;
+	background: url(../images/zan.png) no-repeat;
+	position: absolute;
+    margin-left: 5px;
+}
+
+.cai{
+	width: 15px;
+	height: 15px;
+	background: url(../images/cai.png) no-repeat;
+	position: absolute;
+    margin-left: 5px;
+    margin-top: 6px;
+}
+
+
+.video_info {
+    position: relative;
+    width: 205px;
+    height: 110px;
+}
+
+    .video_info img {
+        width: 205px;
+        height: 110px;
+    }
+
+    .video_info .v_info {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 22px;
+        line-height: 22px;
+        background: url(../images/video_bg.png) repeat-x;
+        opacity: .9;
+        filter: alpha(opacity = 90);
+    }
+
+        .video_info .v_info .name {
+            float: left;
+            color: #fff;
+        }
+
+        .video_info .v_info .nums {
+            float: right;
+            color: #fff;
+            display: inline-block;
+            padding-left: 15px;
+            background: url(../images/vedio_2.png) no-repeat left center;
+        }
+
+    .video_info .video {
+        cursor: pointer;
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        left: 82px;
+        top: 17px;
+        background: url(../images/vedio_play.png) no-repeat;
+    }
+
+.zancai {
+    color: #666;
+    margin-top: 5px;
+}
+
+    .zancai .zan_b {
+        display: inline-block;
+        padding-left: 15px;
+        height: 15px;
+        line-height: 15px;
+        background: url(../images/zan.png) no-repeat left center;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .zancai .cai_b {
+        display: inline-block;
+        padding-left: 15px;
+        height: 15px;
+        line-height: 15px;
+        background: url(../images/cai.png) no-repeat left center;
+        margin-right: 5px;
+        cursor: pointer;
+    }

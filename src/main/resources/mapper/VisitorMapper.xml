@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.VisitorMapper">
+		<sql id="visitorInfo">
+			id,
+			visitor_id,
+			p_visitor_id,
+			visit_time,
+			visit_type,
+			visit_url
+		</sql>
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.Visitor" >
+     		INSERT INTO m_visitor(
+     			id,
+				visitor_id,
+				p_visitor_id,
+				visit_time,
+				visit_type,
+				visit_url,
+				visit_count,
+				t_visit_count
+     		)VALUES(
+     			#{id},
+				#{visitor_id},
+				#{p_visitor_id},
+				NOW(),
+				#{visit_type},
+				#{visit_url},
+				#{visit_count},
+				#{t_visit_count}
+     		)
+     	</insert>
+		
+		<update id="update">
+			update m_visitor set 
+			<if test="visit_count!=null">
+				visit_count = #{visit_count},
+			</if>
+			<if test="t_visit_count!=null" >
+				t_visit_count = #{t_visit_count},
+			</if>
+			visit_time = NOW()
+			where id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.Visitor">
+     		SELECT 
+     			<include refid="visitorInfo"/>
+     		 FROM m_visitor WHERE id = #{id}
+     	</select>
+     	
+     	<select id="queryForPage" resultType="hashmap">
+				SELECT vi.visitor_id AS visitor_id,vi.visit_time AS visit_time, mu.usernick AS nick ,mu.head_icon AS icon FROM m_visitor vi 
+					LEFT JOIN m_user mu ON vi.visitor_id = mu.id
+					WHERE 1=1 
+					<if test="maps.visitor_id!=null and maps.visitor_id!=''">
+						AND vi.visitor_id = #{maps.visitor_id}
+					</if>
+					<if test="maps.p_visitor_id!=null and maps.p_visitor_id!=''">
+						AND vi.p_visitor_id = #{maps.p_visitor_id}
+					</if>
+					<!-- <if test="maps.visit_time!=null and maps.visit_time!=''">
+						AND vi.visit_time &gt; '' AND visitor_time &lt; ''
+					</if> -->
+					<if test="maps.visit_type!=null and maps.visit_type!=''">
+						AND vi.visit_type = #{maps.visit_type}
+					</if>
+					<if test="maps.visit_url!=null and maps.visit_url!=''">
+						AND vi.visit_url = #{maps.visit_url}
+					</if>
+					ORDER BY vi.visit_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+     	<select id="count" resultType="int">
+			SELECT count(vi.id) FROM m_visitor vi 
+				LEFT JOIN m_user mu ON vi.visitor_id = mu.id
+				WHERE 1=1 
+				<if test="maps.visitor_id!=null and maps.visitor_id!=''">
+					AND vi.visitor_id = #{maps.visitor_id}
+				</if>
+				<if test="maps.p_visitor_id!=null and maps.p_visitor_id!=''">
+					AND vi.p_visitor_id = #{maps.p_visitor_id}
+				</if>
+				<!-- <if test="maps.visit_time!=null and maps.visit_time!=''">
+					AND vi.visit_time &gt; '' AND visitor_time &lt; ''
+				</if> -->
+				<if test="maps.visit_type!=null and maps.visit_type!=''">
+					AND vi.visit_type = #{maps.visit_type}
+				</if>
+				<if test="maps.visit_url!=null and maps.visit_url!=''">
+					AND vi.visit_url = #{maps.visit_url}
+				</if>
+		</select>
+		
+		<select id="visitCount" resultType="Integer">
+			(SELECT	SUM(t_visit_count) AS cmount FROM m_visitor WHERE 1=1 AND visit_time &gt; DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%s') AND
+			      visit_time &lt; DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY),'%Y-%m-%d %H:%i:%s') AND p_visitor_id = #{maps.p_visitor_id} AND visit_url = #{maps.visit_url} AND visit_type = #{maps.visit_type})
+			UNION ALL 
+			(SELECT SUM(visit_count) AS amount FROM m_visitor WHERE 1=1 AND p_visitor_id = #{maps.p_visitor_id} AND visit_url = #{maps.visit_url} AND visit_type = #{maps.visit_type})
+		</select>
+		
+		<select id="getVisitor" resultType="com.yt.framework.persistent.entity.Visitor">
+			SELECT * FROM m_visitor vi
+			 WHERE 1=1
+			 <if test="maps.visitor_id!=null and maps.visitor_id!=''">
+				AND vi.visitor_id = #{maps.visitor_id}
+			</if>
+			<if test="maps.p_visitor_id!=null and maps.p_visitor_id!=''">
+				AND vi.p_visitor_id = #{maps.p_visitor_id}
+			</if>
+			<if test="maps.visit_type!=null and maps.visit_type!=''">
+				AND vi.visit_type = #{maps.visit_type}
+			</if>
+			<if test="maps.visit_url!=null and maps.visit_url!=''">
+				AND vi.visit_url = #{maps.visit_url}
+			</if>
+		</select>
+		
+		
+		
+</mapper>

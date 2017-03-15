@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.MessageRecordsMapper">
+	<sql id="message">
+		id,user_id,user_ids,type,content,create_time,status,show_status
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.MessageRecords">
+		INSERT INTO n_msg_records(
+			id,
+			user_id,
+			user_ids,
+			type,
+			content,
+			create_time,
+			status,
+			show_status
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{user_ids},
+			#{type},
+			#{content},
+			NOW(),
+			#{status},
+			#{show_status}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.MessageRecords">
+		UPDATE n_msg_records
+		SET
+			user_id=#{user_id},
+			user_ids=#{user_ids},
+			type=#{type},
+			content=#{content},
+			status=#{status},
+			show_status=#{show_status}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM n_msg_records WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.MessageRecords">
+		SELECT
+		<include refid="message" />
+		FROM n_msg_records WHERE id = #{id}
+	</select>
+	
+	<select id="queryNewMsgRecord" parameterType="hashmap" resultType="hashmap">
+		SELECT id,user_id,user_ids,type,content,create_time,status,is_show FROM n_msg_records	
+		WHERE is_show=1 
+		ORDER BY create_time DESC 
+		LIMIT 20 
+	</select>
+	
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.CoachInfoMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.CoachInfo" >
+			INSERT INTO c_coach_info(
+				id,
+				user_id,
+				is_player,
+				cer_no,
+				in_team,
+				stars,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{is_player},
+				#{cer_no},
+				#{in_team},
+				#{stars},
+				NOW()
+			)
+		</insert>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.CoachInfo">
+			UPDATE c_coach_info
+				SET
+					user_id = #{user_id},
+					is_player = #{is_player},
+					cer_no = #{cer_no},
+					in_team = #{in_team},
+					stars = #{stars}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.CoachInfo">
+			SELECT * FROM c_coach_info WHERE id = #{id}
+		</select>
+		
+		<select id="getCoachInfoByUserId" resultType="com.yt.framework.persistent.entity.CoachInfo">
+			SELECT * FROM c_coach_info WHERE user_id = #{user_id}
+		</select>
+		
+</mapper>

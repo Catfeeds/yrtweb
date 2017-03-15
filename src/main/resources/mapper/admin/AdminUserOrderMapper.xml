@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminUserOrderMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.UserOrder" >
+		INSERT INTO or_order(
+			order_id,
+			order_sn,
+			data_sn,
+			data_id,
+			user_id,
+			create_time,
+			order_pay_time,
+			order_user_name,
+			order_user_phone,
+			order_user_offer,
+			order_address,
+			order_check_time,
+			order_ifcheck,
+			order_send_time,
+			order_actual_cash,
+			order_cash,
+			order_ifsend,
+			order_nums,
+			order_count,
+			order_ifwin,
+			order_status,
+			order_buy_channel,
+			order_valid_status
+		)VALUES(
+			#{order_id},
+			#{order_sn},
+			#{data_sn},
+			#{data_id},
+			#{user_id},
+			NOW(),
+			#{order_pay_time},
+			#{order_user_name},
+			#{order_user_phone},
+			#{order_user_offer},
+			#{order_address},
+			#{order_check_time},
+			#{order_ifcheck},
+			#{order_send_time},
+			#{order_actual_cash},
+			#{order_cash},
+			#{order_ifsend},
+			#{order_nums},
+			#{order_count},
+			#{order_ifwin},
+			#{order_status},
+			#{order_buy_channel},
+			#{order_valid_status}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.UserOrder">
+		UPDATE or_order
+			SET
+				order_sn = #{order_sn},
+				data_id = #{data_id},
+				data_sn = #{data_sn},
+				user_id = #{user_id},
+				order_pay_time = #{order_pay_time},
+				order_user_name = #{order_user_name},
+				order_user_phone = #{order_user_phone},
+				order_user_offer = #{order_user_offer},
+				order_address = #{order_address},
+				order_check_time = #{order_check_time},
+				order_ifcheck = #{order_ifcheck},
+				order_send_time = #{order_send_time},
+				order_actual_cash = #{order_actual_cash},
+				order_cash = #{order_cash},
+				order_ifsend = #{order_ifsend},
+				order_nums = #{order_nums},
+				order_count = #{order_count},
+				order_ifwin = #{order_ifwin},
+				order_ifvalid = #{order_ifvalid},
+				order_status = #{order_status},
+				order_send = #{order_send},
+				order_send_no = #{order_send_no},
+				order_send_cash = #{order_send_cash},
+				order_buy_channel = #{order_buy_channel}
+			WHERE
+				order_id = #{order_id}	
+	</update>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT o.*,p.product_title,pd.data_sn,pd.data_win_num
+			FROM 
+				or_order o 
+			LEFT JOIN 
+				product_data pd 
+			ON 
+				pd.data_id = o.data_id
+			LEFT JOIN 
+				product p 
+			ON 
+				p.product_id = pd.product_id
+		<where>
+			<if test="maps.order_sn !=null and maps.order_sn !='' ">
+				 o.order_sn = #{maps.order_sn}
+			</if>
+			<if test="maps.order_ifwin !=null and maps.order_ifwin !='' ">
+				AND o.order_ifwin = #{maps.order_ifwin}
+			</if>
+			<if test="maps.order_ifsend !=null and maps.order_ifsend !='' ">
+				AND o.order_ifsend = #{maps.order_ifsend}
+			</if>
+			<if test="maps.order_ifcheck !=null and maps.order_ifcheck !='' ">
+				AND o.order_ifcheck = #{maps.order_ifcheck}
+			</if>
+			<if test="maps.begin_time !=null and maps.begin_time !='' ">
+				AND o.order_check_time &gt; #{maps.begin_time}
+			</if>
+			<if test="maps.end_time !=null and maps.end_time !='' ">
+				AND o.order_check_time &lt; #{maps.end_time}
+			</if>
+   		 </where>
+   		 ORDER BY o.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( 
+			SELECT o.order_id
+				FROM 
+					or_order o 
+				LEFT JOIN 
+					product_data pd 
+				ON 
+					pd.data_id = o.data_id
+				LEFT JOIN 
+					product p 
+				ON 
+					p.product_id = pd.product_id
+			<where>
+				<if test="maps.order_sn !=null and maps.order_sn !='' ">
+					 o.order_sn = #{maps.order_sn}
+				</if>
+				<if test="maps.order_ifwin !=null and maps.order_ifwin !='' ">
+					AND o.order_ifwin = #{maps.order_ifwin}
+				</if>
+				<if test="maps.order_ifsend !=null and maps.order_ifsend !='' ">
+					AND o.order_ifsend = #{maps.order_ifsend}
+				</if>
+				<if test="maps.order_ifcheck !=null and maps.order_ifcheck !='' ">
+					AND o.order_ifcheck = #{maps.order_ifcheck}
+				</if>
+				<if test="maps.begin_time !=null and maps.begin_time !='' ">
+					AND o.order_check_time &gt; #{maps.begin_time}
+				</if>
+				<if test="maps.end_time !=null and maps.end_time !='' ">
+					AND o.order_check_time &lt; #{maps.end_time}
+				</if>
+	   		 </where>
+		) cot_t 
+	</select>
+	
+	<select id="getOrderById" resultType="hashmap">
+		SELECT 
+				o.*,
+				p.product_title,
+				p.product_second_title,
+				p.product_no,	
+				pd.data_sn,
+				pd.data_win_num
+			FROM 
+				or_order o 
+			LEFT JOIN 
+				product_data pd 
+			ON 
+				pd.data_id = o.data_id
+			LEFT JOIN 
+				product p 
+			ON 
+				p.product_id = pd.product_id
+			WHERE 
+				o.order_id = #{order_id}
+	</select>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.UserOrder">
+		SELECT *
+			FROM 
+				or_order o 
+			WHERE 
+				o.order_id = #{id}
+	</select>
+	
+	<insert id="addOrderNumData" parameterType="com.yt.framework.persistent.entity.OrderNumData" >
+		INSERT INTO order_num(
+			num_id,
+			data_sn,
+			order_num,
+			order_num_mark,
+			order_sn
+		)VALUES(
+			#{num_id},
+			#{data_sn},
+			#{order_num},
+			#{order_num_mark},
+			#{order_sn}
+		)
+	</insert>
+	
+	
+	<select id="queryOrderNums" parameterType="hashmap" resultType="hashmap">
+		SELECT o.* FROM (SELECT *,(CASE WHEN (order_sn IS NULL OR order_sn='') THEN 2 ELSE 1 END) if_use FROM order_num) o 
+		<where>
+			<if test="data_sn !=null and data_sn !='' ">
+				AND o.data_sn=#{data_sn} 
+			</if>
+			<if test="order_num !=null and order_num !='' ">
+				AND o.order_num=#{order_num}  
+			</if>
+			<if test="order_sn !=null and order_sn !='' ">
+				AND o.order_sn LIKE CONCAT(CONCAT('%', #{order_sn}),'%') 
+			</if>
+			<if test="if_use !=null and if_use !='' ">
+				AND o.if_use=#{if_use} 
+			</if>
+   		</where>
+   		ORDER BY order_num_mark  
+   		<if test="start!=null and rows!=null">
+			LIMIT #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="queryOrderNumsCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT o.* FROM (SELECT *,(CASE WHEN (order_sn IS NULL OR order_sn='') THEN 2 ELSE 1 END) if_use FROM order_num) o 
+			<where>
+				<if test="data_sn !=null and data_sn !='' ">
+					AND o.data_sn=#{data_sn} 
+				</if>
+				<if test="order_num !=null and order_num !='' ">
+					AND o.order_num=#{order_num}  
+				</if>
+				<if test="order_sn !=null and order_sn !='' ">
+					AND o.order_sn LIKE CONCAT(CONCAT('%', #{order_sn}),'%') 
+				</if>
+				<if test="if_use !=null and if_use !='' ">
+					AND o.if_use=#{if_use} 
+				</if>
+	   		</where>
+		) cot_t)
+	</select>
+	
+	<select id="getOrderMaps" parameterType="hashmap" resultType="hashmap">
+		SELECT o.*,p.product_title,pd.data_sn,pd.data_win_num
+			FROM 
+				or_order o 
+			LEFT JOIN 
+				product_data pd 
+			ON 
+				pd.data_id = o.data_id
+			LEFT JOIN 
+				product p 
+			ON 
+				p.product_id = pd.product_id
+		<where>
+			<if test="order_sn !=null and order_sn !='' ">
+				 o.order_sn = #{order_sn}
+			</if>
+			<if test="order_ifwin !=null and order_ifwin !='' ">
+				AND o.order_ifwin = #{order_ifwin}
+			</if>
+			<if test="order_ifsend !=null and order_ifsend !='' ">
+				AND o.order_ifsend = #{order_ifsend}
+			</if>
+			<if test="begin_time !=null and begin_time !='' ">
+				AND o.order_check_time &gt; #{begin_time}
+			</if>
+			<if test="end_time !=null and end_time !='' ">
+				AND o.order_check_time &lt; #{end_time}
+			</if>
+   		 </where>
+   		 ORDER BY o.create_time DESC
+	</select>
+</mapper>

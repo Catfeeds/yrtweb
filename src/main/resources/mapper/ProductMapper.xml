@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.ProductMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.Product">
+		INSERT
+		INTO
+		g_product
+		(
+		id,
+		p_type,
+		p_code,
+		p_name,
+		image_src,
+		image_src_max,
+		status,
+		charm_value,
+		p_price,
+		create_time
+		)
+		VALUES
+		(
+		#{id},
+		#{p_type},
+		#{p_code},
+		#{p_name},
+		#{image_src},
+		#{image_src_max},
+		#{status},
+		#{charm_value},
+		#{p_price},
+		#{create_time}
+		)
+	</insert>
+	<select id="count" resultType="int">
+		SELECT count(id) FROM g_product
+	</select>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.Product">
+		SELECT * FROM
+		g_product WHERE id = #{id}
+	</select>
+	<update id="update" parameterType="com.yt.framework.persistent.entity.Product">
+		UPDATE g_product
+		SET
+		p_type=#{p_type},
+		p_code=#{p_code},
+		p_name=#{p_name},
+		image_src=#{image_src},
+		image_src_max=#{image_src_max},
+		status=#{status},
+		charm_value=#{charm_value},
+		p_price=#{p_price},
+		create_time=#{create_time}
+		WHERE
+		id = #{id}
+	</update>
+	<select id="queryForPage" resultType="com.yt.framework.persistent.entity.Product">
+		SELECT * FROM g_product
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+</mapper>

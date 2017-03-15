@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.PlayerOtherMapper">
+	<sql id="playerOther">
+		id,
+		user_id,
+		vision,
+		level,
+		shoe,
+		fans_count,
+		marriage,
+		language,
+		idcard,
+		national
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.PlayerOther">
+		INSERT INTO p_player_other(
+			id,
+			user_id,
+			vision,
+			level,
+			shoe,
+			fans_count,
+			marriage,
+			language,
+			idcard,
+			national
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{vision},
+			#{level},
+			#{shoe},
+			#{fans_count},
+			#{marriage},
+			#{language},
+			#{idcard},
+			#{national}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.PlayerOther">
+		UPDATE p_player_other
+		SET
+			vision=#{vision},
+			level=#{level},
+			shoe=#{shoe},
+			fans_count=#{fans_count},
+			marriage=#{marriage},
+			language=#{language},
+			idcard=#{idcard},
+			national=#{national}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM p_player_other WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.PlayerOther">
+		SELECT
+		<include refid="playerOther" />
+		FROM p_player_other WHERE id = #{id}
+	</select>
+	
+	<select id="getByUserId" resultType="com.yt.framework.persistent.entity.PlayerOther">
+		SELECT
+		<include refid="playerOther" />
+		FROM p_player_other WHERE user_id = #{userId}
+	</select>
+</mapper>

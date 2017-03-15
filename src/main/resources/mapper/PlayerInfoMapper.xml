@@ -1,0 +1,863 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.PlayerInfoMapper">
+	<sql id="playerInfo">
+		id,
+		user_id,
+		height,
+		weight,
+		position,
+		cfoot,
+		score,
+		create_time,
+		is_sign,
+		invitat_team,
+		ball_format,
+		self_price,
+		tags,
+		pro_status,
+		explosive,
+		injured_area,
+		results,
+		distance,
+		type,
+		ball_ability,
+		respond_ability,
+		pass_ability,
+		tack_ability,
+		player_temp,
+		shot,
+		bou_count,
+		balance,
+		physical,
+		defense,
+		attack,
+		ball_long,
+		assists,
+		insight,
+		header,
+		corner,
+		free_kick,
+		fill,
+		speed,
+		power,
+		goal,
+		love_num,
+		current_price,
+		level
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.PlayerInfo">
+		INSERT INTO p_player_info(
+			id,
+			user_id,
+			height,
+			weight,
+			position,
+			cfoot,
+			score,
+			create_time,
+			is_sign,
+			invitat_team,
+			ball_format,
+			self_price,
+			tags,
+			pro_status,
+			explosive,
+			injured_area,
+			results,
+			distance,
+			type,
+			ball_ability,
+			respond_ability,
+			pass_ability,
+			tack_ability,
+			player_temp,
+			shot,
+			bou_count,
+			balance,
+			physical,
+			defense,
+			attack,
+			ball_long,
+			assists,
+			insight,
+			header,
+			corner,
+			free_kick,
+			fill,
+			speed,
+			power,
+			goal,
+			love_num,
+			current_price
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{height},
+			#{weight},
+			#{position},
+			#{cfoot},
+			#{score},
+			NOW(),
+			#{is_sign},
+			#{invitat_team},
+			#{ball_format},
+			#{self_price},
+			#{tags},
+			#{pro_status},
+			#{explosive},
+			#{injured_area},
+			#{results},
+			#{distance},
+			#{type},
+			#{ball_ability},
+			#{respond_ability},
+			#{pass_ability},
+			#{tack_ability},
+			#{player_temp},
+			#{shot},
+			#{bou_count},
+			#{balance},
+			#{physical},
+			#{defense},
+			#{attack},
+			#{ball_long},
+			#{assists},
+			#{insight},
+			#{header},
+			#{corner},
+			#{free_kick},
+			#{fill},
+			#{speed},
+			#{power},
+			#{goal},
+			#{love_num},
+			#{current_price}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.PlayerInfo">
+		UPDATE p_player_info
+		SET
+		height=#{height},
+		weight=#{weight},
+		position=#{position},
+		cfoot=#{cfoot},
+		score=#{score},
+		is_sign=#{is_sign},
+		invitat_team=#{invitat_team},
+		ball_format=#{ball_format},
+		self_price=#{self_price},
+		tags=#{tags},
+		pro_status=#{pro_status},
+		explosive=#{explosive},
+		injured_area=#{injured_area},
+		results=#{results},
+		distance=#{distance},
+		type=#{type},
+		ball_ability=#{ball_ability},
+		respond_ability=#{respond_ability},
+		pass_ability=#{pass_ability},
+		tack_ability=#{tack_ability},
+		player_temp=#{player_temp},
+		shot = #{shot},
+		bou_count = #{bou_count},
+		balance	= #{balance},
+		physical = #{physical},
+		defense	= #{defense},
+		attack	= #{attack},
+		ball_long	= #{ball_long},
+		assists	= #{assists},
+		insight	= #{insight},
+		header = #{header},
+		corner = #{corner},
+		free_kick = #{free_kick},
+		fill = #{fill},
+		speed = #{speed},
+		power = #{power},
+		goal = #{goal},
+		love_num = #{love_num}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<update id="updateByUserId" parameterType="com.yt.framework.persistent.entity.PlayerInfo">
+		UPDATE p_player_info
+		SET
+			explosive = #{explosive},
+			ball_ability = #{ball_ability},
+			respond_ability= #{respond_ability},
+			pass_ability = #{pass_ability},
+			tack_ability = #{tack_ability},
+			shot=#{shot},
+			bou_count=#{bou_count},
+			balance=#{balance},
+			physical=#{physical},
+			defense=#{defense},
+			attack=#{attack},
+			ball_long=#{ball_long},
+			assists=#{assists},
+			insight=#{insight},
+			header=#{header},
+			corner=#{corner},
+			free_kick=#{free_kick},
+			fill=#{fill},
+			speed=#{speed},
+			power=#{power},
+			goal=#{goal}
+		WHERE
+			user_id = #{user_id}
+	</update>
+	
+	<update id="updatePrice">
+		UPDATE p_player_info
+		SET
+			current_price=#{current_price}
+		WHERE
+			user_id = #{user_id}
+	</update>
+	
+	<update id="updateLeagueStatus">
+		UPDATE p_player_info
+		SET
+			if_league=#{if_league}
+		WHERE
+			user_id = #{user_id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM p_player_info WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.PlayerInfo">
+		SELECT
+		<include refid="playerInfo" />
+		FROM p_player_info WHERE id = #{id}
+	</select>
+	
+	<select id="getByUserId" resultType="com.yt.framework.persistent.entity.PlayerInfo">
+		SELECT
+		<include refid="playerInfo" />
+		FROM p_player_info WHERE user_id = #{userId}
+	</select>
+	
+	<select id="getPlayerInfoByUserId" resultType="hashmap">
+		SELECT p.*,u.borndate,u.sex,u.phone,u.head_icon FROM p_player_info p 
+		LEFT JOIN m_user u ON u.id=p.user_id
+		WHERE p.user_id=#{userId}
+	</select>
+	
+	<select id="getAgentByUserId" resultType="hashmap">
+		SELECT u.id,u.usernick,ap.status,ap.create_time FROM a_agent_player ap,m_user u 
+		WHERE ap.user_id=u.id AND ap.p_user_id=#{userId} AND status=1
+	</select>
+	
+	<select id="getTeamByUserId" resultType="hashmap">
+		SELECT t.name,tp.type,tp.create_time,t.id,t.user_id,t.logo FROM t_team_player tp,t_team_info t 
+		WHERE tp.teaminfo_id=t.id AND is_exist=1 AND tp.user_id=#{userId}
+	</select>
+	
+	<update id="terminated">
+		UPDATE a_agent_player SET status=2 WHERE p_user_id = #{userId}
+	</update>
+	
+	<delete id="quitTeam">
+		DELETE FROM t_team_player WHERE user_id = #{userId}
+	</delete>
+	<insert id="signByPlayer" parameterType="com.yt.framework.persistent.entity.AgentPlayer" >
+		INSERT INTO a_agent_player(
+			id,
+			user_id,
+			p_user_id,
+			status,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{p_user_id},
+			#{status},
+			NOW()
+		)
+	</insert>
+	
+	<select id="queryTrialByUserId" resultType="com.yt.framework.persistent.entity.Trial">
+		SELECT * FROM m_trial WHERE user_id=#{user_id} AND s_user_id=#{s_user_id} ORDER BY create_time DESC
+	</select>
+	
+	<insert id="saveTrial" parameterType="com.yt.framework.persistent.entity.Trial" >
+		INSERT INTO m_trial(
+			id,
+			user_id,
+			s_user_id,
+			trail_date,
+			trail_position,
+			trail_other,
+			status,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{s_user_id},
+			#{trail_date},
+			#{trail_position},
+			#{trail_other},
+			#{status},
+			NOW()
+		)
+	</insert>
+	
+	<select id="trialCount" resultType="int">
+		SELECT count(1) FROM m_trial WHERE user_id=#{userId}
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(p.id)
+			FROM p_player_info p
+			LEFT JOIN m_user m ON p.user_id = m.id
+			LEFT JOIN t_team_player t ON p.user_id = t.user_id
+			<!-- LEFT JOIN a_league_sign als ON als.user_id = p.user_id AND als.invalid = 1 -->
+			<if test="maps.user_id!=null and maps.user_id!=''">
+				LEFT JOIN m_focus mf ON p.user_id = mf.f_user_id AND mf.user_id = #{maps.user_id}
+			</if>
+			WHERE 1 = 1
+				<if test="maps.s_user_id!=null and maps.s_user_id!=''">
+		     		AND mf.user_id = #{maps.s_user_id}
+				</if>
+				<if test="maps.usernick!=null and maps.usernick!=''">
+		     		AND m.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+				<if test="maps.begin_score!=null and maps.begin_score!=''">
+					AND p.score &gt; ${maps.begin_score}
+				</if>
+				<if test="maps.end_score!=null and maps.end_score!=''">
+					 AND p.score &lt; ${maps.end_score} 
+				</if>
+				<if test="maps.position!=null and maps.position!=''">
+					AND p.position LIKE CONCAT(CONCAT('%', #{maps.position}),'%')
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+		      		AND p.ball_format = #{maps.ball_format} 
+				</if>
+				<if test="maps.cfoot!=null and maps.cfoot!=''">
+		      		AND p.cfoot = #{maps.cfoot} 
+				</if>
+				<if test="maps.begin_age!=null and maps.begin_age!=''">
+					AND (YEAR(CURDATE())-YEAR(m.borndate)) &gt; #{maps.begin_age}
+				</if>
+				<if test="maps.end_age!=null and maps.end_age!=''">
+					AND (YEAR(CURDATE())-YEAR(m.borndate)) &lt; #{maps.end_age}
+				</if>
+	     		<if test="maps.city!=null and maps.city!=''">
+					AND m.city = #{maps.city}
+				</if>
+				<if test="maps.sex!=null and maps.sex!=''">
+					<choose>
+						<when test="maps.sex == 2">
+							AND m.sex = 0
+						</when>
+						<otherwise>
+							AND m.sex = #{maps.sex}
+						</otherwise>
+					</choose>
+				</if>
+				<if test="maps.level!=null and maps.level!=''">
+					AND p.level = #{maps.level}
+				</if>
+	</select>
+	
+	<select id="searchPlayerInfo" resultType="hashmap" >
+		SELECT p.*,m.usernick usernick,(YEAR(CURDATE())-YEAR(m.borndate)) age,
+				   m.city city,m.head_icon head_icon, t.teaminfo_id team_id
+				<if test="maps.user_id!=null and maps.user_id!=''">
+				   ,mf.f_user_id f_user_id
+				</if>
+				,(SELECT sp.id FROM a_suspend_player AS sp where sp.user_id = p.user_id and sp.status=1)AS sp_id
+			FROM p_player_info p
+			LEFT JOIN m_user m ON p.user_id = m.id
+			LEFT JOIN t_team_player t ON p.user_id = t.user_id
+			<!-- LEFT JOIN a_league_sign als ON als.user_id = p.user_id AND als.invalid = 1 -->
+			<if test="maps.user_id!=null and maps.user_id!=''">
+				LEFT JOIN m_focus mf ON p.user_id = mf.f_user_id AND mf.user_id = #{maps.user_id}
+			</if>
+			WHERE 1 = 1
+				<if test="maps.s_user_id!=null and maps.s_user_id!=''">
+		     		AND mf.user_id = #{maps.s_user_id}
+				</if>
+				<if test="maps.usernick!=null and maps.usernick!=''">
+		     		AND m.usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+				<if test="maps.begin_score!=null and maps.begin_score!=''">
+					AND p.score &gt; ${maps.begin_score}
+				</if>
+				<if test="maps.end_score!=null and maps.end_score!=''">
+					 AND p.score &lt; ${maps.end_score} 
+				</if>
+				<if test="maps.position!=null and maps.position!=''">
+					AND p.position LIKE CONCAT(CONCAT('%', #{maps.position}),'%')
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+		      		AND p.ball_format = #{maps.ball_format} 
+				</if>
+				<if test="maps.cfoot!=null and maps.cfoot!=''">
+		      		AND p.cfoot = #{maps.cfoot} 
+				</if>
+				<if test="maps.begin_age!=null and maps.begin_age!=''">
+					AND (YEAR(CURDATE())-YEAR(m.borndate)) &gt; #{maps.begin_age}
+				</if>
+				<if test="maps.end_age!=null and maps.end_age!=''">
+					AND (YEAR(CURDATE())-YEAR(m.borndate)) &lt; #{maps.end_age}
+				</if>
+	     		<if test="maps.city!=null and maps.city!=''">
+					AND m.city = #{maps.city}
+				</if>
+				<if test="maps.sex!=null and maps.sex!=''">
+					<choose>
+						<when test="maps.sex == 2">
+							AND m.sex = 0
+						</when>
+						<otherwise>
+							AND m.sex = #{maps.sex}
+						</otherwise>
+					</choose>
+				</if>
+				<if test="maps.level!=null and maps.level!=''">
+					AND p.level = #{maps.level}
+				</if>
+				<choose>
+					<when test="maps.age_sort!=null and maps.age_sort!=''">
+						ORDER BY m.borndate ${maps.age_sort}
+					</when>
+					<when test="maps.h_sort!=null and maps.h_sort!=''">
+						ORDER BY p.height ${maps.h_sort}
+					</when>
+					<when test="maps.w_sort!=null and maps.w_sort!=''">
+						ORDER BY p.weight ${maps.w_sort}
+					</when>
+					<when test="maps.score_sort!=null and maps.score_sort!=''">
+						ORDER BY p.score ${maps.score_sort}
+					</when>
+				</choose>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+	</select>
+	
+	<select id="queryPlayerCount" resultType="String">
+		SELECT count(*) FROM m_focus WHERE f_user_id=#{userId}
+		UNION ALL
+		SELECT count(*) FROM m_message WHERE user_id=#{userId} AND type='ttpa'
+	</select>
+	
+	<update id="updateTrial">
+		UPDATE m_trial
+		SET
+			status = #{status}
+		WHERE
+			id = #{trail_id}
+	</update>
+	
+	<select id="praiseCount" parameterType="hashmap" resultType="String">
+		SELECT count(1) praise FROM p_praise WHERE p_user_id=#{p_user_id} AND p_state=1
+		UNION ALL
+		SELECT count(1) praise FROM p_praise WHERE p_user_id=#{p_user_id} AND p_state=2
+	</select>
+	
+	<select id="queryPraise" parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM p_praise WHERE user_id=#{user_id} AND p_user_id=#{p_user_id} 
+		<if test="p_state!=null and p_state!=''">
+		AND p_state=#{p_state}
+		</if>
+	</select>
+	
+	<delete id="deletePraise" parameterType="hashmap">
+		DELETE FROM p_praise WHERE user_id=#{user_id} AND p_user_id=#{p_user_id} AND p_state=#{p_state}
+	</delete>
+	
+	<insert id="savePraise" parameterType="hashmap">
+		INSERT INTO p_praise(
+			id,
+			user_id,
+			p_user_id,
+			p_state,
+			ip_str,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{p_user_id},
+			#{p_state},
+			#{ip_str},
+			NOW()
+		)
+	</insert>
+	
+	<select id="getLeagueMarketById" resultType="com.yt.framework.persistent.entity.LeagueMarket">
+		SELECT * FROM a_league_market WHERE id = #{id}
+	</select>
+	
+	<update id="updateLeagueMarker" parameterType="com.yt.framework.persistent.entity.LeagueMarket">
+		UPDATE a_league_market
+			SET 
+				status = #{status},
+				buyer = #{buyer},
+				buy_time = #{buy_time}
+			WHERE
+				id = #{id}	
+	</update>
+	
+	<insert id="saveMarketRecord" parameterType="com.yt.framework.persistent.entity.MarketRecords">
+		INSERT INTO a_market_records(
+			id,
+			manager_id,
+			m_id,
+			buy_price,
+			buy_time
+		)VALUES(
+			#{id},
+			#{manager_id},
+			#{m_id},
+			#{buy_price},
+			NOW()
+		)
+	</insert>
+	
+	<select id="loadMarketRecord" resultType="hashmap">
+		<!-- SELECT ppi.*,mr.m_id,mr.buy_price,mr.buy_time,mu.username,mu.head_icon,mu.borndate,mu.phone FROM a_market_records AS mr
+			LEFT JOIN a_league_market AS lm ON lm.id = mr.m_id
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = lm.user_id
+			LEFT JOIN m_user AS mu ON mu.id = ppi.user_id
+			WHERE 1=1
+				<if test="condition.user_name!=null and condition.user_name!=''">
+					AND mu.username like CONCAT(CONCAT('%', #{condition.user_name}),'%')
+				</if>
+				<if test="condition.position!=null and condition.position!=''">
+					AND ppi.position like CONCAT(CONCAT('%', #{condition.position}),'%')
+				</if>
+				AND mr.manager_id = #{condition.teaminfo_id}
+			    <choose>
+					<when test="condition.age_sort!=null and condition.age_sort!=''">
+						ORDER BY mu.borndate ${condition.age_sort}
+					</when>
+					<when test="condition.bid_sort!=null and condition.bid_sort!=''">
+						ORDER BY mr.buy_price ${condition.bid_sort}
+					</when>
+					<when test="condition.score_sort!=null and condition.score_sort!=''">
+						ORDER BY ppi.score ${condition.score_sort}
+					</when>
+					<otherwise>
+						ORDER BY mr.buy_price DESC,ppi.score DESC,mu.borndate DESC
+					</otherwise>	
+				</choose>
+    	<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if> -->
+		
+		SELECT p.*,ala.id m_id,ala.price,ala.buy_time,ala.status,mu.username,mu.head_icon,mu.borndate,mu.phone
+ 			FROM (SELECT aa.* FROM (SELECT DISTINCT ar.m_id m_id FROM a_market_records ar WHERE ar.manager_id = #{maps.teaminfo_id}) AS auc ,a_league_market aa
+ 					WHERE auc.m_id = aa.id 
+						<if test="maps.s_id!=null and maps.s_id!=''">
+							AND aa.s_id = #{maps.s_id} 
+						</if>
+						<if test="maps.turn_num!=null and maps.turn_num!=''">
+							AND aa.turn_num = #{maps.turn_num} 
+						</if>
+				) AS ala		
+					LEFT JOIN p_player_info p ON ala.user_id = p.user_id
+					LEFT JOIN m_user mu ON ala.user_id = mu.id
+						WHERE 1=1 
+						<if test="maps.user_name!=null and maps.user_name!=''">
+							AND mu.username like CONCAT(CONCAT('%', #{maps.user_name}),'%')
+						</if>
+						<if test="maps.position!=null and maps.position!=''">
+							AND p.position like CONCAT(CONCAT('%', #{maps.position}),'%')
+						</if>
+							<choose>
+								<when test="maps.age_sort!=null and maps.age_sort!=''">
+									ORDER BY mu.borndate ${maps.age_sort}
+								</when>
+								<when test="maps.bid_sort!=null and maps.bid_sort!=''">
+									ORDER BY ala.price ${maps.bid_sort}
+								</when>
+								<when test="maps.score_sort!=null and maps.score_sort!=''">
+									ORDER BY p.score ${maps.score_sort}
+								</when>
+								<otherwise>
+									ORDER BY ala.price DESC,p.score DESC,mu.borndate DESC
+								</otherwise>	
+							</choose>
+						<if test="maps.start!=null and maps.rows!=null">
+							LIMIT #{maps.start},#{maps.rows}
+						</if>
+		
+	</select>
+	
+	<select id="loadMarketRecordCount" resultType="int">
+		SELECT count(ala.id)
+ 			FROM (SELECT aa.* FROM (SELECT DISTINCT ar.m_id m_id FROM a_market_records ar WHERE ar.manager_id = #{maps.teaminfo_id}) AS auc ,a_league_market aa
+ 					WHERE auc.m_id = aa.id 
+						<if test="maps.s_id!=null and maps.s_id!=''">
+							AND aa.s_id = #{maps.s_id} 
+						</if>
+						<if test="maps.turn_num!=null and maps.turn_num!=''">
+							AND aa.turn_num = #{maps.turn_num} 
+						</if>
+				) AS ala		
+					LEFT JOIN p_player_info p ON ala.user_id = p.user_id
+					LEFT JOIN m_user mu ON ala.user_id = mu.id
+						WHERE 1=1 
+						<if test="maps.user_name!=null and maps.user_name!=''">
+							AND mu.username like CONCAT(CONCAT('%', #{maps.user_name}),'%')
+						</if>
+						<if test="maps.position!=null and maps.position!=''">
+							AND p.position like CONCAT(CONCAT('%', #{maps.position}),'%')
+						</if>
+	</select>
+	
+	<select id="loadPlayers" resultType="hashmap">
+	SELECT ppi.*,ti.name AS team_name,lm.id AS m_id,lm.team_id,lm.price,lm.user_id,mu.username,mu.head_icon,mu.borndate FROM a_league_market AS lm
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = lm.user_id
+			LEFT JOIN m_user AS mu ON mu.id = ppi.user_id
+			LEFT JOIN t_team_info AS ti ON ti.id = lm.team_id
+			WHERE 1=1
+				AND lm.if_up = 1
+				AND lm.`status` = 0
+			<if test="condition.user_name!=null and condition.user_name!=''">
+				AND mu.username like CONCAT(CONCAT('%', #{condition.user_name}),'%')
+			</if>
+			<if test="condition.position!=null and condition.position!=''">
+				AND ppi.position like CONCAT(CONCAT('%', #{condition.position}),'%')
+			</if>
+			<choose>
+				<when test="condition.age_sort!=null and condition.age_sort!=''">
+					ORDER BY mu.borndate ${condition.age_sort}
+				</when>
+				<when test="condition.bid_sort!=null and condition.bid_sort!=''">
+					ORDER BY lm.price ${condition.bid_sort}
+				</when>
+				<when test="condition.score_sort!=null and condition.score_sort!=''">
+					ORDER BY ppi.score ${condition.score_sort}
+				</when>
+				<otherwise>
+					ORDER BY lm.price DESC,ppi.score DESC,mu.borndate DESC
+				</otherwise>	
+			</choose>	
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="loadPlayersCount" resultType="int">
+	 SELECT COUNT(*) FROM a_league_market AS lm
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = lm.user_id
+			LEFT JOIN m_user AS mu ON mu.id = ppi.user_id
+			WHERE 1=1
+				AND lm.if_up = 1
+				AND lm.`status` = 0
+			<if test="condition.user_name!=null and condition.user_name!=''">
+				AND mu.username like CONCAT(CONCAT('%', #{condition.user_name}),'%')
+			</if>
+			<if test="condition.position!=null and condition.position!=''">
+				AND ppi.position like CONCAT(CONCAT('%', #{condition.position}),'%')
+			</if>
+	</select>
+	
+	<select id="getPlayerInfoForMarketByUserId" resultType="hashmap">
+	SELECT ppi.*,lm.id AS m_id,lm.price,lm.user_id,mu.username,mu.head_icon,mu.borndate FROM a_league_market AS lm
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = lm.user_id
+			LEFT JOIN m_user AS mu ON mu.id = ppi.user_id
+			WHERE 1=1
+		    	AND	mu.id = #{user_id}
+		    	AND lm.status = #{status}
+		    	ORDER BY lm.create_time DESC LIMIT 0,1
+	</select>
+	
+	<insert id="saveTransferRecord" parameterType="com.yt.framework.persistent.entity.TransferRecord">
+		INSERT INTO p_transfer_record(
+			id,
+			user_id,
+			teaminfo_id,
+			new_teaminfo_id,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{teaminfo_id},
+			#{new_teaminfo_id},
+			NOW()
+		)
+	</insert>
+	
+	<insert id="saveTeamSale" parameterType="com.yt.framework.persistent.entity.TeamSale">
+		INSERT INTO t_team_sale(
+			id,
+			teaminfo_id,
+			user_id,
+			status,
+			create_time
+		)VALUES(
+			#{id},
+			#{teaminfo_id},
+			#{user_id},
+			#{status},
+			NOW()
+		)
+	</insert>
+	
+	<delete id="deleteTeamSale">
+		DELETE FROM t_team_sale WHERE id = #{id}
+	</delete>
+	
+	<select id="getTeamSaleByUserID" resultType="com.yt.framework.persistent.entity.TeamSale">
+		SELECT * FROM t_team_sale 
+			WHERE 1=1 
+				AND status = #{status}
+				AND user_id = #{user_id}
+	</select>
+	
+	<update id="updateTeamSale" parameterType="com.yt.framework.persistent.entity.TeamSale">
+		UPDATE t_team_sale
+			SET 
+				status = #{status}
+			WHERE
+				id = #{id}	
+	</update>
+	
+	<select id="loadSaleRecord" resultType="hashmap">
+	SELECT ppi.*,tp.id AS tp_id,tti.name AS team_name,ts.price,ts.status,ts.create_time,mu.username,mu.head_icon,mu.borndate FROM t_team_sale AS ts 
+			LEFT JOIN t_team_info AS tti ON tti.id = ts.teaminfo_id
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = ts.user_id
+			LEFT JOIN t_team_player AS tp on tp.user_id = ppi.user_id
+			LEFT JOIN m_user AS mu ON mu.id = tp.user_id
+		WHERE 1=1
+				<if test="condition.user_name!=null and condition.user_name!=''">
+					AND mu.username like CONCAT(CONCAT('%', #{condition.user_name}),'%')
+				</if>
+				<if test="condition.position!=null and condition.position!=''">
+					AND ppi.position like CONCAT(CONCAT('%', #{condition.position}),'%')
+				</if>
+				AND ts.teaminfo_id = #{condition.teaminfo_id}
+			    <choose>
+					<when test="condition.age_sort!=null and condition.age_sort!=''">
+						ORDER BY mu.borndate ${condition.age_sort}
+					</when>
+					<when test="condition.bid_sort!=null and condition.bid_sort!=''">
+						ORDER BY ts.price ${condition.bid_sort}
+					</when>
+					<when test="condition.score_sort!=null and condition.score_sort!=''">
+						ORDER BY ppi.score ${condition.score_sort}
+					</when>
+					<otherwise>
+						ORDER BY ts.price DESC,ppi.score DESC,mu.borndate DESC
+					</otherwise>	
+				</choose>
+    	<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="loadSaleRecordCount" resultType="int">
+		SELECT COUNT(*) FROM t_team_sale AS ts 
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = ts.user_id
+			LEFT JOIN m_user AS mu ON mu.id = ppi.user_id
+		WHERE 1=1
+		<if test="condition.user_name!=null and condition.user_name!=''">
+					AND mu.username like CONCAT(CONCAT('%', #{condition.user_name}),'%')
+				</if>
+				<if test="condition.position!=null and condition.position!=''">
+					AND ppi.position like CONCAT(CONCAT('%', #{condition.position}),'%')
+				</if>
+				AND ts.teaminfo_id = #{condition.teaminfo_id}
+	</select>
+	
+	
+	<insert id="savePlayerTag" parameterType="com.yt.framework.persistent.entity.PlayerTag">
+		INSERT INTO p_player_tag(
+			id,
+			user_id,
+			s_user_id,
+			tag,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{s_user_id},
+			#{tag},
+			NOW()
+		)
+	</insert>
+	
+	<delete id="deletePlayerTag">
+		DELETE FROM p_player_tag WHERE id = #{id}
+	</delete>
+	
+	<select id="queryPlayerTag" resultType="com.yt.framework.persistent.entity.PlayerTag">
+		SELECT * FROM p_player_tag 
+			WHERE user_id = #{user_id} 
+			ORDER BY create_time DESC LIMIT 0,11
+	</select>
+	
+	<select id="searchPlayerInfoByAdmin" resultType="hashmap">
+		SELECT p.*,mu.head_icon,mu.usernick,mu.username,mu.phone,mu.email FROM p_player_recommendation p,m_user mu 
+			WHERE p.user_id = mu.id
+		<if test="maps.usernick!=null and maps.usernick!=''">
+			AND mu.usernick like CONCAT(CONCAT('%', #{maps.usernick}),'%')
+		</if>
+		<if test="maps.if_up!=null and maps.if_up!=''">
+			AND p.if_up = #{maps.if_up}
+		</if>
+			ORDER BY p.re_sort	
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="countAdmin" resultType="int">
+		SELECT count(p.id) FROM p_player_recommendation p,m_user mu 
+			WHERE p.user_id = mu.id
+		<if test="maps.usernick!=null and maps.usernick!=''">
+			AND mu.usernick like CONCAT(CONCAT('%', #{maps.usernick}),'%')
+		</if>
+		<if test="maps.if_up!=null and maps.if_up!=''">
+			AND p.if_up = #{maps.if_up}
+		</if>		
+	</select>
+	
+	<insert id="savePlayerRecommendation">
+		INSERT INTO p_player_recommendation(
+			id,
+			if_up,
+			re_sort,
+			user_id,
+			create_time
+		)VALUES(
+			#{id},
+			0,
+			0,
+			#{user_id},
+			NOW()
+		)
+	</insert>
+	
+	<update id="updatePlayerRecommendation" parameterType="hashmap">
+		UPDATE p_player_recommendation
+			SET
+				re_sort = #{re_sort},
+				if_up = #{if_up}
+			WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="deletePlayerRecommendation">
+		DELETE FROM p_player_recommendation WHERE id = #{id}
+	</delete>
+	<!-- 判断该球员是否在转会市场 -->
+	<select id="getPlayerInLeagueMarket" resultType="com.yt.framework.persistent.entity.LeagueMarket">
+		SELECT lm.* FROM a_league_market lm WHERE lm.user_id=#{userId} AND lm.if_up=1 AND lm.`status`=0 
+	</select>
+	
+	<select id="getSuspendPlayerByUserId" resultType="com.yt.framework.persistent.entity.SuspendPlayer">
+		SELECT * FROM a_suspend_player WHERE user_id = #{user_id} AND status = 1
+	</select>
+	
+</mapper>

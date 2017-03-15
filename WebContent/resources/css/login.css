@@ -1,0 +1,289 @@
+.login {
+    width: 401px;
+    height: 313px;
+    background: url(../images/yr_login.png) no-repeat;
+    color: #fff;
+}
+
+    .login .span {
+        width: 120px;
+        margin: 40px auto 0;
+    }
+
+    .login .windows {
+        width: 370px;
+        margin: 0 auto;
+    }
+
+        .login .windows dl {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .login .windows .username, .login .windows .password {
+            width: 334px;
+            height: 38px;
+            line-height: 38px;
+            margin: 0 auto;
+            background: transparent;
+            color: #696767;
+            text-indent: 3em;
+        }
+
+        .login .windows .username {
+            background: url(../images/yt_user.png) -8px -5px no-repeat;
+        }
+
+        .login .windows .password {
+            margin-top: 10px;
+            background: url(../images/yt_user.png) -8px -58px no-repeat;
+        }
+
+        .login .windows .captxt, .login .windows .cap {
+            float: left;
+            width: 159px;
+            height: 38px;
+            line-height: 38px;
+            margin: 0 auto;
+            background: transparent;
+            color: #696767;
+        }
+
+        .login .windows .captxt {
+            text-indent: 1em;
+        }
+
+        .login .windows .cap {
+            height: 48px;
+            margin-left: 14px;
+        }
+
+        .login .windows .signbtn {
+            padding: 13px 70px;
+            background: #494541;
+            border: none;
+            color: #fff;
+            border-radius: 6px;
+        }
+
+.phone_bd {
+    width: 399px;
+    height: 236px;
+    background: url(../images/yr_bd.png) no-repeat;
+    color: #fff;
+}
+
+    .phone_bd .span {
+        width: 120px;
+        margin: 40px auto 0;
+    }
+
+    .phone_bd .windows_bd dl {
+        margin-left: 30px;
+        *margin-left: -10px;
+        margin-top: 10px;
+    }
+
+    .phone_bd .windows_bd .phone_num, .phone_bd .windows_bd .phone_cap, .phone_bd .windows_bd .phone_email {
+        width: 204px;
+        height: 38px;
+        line-height: 38px;
+        background: transparent;
+        color: #fff;
+        text-indent: 3em;
+    }
+
+    .phone_bd .windows_bd .phone_num {
+        background: url(../images/yt_user.png) -8px -117px no-repeat;
+    }
+
+    .phone_bd .windows_bd .phone_cap {
+        margin-top: 20px;
+        background: url(../images/yt_user.png) -8px -176px no-repeat;
+    }
+    .phone_bd .windows_bd .phone_email {
+        background: url(../images/yt_user.png) -8px -227px no-repeat;
+    }
+
+    .phone_bd .funbtn {
+        width: 120px;
+        height: 50px;
+        background: #494541;
+        border: none;
+        color: #fff;
+        border-radius: 6px;
+    }
+
+
+.reg {
+    width: 402px;
+    height: 394px;
+    background: url(../images/yr_reg.png) no-repeat;
+    color: #fff;
+}
+
+    .reg .span {
+        width: 120px;
+        margin: 30px auto 0;
+    }
+
+    .reg .windows {
+        width: 370px;
+        margin: 0 auto;
+    }
+
+        .reg .windows dl {
+            margin-left: 12px;
+            *margin-left: 0;
+            margin-top: 5px;
+        }
+        .reg .windows dd.fix {
+            *margin-left: -35px;
+        }
+        .reg .windows .username, .reg .windows .password {
+            width: 334px;
+            height: 38px;
+            line-height: 38px;
+            margin: 0 auto;
+            background: transparent;
+            color: #fff;
+            text-indent: 3em;
+        }
+
+        .reg .windows .username {
+            background: url(../images/yt_user.png) -8px -5px no-repeat;
+        }
+
+        .reg .windows .password {
+            margin-top: 10px;
+            background: url(../images/yt_user.png) -8px -58px no-repeat;
+        }
+
+        .reg .windows .captxt, .reg .windows .cap {
+            float: left;
+            width: 159px;
+            height: 38px;
+            line-height: 38px;
+            margin: 0 auto;
+            background: transparent;
+            color: #696767;
+        }
+
+        .reg .windows .captxt {
+            text-indent: 1em;
+        }
+
+        .reg .windows .cap {
+            height: 48px;
+            margin-left: 14px;
+        }
+
+        .reg .windows .regbtn {
+            width: 165px;
+            height: 50px;
+            background: #44403c;
+            border: none;
+            color: #fff;
+            border-radius: 6px;
+        }
+
+
+.login-wrap {
+    position: relative;
+    width: 1000px;
+    margin: 20px auto;
+    text-align: right;
+}
+
+.new-login {
+    display: inline-block;
+    margin-top: 50px;
+    width: 410px;
+    height: 505px;
+    background: url(../images/bb_bg.png) repeat-y;
+}
+
+.title-top-reg {
+    width: 377px;
+    height: 96px;
+    margin: 20px auto;
+    background: url(../images/new-reglogo.png) no-repeat;
+}
+
+.new-regtab {
+    width: 360px;
+    margin: 20px auto;
+    text-align: left;
+}
+
+    .new-regtab td.b1 {
+        padding-bottom: 12px;
+    }
+
+    .new-regtab td.b2 {
+        padding-bottom: 25px;
+    }
+
+
+.new-t-user, .new-t-pass {
+    width: 360px;
+    height: 35px;
+    border-radius: 0 !important;
+    font-size: 14px;
+    color: #fff !important;
+    border: 1px solid #838282 !important;
+    text-indent: 3rem;
+}
+
+.new-t-user {
+    background: url(../images/new-user.png) no-repeat 10px center !important;
+}
+
+.new-t-pass {
+    background: url(../images/new-pass.png) no-repeat 10px center !important;
+}
+
+.new-t-code {
+    width: 160px;
+    height: 35px;
+    border-radius: 0 !important;
+    font-size: 14px;
+    color: #fff !important;
+    border: 1px solid #838282 !important;
+    background: none !important;
+}
+
+.new-codebtn {
+    float: right;
+    width: 168px;
+    height: 47px;
+    background: #fff;
+    color: #c75909;
+    border: none;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+}
+
+.new-regtab a:hover {
+    text-decoration: underline;
+}
+
+.new-regbtn {
+    width: 376px;
+    height: 40px;
+    border: none;
+    background: #e83f3d;
+    color: #fff;
+}
+
+.warn-red {
+    border: 1px solid #e83f3d !important;
+}
+
+.new-err {
+    display: none;
+    position: absolute;
+    left: 608px;
+    margin-top: 170px;
+    color: #e83f3d;
+}

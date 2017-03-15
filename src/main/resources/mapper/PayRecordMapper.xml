@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.PayRecordMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.PayRecord" >
+			INSERT INTO m_pay_record(
+				id,
+				user_id,
+				teaminfo_id,
+				operate_id,
+				amount,
+				free,
+				payer_no,
+				cash_no,
+				real_amount,
+				order_no,
+				bank_no,
+				describle,
+				third_part,
+				status,
+				way,
+				submit_time,
+				end_time,
+				create_time,
+				type
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{teaminfo_id},
+				#{operate_id},
+				#{amount},
+				#{free},
+				#{payer_no},
+				#{cash_no},
+				#{real_amount},
+				#{order_no},
+				#{bank_no},
+				#{describle},
+				#{third_part},
+				#{status},
+				#{way},
+				#{submit_time},
+				#{end_time},
+				NOW(),
+				#{type}
+			)
+		</insert>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.PayRecord">
+			UPDATE m_pay_record
+				SET 
+					bank_no = #{bank_no},
+					status = #{status},
+					end_time = #{end_time},
+					payer_no= #{payer_no},
+					cash_no = #{cash_no}
+				WHERE
+					id = #{id}	
+		</update>
+		
+		<select id="getPayRecordByUserId" resultType="com.yt.framework.persistent.entity.PayRecord">
+			SELECT * FROM m_pay_record WHERE user_id = #{user_id}
+		</select>
+		
+		<select id="getPayRecordByOrderNo" resultType="com.yt.framework.persistent.entity.PayRecord">
+			SELECT * FROM m_pay_record WHERE order_no = #{order_no}
+		</select>
+		
+		<select id="queryForPage" resultType="com.yt.framework.persistent.entity.PayRecord">
+			SELECT * FROM m_pay_record
+				WHERE 1=1
+				<!-- 屏蔽查询为个人充值记录
+				 <if test="maps.user_id!=null and maps.user_id!=''">
+					AND user_id = #{maps.user_id}
+				</if> -->
+				
+				<!-- 查询用户个人充值与俱乐部充值 -->
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					AND operate_id = #{maps.user_id}
+				</if>
+				<if test="maps.way!=null and maps.way!=''">
+					AND way = #{maps.way}
+				</if>
+				<if test="maps.startTime!=null and maps.startTime!='' and maps.endTime!=null and maps.endTime!=''">
+					AND DATE_FORMAT(create_time,'yyyy-MM-dd') BETWEEN #{maps.endTime} AND #{maps.endTime}
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					AND status = #{maps.status}
+				</if>
+				ORDER BY create_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT COUNT(*) FROM m_pay_record
+				WHERE 1=1
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					AND user_id = #{maps.user_id}
+				</if>
+				<if test="maps.way!=null and maps.way!=''">
+					AND way = #{maps.way}
+				</if>
+				<if test="maps.startTime!=null and maps.startTime!='' and maps.endTime!=null and maps.endTime!=''">
+					AND DATE_FORMAT(create_time,'yyyy-MM-dd') BETWEEN #{maps.endTime} AND #{maps.endTime}
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					AND status = #{maps.status}
+				</if>
+		</select>
+		
+</mapper>

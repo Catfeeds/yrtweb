@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.MessageMapper">
+	<sql id="message">
+		id,
+		user_id,
+		s_user_id,
+		content,
+		type,
+		status,
+		relate_id,
+		m_style,
+		create_time,
+		sys_type,
+		oper_status
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.Message">
+		INSERT INTO m_message(
+			id,
+			user_id,
+			s_user_id,
+			content,
+			type,
+			status,
+			create_time,
+			m_style,
+			relate_id,
+			sys_type
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{s_user_id},
+			#{content},
+			#{type},
+			0,
+			NOW(),
+			#{m_style},
+			#{relate_id},
+			#{sys_type}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.Message">
+		UPDATE m_message
+		SET
+			user_id=#{user_id},
+			s_user_id=#{s_user_id},
+			content=#{content},
+			type=#{type},
+			status=#{status},
+			oper_status=#{oper_status}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM m_message WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.Message">
+		SELECT
+		<include refid="message" />
+		FROM m_message WHERE id = #{id}
+	</select>
+	
+	<insert id="saveMessageRecord" parameterType="com.yt.framework.persistent.entity.MessageRecords" >
+		INSERT INTO n_msg_records(
+			id,
+			user_id,
+			user_ids,
+			type,
+			content,
+			status,
+			is_show,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{user_ids},
+			#{type},
+			#{content},
+			#{status},
+			#{is_show},
+			NOW()
+		)
+	</insert>
+	
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT m.*,u.usernick,u.head_icon 
+		<if test="maps.user_id!=null">
+			,(CASE WHEN u.id=#{maps.user_id} THEN 1 ELSE 0 END) isme 
+		</if>
+			FROM m_message m,m_user u 
+			WHERE m.s_user_id=u.id 
+		<if test="maps.type!=null and maps.type!=''">
+			AND m.type=#{maps.type} 
+		</if>
+		<if test="maps.m_style!=null and maps.m_style!=''">
+			AND m.m_style=#{maps.m_style} 
+		</if>
+		<if test="maps.s_user_id!=null and maps.user_id!=null">
+			AND ((user_id=#{maps.user_id} AND s_user_id=#{maps.s_user_id}) OR (user_id=#{maps.s_user_id} AND s_user_id=#{maps.user_id})) 
+		</if>
+		<if test="maps.user_id!=null and maps.s_user_id==null">
+			AND m.user_id=#{maps.user_id} 
+		</if>
+		<if test="maps.s_user_id!=null and maps.user_id==null">
+			AND s_user_id=#{maps.s_user_id} 
+		</if>
+		<if test="maps.status!=null">
+			AND status=#{maps.status} 
+		</if>
+			ORDER BY m.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT m.*,u.usernick,u.head_icon 
+			<if test="maps.user_id!=null">
+				,(CASE WHEN u.id=#{maps.user_id} THEN 1 ELSE 0 END) isme 
+			</if>
+				FROM m_message m,m_user u 
+				WHERE m.s_user_id=u.id 
+			<if test="maps.type!=null and maps.type!=''">
+				AND m.type=#{maps.type} 
+			</if>
+			<if test="maps.m_style!=null and maps.m_style!=''">
+				AND m.m_style=#{maps.m_style} 
+			</if>
+			<if test="maps.s_user_id!=null and maps.user_id!=null">
+				AND ((user_id=#{maps.user_id} AND s_user_id=#{maps.s_user_id}) OR (user_id=#{maps.s_user_id} AND s_user_id=#{maps.user_id})) 
+			</if>
+			<if test="maps.user_id!=null and maps.s_user_id==null">
+				AND m.user_id=#{maps.user_id} 
+			</if>
+			<if test="maps.s_user_id!=null and maps.user_id==null">
+				AND s_user_id=#{maps.s_user_id} 
+			</if>
+			<if test="maps.status!=null">
+				AND status=#{maps.status} 
+			</if>
+		) cot_t)
+	</select>
+	
+	
+	<select id="queryMsgUser" resultType="hashmap">
+		SELECT * FROM (SELECT u.usernick,u.head_icon,u.id,m.create_time,m.`status` FROM m_message m,m_user u 
+		WHERE m.s_user_id=u.id AND m.m_style=0 AND m.user_id=#{userId} 
+		ORDER BY m.create_time DESC ) t GROUP BY id ORDER BY create_time DESC
+	</select>
+	
+	<select id="queryMsg" resultType="com.yt.framework.persistent.entity.Message">
+		SELECT * FROM m_message WHERE user_id=#{userId} AND s_user_id=#{s_userId} AND type=#{type} AND `status`=0 
+	</select>
+	
+	<select id="queryNotReadMsg" resultType="int">
+		SELECT count(1) FROM m_message WHERE m_style=0 AND user_id=#{userId} AND status=0
+	</select>
+	
+	<update id="updateMsgState">
+		UPDATE m_message
+		SET
+			status=#{state}
+		WHERE
+		user_id = #{userId} AND s_user_id=#{s_user_id}
+	</update>
+	
+	<select id="queryPointToPointMsg" resultType="com.yt.framework.persistent.entity.Message">
+		SELECT * FROM m_message 
+			WHERE 1=1 
+				<if test="user_id!=null and user_id!=''">
+					AND m.user_id=#{user_id} 
+				</if>
+				<if test="s_user_id!=null and s_user_id!=''">
+					AND s_user_id=#{s_user_id} 
+				</if>
+				<if test="type!=null and type!=''">
+					AND type=#{type} 
+				</if>
+				 AND `status` = 0 ORDER BY create_time DESC		 
+	</select>
+	
+	<select id="loadAllSysMsgList" parameterType="hashmap" resultType="hashmap">
+	    SELECT m.* FROM m_message m 
+	        LEFT JOIN m_user u ON m.user_id = u.id and sys_type = 2
+            LEFT JOIN t_team_info t ON m.user_id = t.id and sys_type = 3
+          WHERE 1=1 
+          <if test="maps.user_id!=null and maps.user_id!=''">
+					AND m.user_id=#{maps.user_id} 
+		  </if>
+          <if test="maps.m_style!=null and maps.m_style!=''">
+			 AND m.m_style=#{maps.m_style} 
+		  </if>
+          <if test="maps.status!=null and maps.status!=''">
+			 AND m.status=#{maps.status} 
+		  </if>
+		  ORDER BY create_time DESC
+		  <if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		  </if>
+	</select>
+	
+	<select id="loadSysMsgCount"  resultType="int" parameterType="hashmap">
+	   SELECT count(1) from ((
+	       SELECT m.* FROM m_message m 
+	        LEFT JOIN m_user u ON m.user_id = u.id and sys_type = 2
+            LEFT JOIN t_team_info t ON m.user_id = t.id and sys_type = 3
+          WHERE 1=1 
+	          <if test="maps.user_id!=null and maps.user_id!=''">
+				 AND m.user_id=#{maps.user_id} 
+			  </if>
+	          <if test="maps.m_style!=null and maps.m_style!=''">
+				 AND m.m_style=#{maps.m_style} 
+			  </if>
+	          <if test="maps.status!=null and maps.status!=''">
+				 AND m.status=#{maps.status} 
+			  </if>
+	   ) b);
+	</select>
+</mapper>

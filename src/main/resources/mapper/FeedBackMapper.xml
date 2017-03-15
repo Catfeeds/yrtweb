@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.FeedBackMapper">
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.FeedBack" >
+			INSERT INTO m_feedback(
+				id,
+				name,
+				phone,
+				email,
+				content,
+				ip_str,
+				image_url,
+				status,
+				create_time
+			)VALUES(
+				#{id},
+				#{name},
+				#{phone},
+				#{email},
+				#{content},
+				#{ip_str},
+				#{image_url},
+				0,
+				NOW()
+			)
+		</insert>
+		
+</mapper>

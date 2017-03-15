@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.EventRecordMapper">
+		
+		<select id="queryForPageForMap" resultType="hashmap">
+			SELECT er.*,
+				(SELECT logo FROM t_team_info mt WHERE er.m_teaminfo_id = mt.id) AS m_logo,
+				(SELECT logo FROM t_team_info gt WHERE er.g_teaminfo_id = gt.id) AS g_logo
+				FROM a_event_record AS er 
+				<if test="maps.s_id!=null and maps.s_id!=''">
+					LEFT JOIN a_league AS al ON er.league_id = al.id
+				</if>
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					LEFT JOIN t_team_info AS ti ON (ti.id = er.m_teaminfo_id OR ti.id = er.g_teaminfo_id)
+				</if>
+					WHERE 1=1
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						AND ti.user_id = #{maps.user_id}
+					</if>	
+					<if test="maps.league_id!=null and maps.league_id!=''">
+						AND er.league_id = #{maps.league_id}
+					</if>
+					<if test="maps.s_id!=null and maps.s_id!=''">
+						AND al.s_id = #{maps.s_id}
+					</if>
+					<if test="maps.begin_time!=null and maps.begin_time!=''">
+						AND er.play_time &gt; #{maps.begin_time}
+					</if>
+					<if test="maps.end_time!=null and maps.end_time!=''">
+						AND er.play_time &lt; #{maps.end_time}
+					</if>
+					ORDER BY er.play_time ASC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>  	
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT COUNT(*) FROM a_event_record AS er 
+				LEFT JOIN t_team_info AS ti ON (ti.id = er.m_teaminfo_id OR ti.id = er.g_teaminfo_id)
+					<if test="maps.s_id!=null and maps.s_id!=''">
+						LEFT JOIN a_league AS al ON er.league_id = al.id
+					</if>
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						LEFT JOIN t_team_info AS ti ON (ti.id = er.m_teaminfo_id OR ti.id = er.g_teaminfo_id)
+					</if>
+						WHERE 1=1
+					<if test="maps.user_id!=null and maps.user_id!=''">
+						AND ti.user_id = #{maps.user_id}
+					</if>	
+					<if test="maps.league_id!=null and maps.league_id!=''">
+						AND er.league_id = #{maps.league_id}
+					</if>
+					<if test="maps.s_id!=null and maps.s_id!=''">
+						AND al.s_id = #{maps.s_id}
+					</if>
+					<if test="maps.begin_time!=null and maps.begin_time!=''">
+						AND er.play_time &lt; #{maps.begin_time}
+					</if>
+					<if test="maps.end_time!=null and maps.end_time!=''">
+						AND er.play_time &gt; #{maps.end_time}
+					</if>
+		</select>
+		
+		<select id="getMaxRounds" resultType="int">
+			SELECT er.rounds FROM a_event_record AS er 
+				WHERE 
+					er.league_id = #{league_id} 
+					ORDER BY er.rounds DESC
+				LIMIT 0,1
+		</select>
+</mapper>

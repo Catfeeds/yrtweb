@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.UserMapper">
+		<sql id="userInfo">
+			id,
+			usernick,
+			phone,
+			username,
+			password,
+			email,
+			create_time,
+			video_count,
+			image_count,
+			sex,
+			borndate,
+			signature,
+			area,
+			city,
+			province,
+			head_icon,
+			last_login,
+			last_login_ip,
+			id_card,
+			receive_sms,
+			usercp,
+			if_protocol
+		</sql>
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.User" >
+     		INSERT INTO m_user(
+     			id,
+				usernick,
+				phone,
+				username,
+				password,
+				email,
+				create_time,
+				video_count,
+				image_count,
+				borndate,
+				signature,
+				area,
+				city,
+				province,
+				head_icon,
+				last_login,
+				last_login_ip,
+				id_card,
+				usercp,
+				if_protocol
+     		)VALUES(
+     			#{id},
+				#{usernick},
+				#{phone},
+				#{username},
+				#{password},
+				#{email},
+				NOW(),
+				#{video_count},
+				#{image_count},
+				#{borndate},
+				#{signature},
+				#{area},
+				#{city},
+				#{province},
+				#{head_icon},
+				#{last_login},
+				#{last_login_ip},
+				#{id_card},
+				#{usercp},
+				#{if_protocol}
+     		)
+     	</insert>
+     	
+   		<update id="update" parameterType="com.yt.framework.persistent.entity.User">
+<!--      		added by zjh 增加User属性 2015年8月3日 15:18:53 start -->
+     		UPDATE m_user
+     			SET 
+     				usernick=#{usernick},
+     				phone=#{phone},
+     				username=#{username},
+	     			password=#{password},
+     				email=#{email},
+     				video_count=#{video_count},
+     				image_count=#{image_count},
+     				sex=#{sex},
+     				borndate=#{borndate},
+     				signature=#{signature},
+     				area=#{area},
+     				city=#{city},
+     				province=#{province},
+     				head_icon=#{head_icon},
+     				last_login = #{last_login},
+     				last_login_ip = #{last_login_ip},
+     				id_card = #{id_card},
+     				receive_sms = #{receive_sms},
+     				usercp = #{usercp},
+     				if_protocol = #{if_protocol}
+     			WHERE 
+     				id = #{id}	
+<!--      		added by zjh 增加User属性 2015年8月3日 15:18:53 end		 -->
+     	</update>
+     	
+   		<delete id="delete">
+     		DELETE FROM m_user WHERE id = #{id}	
+     	</delete>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT 
+     			<include refid="userInfo"/>
+     		 FROM m_user WHERE id = #{id}
+     	</select>
+     	
+     	<select id="getUserById" resultType="hashmap">
+     		SELECT u.id,u.usernick,u.receive_sms,u.phone,u.username,u.email,u.create_time,u.video_count,u.image_count,u.sex,u.signature,u.area,u.city,u.province,u.head_icon,u.usercp,
+     		DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(u.borndate)), '%Y')+0 AS age
+			,DATE_FORMAT(u.borndate,'%Y-%m-%d') borndate,c.`status`,
+     		(CASE WHEN u.id=#{meid} THEN 1 ELSE 0 END) isme,(CASE WHEN uf.id IS NULL THEN 0 ELSE 1 END) guanzhu,ppi.current_price ,ppi.score
+			FROM m_user u 
+			LEFT JOIN (SELECT * FROM m_focus WHERE user_id=#{meid} AND f_user_id=#{uid}) uf ON u.id=uf.f_user_id 
+			LEFT JOIN m_certification c ON c.user_id=u.id AND c.type='professional' 
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = u.id
+			WHERE u.id=#{uid}
+     	</select>
+     	
+     	<select id="findByPage" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT 
+     			<include refid="userInfo"/>
+     		 FROM m_user 
+     		 <where>
+     		 	<if test="username !=null and username !='' ">
+					AND username = LIKE CONCAT(CONCAT('%', #{username}),'%')
+				</if>
+     		 </where>
+     		 <if test="start!=null and rows!=null">
+				LIMIT ${start},${rows}
+			</if>
+     	</select>
+     	<select id="userCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+			SELECT 
+     			<include refid="userInfo"/>
+     		 FROM m_user 
+     		 <where>
+     		 	<if test="username !=null and username !='' ">
+					AND username = LIKE CONCAT(CONCAT('%', #{username}),'%')
+				</if>
+     		 </where>
+			) cot_t)
+		</select>
+     	
+     	<select id="getUserInfo" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT * FROM m_user 
+     			WHERE username = #{username} 
+     			AND password = #{password}
+     	</select>
+     	
+     	<select id="getUserByUsername" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT <include refid="userInfo"/> FROM m_user WHERE 1=1 
+     		<if test="type !=null and type =='phone' ">
+				AND phone=#{username} 
+			</if>
+			<if test="type !=null and type =='email' ">
+				AND email=#{username} 
+			</if>
+     	</select>
+     	
+     	<insert id="saveFocus" parameterType="com.yt.framework.persistent.entity.Focus" >
+     		INSERT INTO m_focus(
+     			id,
+     			user_id,
+     			f_user_id,
+     			f_type,
+     			status,
+     			create_time
+     		)VALUES(
+     			#{id},
+     			#{user_id},
+     			#{f_user_id},
+     			#{f_type},
+     			#{status},
+     			NOW()
+     		)
+     	</insert>
+     	
+     	<delete id="deleteFocus">
+     		DELETE FROM m_focus WHERE user_id = #{user_id} AND f_user_id = #{f_user_id} AND f_type = #{type}
+     	</delete>
+     	
+     	<select id="getFocusUsersNoPage" resultType="hashmap">
+			SELECT u.id,username AS name,u.usernick AS nick ,u.head_icon AS icon,u.create_time AS dates,'0' AS type FROM m_user AS u 
+			WHERE u.id IN (SELECT f.f_user_id FROM m_focus AS f WHERE f.user_id = #{maps.user_id} AND f.f_type=0)
+			<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+			</if>
+     	</select>
+     	
+     	<select id="getFocusUsersByUserId" resultType="hashmap">
+			SELECT u.id as user_id,u.username AS name,u.usernick AS nick ,u.head_icon AS icon,u.create_time AS dates,'0' AS type
+				<if test="maps.other_user_id!=null and maps.other_user_id!=''">
+	     			,(SELECT id FROM m_focus mf WHERE f.f_user_id = mf.f_user_id AND mf.user_id = #{maps.other_user_id}) AS f_status
+				</if>
+     			FROM m_focus AS f 
+     			LEFT JOIN m_user AS u ON f.f_user_id = u.id
+     			WHERE f.user_id = #{maps.user_id} AND f.f_type=0	
+				ORDER BY dates DESC
+			<!-- UNION ALL(
+			  SELECT ti.user_id as user_id,ti.id,ti.name AS name,'' AS nick,ti.logo AS icon,ti.create_time AS dates,'1' AS type FROM t_team_info AS ti WHERE ti.id IN (
+			   SELECT f.f_user_id FROM m_focus AS f WHERE f.user_id = #{maps.user_id} AND f.f_type=1
+			   ))-->
+			<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+			</if>
+     	</select>
+     	<select id="getFocusUsersCountByUserId" resultType="int">
+     		SELECT count(f.id)
+     			FROM m_focus AS f 
+     			LEFT JOIN m_user AS u ON f.f_user_id = u.id
+     			WHERE f.user_id = #{maps.user_id} AND f.f_type=0
+     	</select>
+     	
+     	<select id="getUsersFansByUserId" resultType="hashmap">
+     		SELECT u.id as user_id,u.username AS name,u.usernick AS nick ,u.head_icon AS icon,u.create_time AS dates,'0' AS type
+     			<if test="maps.other_user_id!=null and maps.other_user_id!=''">
+	     			,(SELECT id FROM m_focus mf WHERE f.user_id = mf.f_user_id AND mf.user_id = #{maps.other_user_id}) AS f_status
+				</if>
+     			FROM m_focus AS f 
+     			LEFT JOIN m_user AS u ON f.user_id = u.id
+     			WHERE f.f_user_id = #{maps.user_id} AND f.f_type=0
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+     	</select>
+     	
+     	<select id="getUsersFansCount" resultType="int">
+     		SELECT count(f.id) AS f_status
+     			FROM m_focus AS f 
+     			LEFT JOIN m_user AS u ON f.user_id = u.id
+     			WHERE f.f_user_id = #{maps.user_id} AND f.f_type=0
+     	</select>
+     	
+     	
+     	<select id="getUserByPhone" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT * FROM m_user WHERE phone = #{phone}
+     	</select>
+     	
+     	<select id="getUserByEmail" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT * FROM m_user WHERE email = #{email}
+     	</select>
+     	
+     	<select id="getUserByNick" resultType="com.yt.framework.persistent.entity.User">
+     		SELECT * FROM m_user WHERE usernick = #{usernick}
+     	</select>
+     	
+     	<select id="getFocusByIds" resultType="com.yt.framework.persistent.entity.Focus">
+     		SELECT * FROM m_focus WHERE user_id = #{user_id} AND f_teaminfo_id = #{teaminfo_id}
+     	</select>
+     	
+     	<select id="getCounts" resultType="hashmap" statementType="CALLABLE">
+     		<![CDATA[  
+     		 CALL userCounts(#{maps.u_counts,mode=OUT,jdbcType=INTEGER},
+     		 #{maps.a_counts,mode=OUT,jdbcType=INTEGER},#{maps.c_counts,mode=OUT,jdbcType=INTEGER},
+     		 #{maps.t_counts,mode=OUT,jdbcType=INTEGER},#{maps.f_counts,mode=OUT,jdbcType=INTEGER},
+     		 #{maps.g_counts,mode=OUT,jdbcType=INTEGER},#{maps.usernick,mode=IN,jdbcType=VARCHAR})
+     		]]>   
+     	</select>
+     	
+     	<resultMap id="countMap" type="java.util.HashMap">
+     	    <result column="u_counts" property="u_counts" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     	    <result column="a_counts" property="a_counts" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     	    <result column="c_counts" property="c_counts" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     	    <result column="t_counts" property="t_counts" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     	</resultMap>
+     	
+     	<select id="isOnFocusById" resultType="int">
+     		SELECT COUNT(*) from m_focus WHERE user_id = #{user_id} AND f_user_id = #{f_user_id}
+     	</select>
+     	
+     	<select id="getFocusByUserId" resultType="string">
+     		SELECT f_user_id FROM m_focus WHERE user_id = #{user_id} AND f_type=0
+     	</select>
+     	
+     	<select id="getData" resultType="hashmap">
+     	SELECT * FROM (
+				(SELECT (COUNT(*)-29 )AS sumUser FROM m_user AS u)AS a,
+			    (SELECT COUNT(*)AS toDayUser FROM m_user AS u WHERE DATE_FORMAT(u.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))AS b,
+			    (SELECT SUM(amount)AS sumAmount FROM m_pay_record AS pr WHERE pr.`status`=1)AS c,
+			    (SELECT SUM(amount)AS toDayAmount FROM m_pay_record AS pr WHERE pr.`status`=1 AND DATE_FORMAT(pr.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))AS d,
+				(SELECT COUNT(ls.id)AS signCount FROM a_league_sign AS ls)AS e,
+				(SELECT COUNT(ls.id)AS todaySignCount FROM a_league_sign AS ls WHERE DATE_FORMAT(ls.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))AS f,
+				(
+					SELECT SUM(ivCount+mvCount+fbiCount+mcCount+dyCount+uCount)AS imageCount FROM (
+					(SELECT COUNT(*)AS ivCount FROM m_image_video AS iv WHERE iv.type = 1)AS a,
+					(SELECT COUNT(*)AS mvCount FROM t_image_video AS mv WHERE mv.type = 1)as b,
+					(SELECT COUNT(*)AS fbiCount FROM f_baby_image_video AS fbi WHERE fbi.type = 1)as c,
+					(SELECT COUNT(*)AS mcCount FROM m_certification AS mc WHERE mc.img_src IS NOT NULL)AS d,
+					(SELECT COUNT(*)AS dyCount FROM m_dynamic AS dy WHERE dy.image IS NOT NULL)as e,
+					(SELECT COUNT(*)AS uCount FROM m_user AS u WHERE u.head_icon !='headImg/headimg.png' AND u.head_icon IS NOT NULL AND u.head_icon !='')as f
+					 ))AS aa,
+					(SELECT SUM(ivCount+mvCount+fbiCount+mcCount+dyCount)AS todayImageCount FROM (
+					(SELECT COUNT(*)AS ivCount FROM m_image_video AS iv WHERE iv.type = 1 AND DATE_FORMAT(iv.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))AS a,
+					(SELECT COUNT(*)AS mvCount FROM t_image_video AS mv WHERE mv.type = 1 AND DATE_FORMAT(mv.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))as b,
+					(SELECT COUNT(*)AS fbiCount FROM f_baby_image_video AS fbi WHERE fbi.type = 1 AND DATE_FORMAT(fbi.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))as c,
+					(SELECT COUNT(*)AS mcCount FROM m_certification AS mc WHERE mc.img_src IS NOT NULL AND DATE_FORMAT(mc.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))AS d,
+					(SELECT COUNT(*)AS dyCount FROM m_dynamic AS dy WHERE dy.image IS NOT NULL AND DATE_FORMAT(dy.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d'))as e
+					 ))AS bb,
+					(
+						SELECT COUNT(ls.id)AS toDayuninCount FROM a_league_sign AS ls WHERE DATE_FORMAT(ls.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') AND ls.image_src IS NULL
+					)AS cc,
+					(
+						SELECT COUNT(ls.id)AS inCount FROM a_league_sign AS ls WHERE ls.image_src IS NOT NULL
+					)AS dd
+			)
+     	</select>
+     	
+     	<select id="id2Name" resultType="string">
+			SELECT usernick FROM m_user WHERE id = #{id}
+		</select>
+		
+		<select id="id2UserName" resultType="string">
+			SELECT username FROM m_user WHERE id = #{id}
+		</select>
+			
+     	<select id="getUserRole" resultType="string">
+			select role_id from m_user_role where user_id=#{user_id}
+		</select>
+		
+		<insert id="saveUserInviteSms" parameterType="com.yt.framework.persistent.entity.UserInvitesms">
+			INSERT INTO m_user_invitesms(
+				id,
+				f_user_id,
+				user_id,
+				type,
+				create_time
+			)VALUES(
+				#{id},
+				#{f_user_id},
+				#{user_id},
+				#{type},
+				NOW()
+			)
+		</insert>
+		
+		<select id="inviteUserCountByUserId" resultType="int">
+			SELECT COUNT(*) FROM m_user_invitesms 
+				WHERE 1=1
+					 AND f_user_id = #{f_user_id} 
+					 AND user_id = #{user_id} 
+					 AND type = #{type}
+					 AND DATE_FORMAT(create_time,'%y-%m-%d') = DATE_FORMAT(NOW(),'%y-%m-%d')
+		</select>		
+		
+		<select id="getTodayUserInviteCount" resultType="int">
+			SELECT COUNT(*) FROM m_user_invitesms
+				WHERE 1=1
+					AND f_user_id = #{user_id}
+					AND type = #{type}
+					AND DATE_FORMAT(create_time,'%y-%m-%d') = DATE_FORMAT(NOW(),'%y-%m-%d')
+		</select>
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.BabyCheerMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.BabyCheer">
+		INSERT INTO f_baby_cheer(
+			id,
+			user_id, 
+			teaminfo_id, 
+			team_name, 
+			teamgame_id,
+			logo,
+			contact_phone, 
+			status ,
+			contact_person ,
+			cheer_address,
+			cheer_time ,
+			remark,	
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id}, 
+			#{teaminfo_id}, 
+			#{team_name}, 
+			#{teamgame_id},
+			#{logo},
+			#{contact_phone}, 
+			#{status} ,
+			#{contact_person} ,
+			#{cheer_address},
+			#{cheer_time} ,
+			#{remark},	
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.BabyCheer">
+		UPDATE f_baby_cheer
+		SET
+			user_id = #{user_id}, 
+			teaminfo_id = #{teaminfo_id}, 
+			team_name = #{team_name}, 
+			teamgame_id = #{teamgame_id},
+			contact_phone = #{contact_phone}, 
+			status = #{status} ,
+			contact_person = #{contact_person} ,
+			cheer_address = #{cheer_address},
+			cheer_time  = #{cheer_time},
+			remark = #{remark}
+		WHERE
+			id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM f_baby_cheer WHERE id = #{id}
+	</delete>
+	
+	<select id="queryForPage" resultType="com.yt.framework.persistent.entity.BabyCheer">
+		SELECT * FROM f_baby_cheer
+			WHERE 1=1 
+			<if test="maps.user_id!='' and maps.user_id!=null">
+				AND user_id = #{maps.user_id}
+			</if>
+			<if test="maps.team_game!='' and maps.team_game!=null">
+				AND team_game LIKE CONCAT(CONCAT('%', #{maps.team_game}),'%')
+			</if>
+			<if test="maps.teaminfo_id!='' and maps.teaminfo_id!=null">
+				AND teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.status!='' and maps.status!=null">
+				AND status = #{maps.status}
+			</if>
+			<if test="maps.teamgame_id!='' and maps.teamgame_id!=null">
+				AND teamgame_id = #{maps.teamgame_id}
+			</if>
+				ORDER BY create_time
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(id) FROM f_baby_cheer
+			WHERE 1=1 
+			<if test="maps.user_id!='' and maps.user_id!=null">
+				AND user_id = #{maps.user_id}
+			</if>	
+			<if test="maps.team_game!='' and maps.team_game!=null">
+				AND team_game LIKE CONCAT(CONCAT('%', #{maps.team_game}),'%')
+			</if>
+			<if test="maps.teaminfo_id!='' and maps.teaminfo_id!=null">
+				AND teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.status!='' and maps.status!=null">
+				AND status = #{maps.status}
+			</if>
+			<if test="maps.teamgame_id!='' and maps.teamgame_id!=null">
+				AND teamgame_id = #{maps.teamgame_id}
+			</if>
+				ORDER BY create_time
+	</select>
+	
+	<select id="getByBabyByGame" resultType="hashmap">
+		SELECT DISTINCT fc.teamgame_id AS game_id,m.id AS user_id,m.usernick AS usernick,m.head_icon AS head_icon FROM f_baby_cheer fc 
+		LEFT JOIN m_user m ON fc.user_id = m.id, t_team_game tg
+		WHERE 1=1 AND tg.id = #{game_id} AND fc.teamgame_id = tg.id AND fc.status = 1
+		<if test="teaminfo_id!='' and teaminfo_id!=null">
+			AND fc.teaminfo_id = #{teaminfo_id}
+		</if>
+	</select>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.BabyCheer">
+		SELECT * FROM f_baby_cheer WHERE id = #{id}
+	</select>
+	
+	<select id="babyCheerCount" resultType="int">
+		SELECT COUNT(*) from f_baby_cheer 
+			WHERE 1=1
+				AND teaminfo_id = #{teaminfo_id}
+				AND teamgame_id = #{teamgame_id}
+				AND status = 1
+	</select>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/security 
+	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	<!--use-expressions="true" 的意思是开启表达式 access-denied-page的意思是，当验证权限失败后会跳转到的页面  -->  
+    <!-- <http auto-config="true" use-expressions="true" access-denied-page="/accessDenied" >  --> 
+    <http pattern="/login**/**" security="none"/>
+    <http pattern="/doorCode**/**" security="none"/>
+    <http pattern="/resources/**" security="none"/>
+    <http pattern="/images/**" security="none"/>
+    <http pattern="/filetemp/**" security="none"/>
+    <http pattern="/dynamicv1/loadNewMsg" security="none"/>
+    <http pattern="/pushlet*" security="none"/>
+    <http pattern="/GameService*" security="none"/>
+    <http auto-config="false" entry-point-ref="loginEntryPoint"> 
+    	<!-- <intercept-url pattern="/**" access="ROLE_USER"/> -->
+    	
+    	<!-- 登录过滤器 -->
+        <custom-filter ref="customLoginFilter" before="FORM_LOGIN_FILTER"/>
+        <!-- ajax登录过滤器 -->  
+        <custom-filter position="FORM_LOGIN_FILTER" ref="ajaxLoginFilter"/>
+        
+        <!-- 只cache get,避免ajax post 被cache -->  
+        <!-- <request-cache ref="httpSessionRequestCache"/>  -->
+    	
+    	<!-- 使用自定义的过滤器 -->
+		<custom-filter ref="webSecurityFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
+		
+		<!-- 无权限处理 -->
+		<access-denied-handler ref="accessDeniedHandler"/>
+		
+    	<!-- 以上未列出的，也都必须验证才能访问 -->
+        <!-- <intercept-url pattern="/**" access="isAuthenticated()" /> -->
+		 
+        <!-- 所有地址全开，无需验证，测试用 -->
+        <!-- <intercept-url pattern="/**" access="permitAll" /> -->
+        <!-- <form-login 
+	      login-page="/login"
+	      authentication-failure-url="/login?error=true"
+	      default-target-url="/"/> -->
+	    <logout logout-url="/logout" logout-success-url="/login" invalidate-session="true"/>
+    </http>  
+    
+    <!-- <beans:bean id="httpSessionRequestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache">  
+        <beans:property name="justUseSavedRequestOnGet" value="true" />  
+    </beans:bean>  -->
+      
+    <!-- 配置一个认证管理器 -->  
+    <authentication-manager alias="webAuthenticationManager">  
+        <authentication-provider user-service-ref="webUserDetailsService">  
+        	<!-- <password-encoder hash="md5">  
+	            <salt-source user-property="username" />  
+	        </password-encoder>   -->
+        </authentication-provider> 
+    </authentication-manager>
+    
+    
+    <!-- 
+	如果使用SPRING注解方式，则可直接注释掉
+	
+	authenticationManager：用户拥有的权限
+	accessDecisionManager：用户是否拥有所请求资源的权限
+	securityMetadataSource：资源与权限对应关系
+	-->
+	<beans:bean id="webSecurityFilter" class="com.yt.framework.security.WebSecurityFilter">  
+        <beans:property name="authenticationManager" ref="webAuthenticationManager" />  
+        <beans:property name="accessDecisionManager" ref="webAccessDecisionManager" />  
+        <beans:property name="securityMetadataSource" ref="webSecurityMetadataSource" />
+    </beans:bean>
+    
+    <beans:bean id="loginEntryPoint" class="com.yt.framework.security.LoginEntryPoint">
+        <!-- 默认登录页的url -->
+        <!-- <beans:constructor-arg value="/login" /> -->
+        <beans:property name="loginFormUrl" value="/login" />
+        <!-- 是否强制HTTPS -->
+		<!-- <beans:property name="forceHttps" value="false" /> -->
+    </beans:bean>
+    
+    
+    <!-- 验证普通用户 --> 
+    <beans:bean id="customLoginFilter" class="com.yt.framework.security.CustomLoginFilter">
+        <beans:property name="filterProcessesUrl" value="/doLogin"/>
+        <beans:property name="authenticationManager" ref="webAuthenticationManager"/>
+        <beans:property name="usernameParameter" value="username" />
+		<beans:property name="passwordParameter" value="password" />
+        <beans:property name="authenticationFailureHandler" ref="failureHandler"/>
+        <beans:property name="authenticationSuccessHandler" ref="successHandler"/>
+    </beans:bean>
+ 
+    <beans:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/login?error=true" />
+    </beans:bean>
+ 
+    <beans:bean id="successHandler" class="com.yt.framework.security.UrlAuthenticationSuccessHandler">
+        <beans:property name="alwaysUseDefaultTargetUrl" value="false"/>
+        <!-- <beans:property name="defaultTargetUrl" value="/"/> -->
+    </beans:bean>
+    
+    <!-- 验证ajax请求-->   
+    <beans:bean id="ajaxLoginFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">  
+        <beans:property name="filterProcessesUrl" value="/ajaxLogin"/>  
+        <beans:property name="authenticationManager" ref="webAuthenticationManager"/>  
+        <beans:property name="usernameParameter" value="username" />
+		<beans:property name="passwordParameter" value="password" />
+        <beans:property name="authenticationFailureHandler" ref="ajaxFailureHandler"/>  
+        <beans:property name="authenticationSuccessHandler" ref="ajaxSuccessHandler"/>  
+    </beans:bean>
+    
+    <beans:bean id="ajaxFailureHandler" class="com.yt.framework.security.AjaxAuthenticationFailureHandler">  
+    </beans:bean>  
+      
+    <beans:bean id="ajaxSuccessHandler" class="com.yt.framework.security.AjaxAuthenticationSuccessHandler">  
+    </beans:bean>
+    
+    <beans:bean id="accessDeniedHandler"  class="com.yt.framework.security.WebAccessDeniedHandler">  
+		<beans:property name="accessDeniedUrl" value="/login/accessDenied" />  
+	</beans:bean>
+	
+	<!-- Jcaptcha相关的配置 -->  
+    <beans:bean id="captchaService"  
+        class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">  
+        <beans:property name="captchaEngine">  
+            <beans:bean class="com.yt.framework.utils.jcaptcha.GMailEngine" />  
+        </beans:property>  
+        <!-- 默认生成的图片180秒过期 , 可另行设置   
+        <beans:property name="minGuarantedStorageDelayInSeconds" value="180" />  
+        -->  
+    </beans:bean>  
+</beans:beans>

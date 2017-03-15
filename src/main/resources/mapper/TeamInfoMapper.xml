@@ -1,0 +1,925 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.TeamInfoMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.TeamInfo" >
+			INSERT INTO t_team_info(
+				id,
+				user_id,
+				name,
+				sim_name,
+				is_pk,
+				logo,
+				score,
+				play_time,
+				ball_format,
+				allow,
+				play_position,
+				province,
+				city,
+				image_count,
+				video_count,
+				notice,
+				remark,
+				remark_images,
+				combat,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{name},
+				#{sim_name},
+				#{is_pk},
+				#{logo},
+				#{score},
+				#{play_time},
+				#{ball_format},
+				#{allow},
+				#{play_position},
+				#{province},
+				#{city},
+				#{image_count},
+				#{video_count},
+				#{notice},
+				#{remark},
+				#{remark_images},
+				#{combat},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="delete">
+			DELETE FROM t_team_info WHERE id = #{id}
+		</delete>
+		
+		<update id="update" parameterType="com.yt.framework.persistent.entity.TeamInfo">
+			UPDATE t_team_info
+				SET
+					name = #{name},
+					is_pk = #{is_pk},
+					logo = #{logo},
+					sim_name = #{sim_name},
+					play_time = #{play_time},
+					ball_format = #{ball_format},
+					<if test="allow!=null and allow!=''">
+						allow = #{allow},
+					</if>
+					draw_count = #{draw_count},
+					win_count = #{win_count},
+					loss_count = #{loss_count},
+					sumballs = #{sumballs},
+					province = #{province},
+					city = #{city},
+					score = #{score},
+					play_position = #{play_position},
+					is_exist = #{is_exist},
+					image_count = #{image_count},
+					video_count = #{video_count},
+					user_id = #{user_id},
+					notice = #{notice},
+					remark = #{remark},
+					remark_images = #{remark_images},
+					combat = #{combat}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT * FROM t_team_info WHERE id = #{id} AND is_exist=1
+		</select>
+		
+		<select id="checkSimNameAgain" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT * FROM t_team_info WHERE sim_name=#{sim_name} 
+			<if test="id!=null and id!=''">
+			AND id!=#{id} 
+			</if>
+		</select>
+		
+		<select id="getTeamInfoById" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT * FROM t_team_info WHERE id = #{id}
+		</select>
+		<select id="getTeamInfoByUserId" resultType="com.yt.framework.persistent.entity.TeamInfo">
+		SELECT * FROM t_team_info WHERE user_id = #{user_id} AND is_exist=1
+		</select>
+		
+		<select id="getTeamInfoByPUserID" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT ti.* FROM t_team_info AS ti
+				LEFT JOIN t_team_player AS tp ON tp.teaminfo_id = ti.id
+				WHERE 1=1
+					 AND ti.is_exist=1
+					 AND tp.user_id = #{p_user_id}
+		</select>
+		
+		<select id="queryForPage" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT * FROM t_team_info
+					WHERE 1=1
+					AND is_exist=1
+				<if test="maps.name!=null and maps.name!=''">
+					AND name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.sumballs!=null and maps.sumballs!=''">
+					AND sumballs > #{maps.sumballs}
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+					AND ball_format = #{maps.ball_format}
+				</if>
+				
+				<if test="maps.beginSumballs!=null and maps.beginSumballs!=''">
+					AND sumballs &gt; #{maps.beginSumballs}
+				</if>
+				
+				<if test="maps.endSumballs!=null and maps.endSumballs!=''">
+					AND sumballs &lt; #{maps.endSumballs}
+				</if>
+				
+				<if test="maps.beginScore!=null and maps.beginScore!=''">
+					AND score &gt; #{maps.beginScore}
+				</if>
+				
+				<if test="maps.endScore!=null and maps.endScore!=''">
+					AND score &lt; #{maps.endScore}
+				</if>
+				
+				<if test="maps.play_time!=null and maps.play_time!=''">
+					AND play_time = #{maps.play_time}
+				</if>
+				<if test="maps.city!=null and maps.city!=''">
+					AND city = #{maps.city}
+				</if>
+				<choose>
+					<when test="maps.orderSumballs!=null and maps.orderSumballs!=''">
+						ORDER BY sumballs ${maps.orderSumballs} 
+					</when>
+					<when test="maps.orderWin!=null and maps.orderWin!=''">
+						ORDER BY win_count ${maps.orderWin} 
+					</when>
+					<otherwise>
+						ORDER BY city DESC
+					</otherwise>
+				</choose>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+			SELECT ua.amount,tl.id tlid,tt.*
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					,mf.user_id,mf.f_teaminfo_id 
+				</if>
+					FROM t_team_info tt 
+					LEFT JOIN a_team_league tl ON tl.teaminfo_id=tt.id AND tl.`status`=1 
+					LEFT JOIN m_user_amount ua ON ua.teaminfo_id=tt.id
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					LEFT JOIN m_focus mf ON tt.id = mf.f_teaminfo_id AND mf.user_id = #{maps.user_id}
+				</if>
+					WHERE 1=1
+					AND tt.is_exist=1
+				<if test="maps.name!=null and maps.name!=''">
+					AND tt.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.sumballs!=null and maps.sumballs!=''">
+					AND tt.sumballs > #{maps.sumballs}
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+					AND tt.ball_format = #{maps.ball_format}
+				</if>
+				
+				<if test="maps.beginSumballs!=null and maps.beginSumballs!=''">
+					AND tt.sumballs &gt; #{maps.beginSumballs}
+				</if>
+				
+				<if test="maps.endSumballs!=null and maps.endSumballs!=''">
+					AND tt.sumballs &lt; #{maps.endSumballs}
+				</if>
+				
+				<if test="maps.beginScore!=null and maps.beginScore!=''">
+					AND tt.score &gt; #{maps.beginScore}
+				</if>
+				
+				<if test="maps.endScore!=null and maps.endScore!=''">
+					AND tt.score &lt; #{maps.endScore}
+				</if>
+				
+				<if test="maps.play_time!=null and maps.play_time!=''">
+					AND tt.play_time = #{maps.play_time}
+				</if>
+				<if test="maps.city!=null and maps.city!=''">
+					AND tt.city = #{maps.city}
+				</if>
+				<if test="maps.is_focus!=null and maps.is_focus==1">
+					AND mf.f_teaminfo_id is not null 
+				</if>
+				ORDER BY 
+				<choose>
+					<when test="maps.order_str!=null and maps.order_str!=''">
+						<choose>
+							<when test="maps.order_str=='combat'"> tt.combat </when>
+							<when test="maps.order_str=='amount'"> ua.amount </when>
+						</choose>
+						<if test="maps.order_type==1">DESC</if>
+					</when>
+					<otherwise>
+						tt.combat DESC
+					</otherwise>
+				</choose>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT COUNT(tt.id) FROM t_team_info tt 
+			LEFT JOIN a_team_league tl ON tl.teaminfo_id=tt.id AND tl.`status`=1 
+			LEFT JOIN m_user_amount ua ON ua.user_id=tt.user_id 
+				<if test="maps.user_id!=null and maps.user_id!=''">
+					LEFT JOIN m_focus mf ON tt.id = mf.f_teaminfo_id AND mf.user_id = #{maps.user_id}
+				</if>
+					WHERE 1=1
+					AND tt.is_exist=1
+				<if test="maps.name!=null and maps.name!=''">
+					AND tt.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.sumballs!=null and maps.sumballs!=''">
+					AND tt.sumballs > #{maps.sumballs}
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+					AND tt.ball_format = #{maps.ball_format}
+				</if>
+				
+				<if test="maps.beginSumballs!=null and maps.beginSumballs!=''">
+					AND tt.sumballs &gt; #{maps.beginSumballs}
+				</if>
+				
+				<if test="maps.endSumballs!=null and maps.endSumballs!=''">
+					AND tt.sumballs &lt; #{maps.endSumballs}
+				</if>
+				
+				<if test="maps.beginScore!=null and maps.beginScore!=''">
+					AND tt.score &gt; #{maps.beginScore}
+				</if>
+				
+				<if test="maps.endScore!=null and maps.endScore!=''">
+					AND tt.score &lt; #{maps.endScore}
+				</if>
+				
+				<if test="maps.play_time!=null and maps.play_time!=''">
+					AND tt.play_time = #{maps.play_time}
+				</if>
+				<if test="maps.city!=null and maps.city!=''">
+					AND tt.city = #{maps.city}
+				</if>
+				<if test="maps.is_focus!=null and maps.is_focus==1">
+					AND mf.f_teaminfo_id is not null 
+				</if>
+		</select>
+		
+		<delete id="deleteTeamPlayer">
+			DELETE FROM t_team_player
+				WHERE
+					teaminfo_id = #{teaminfo_id}
+				<if test="player_id!=null and player_id!=''">
+					AND user_id = #{player_id}
+				</if>
+		</delete>
+		
+		<select id="getTeamPlayerPosition" resultType="int">
+			SELECT type FROM t_team_player
+				WHERE
+					teaminfo_id = #{teaminfo_id}
+				AND user_id = #{player_id}
+		</select>
+		
+		<insert id="saveTeamPlayer" parameterType="com.yt.framework.persistent.entity.TeamPlayer" >
+			INSERT INTO t_team_player(
+				id,
+				teaminfo_id,
+				user_id,
+				type,
+				player_num,
+				position,
+				create_time
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{user_id},
+				#{type},
+				#{player_num},
+				#{position},
+				NOW()
+			)
+		</insert>
+		
+		<update id="updateNum">
+			UPDATE t_team_player
+				SET
+					player_num = #{num}
+				WHERE 
+					id = #{id}
+		</update>
+		<update id="updatePstatus">
+			UPDATE t_team_info
+				SET
+					p_status = #{p_status}
+				WHERE 
+					id = #{teaminfo_id}
+		</update>
+		
+		<select id="isJoinTeamForPlayer" resultType="int">
+			SELECT COUNT(*) FROM t_team_player WHERE user_id = #{player_id}
+		</select>
+		
+		<select id="getTeamPlayerList" resultType="hashmap">
+			SELECT tt.*,sp.id AS sp_id,
+					mu.usernick,mu.borndate,mu.head_icon,
+					tp.current_price,tp.score,tp.pass_ability,tp.header,tp.shot,tp.power,tp.speed,tp.explosive,
+					tp.height,tp.weight,tp.position p_position,tp.love_num,ta.id AS loanId
+					<if test="maps.buy_teaminfo_id!=null and maps.buy_teaminfo_id!=''">
+					,tm.status,tm.if_ok,tm.id as transfer_id
+					,tl.id AS loanMsgId
+					</if>
+				FROM t_team_player tt 
+					LEFT JOIN m_user mu ON tt.user_id = mu.id
+					LEFT JOIN p_player_info tp ON tt.user_id = tp.user_id 
+				<!-- 查询用户是否禁赛start -->
+					LEFT JOIN a_suspend_player AS sp ON sp.user_id = tt.user_id AND sp.status = 1
+				<!-- 查询用户是否禁赛end -->
+				<!-- 查询当前俱乐部是否有购买消息start -->
+				<if test="maps.buy_teaminfo_id!=null and maps.buy_teaminfo_id!=''">
+					LEFT JOIN t_transfer_msg AS tm ON tm.user_id = tt.user_id 
+								AND tm.buy_teaminfo_id = #{maps.buy_teaminfo_id} 
+								AND tm.status = 0
+					LEFT JOIN t_teamloan_msg AS tl ON tl.user_id = tt.user_id 
+								AND tl.buy_teaminfo_id = #{maps.buy_teaminfo_id}
+								AND tl.status = 1 
+								AND tl.over_time &gt; NOW()
+				</if>
+				<!-- 查询当前俱乐部是否有购买消息end -->
+				<!-- 查询用户是否已被租借start -->	
+					LEFT JOIN t_teamloan_player ta ON ta.user_id = tt.user_id
+						 	AND ta.teaminfo_id = #{maps.teaminfo_id} 
+						 	AND ta.end_time &gt; NOW()
+				<!-- 查询用户是否已被租借end -->	
+					WHERE 1=1
+				<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+					AND tt.teaminfo_id = #{maps.teaminfo_id}
+				</if>
+				<if test="maps.type!=null and maps.type!=''">
+					AND tt.type = #{maps.type}
+				</if>
+					ORDER BY tt.type ASC,tt.salary DESC,tp.current_price DESC,tp.score DESC,tt.create_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		
+		<select id="getTeamPlayer" resultType="com.yt.framework.persistent.entity.TeamPlayer">
+			SELECT * FROM t_team_player 
+				WHERE teaminfo_id = #{maps.teaminfo_id}
+				<if test="maps.type!=null and maps.type!=''">
+					AND type = #{maps.type}
+				</if>
+				ORDER BY type
+		</select>
+		
+		<select id="getTeamPlayerMap" resultType="hashmap">
+			SELECT tt.*,
+					mu.usernick,mu.borndate,mu.head_icon,
+					tp.current_price,tp.score,tp.pass_ability,tp.header,tp.shot,tp.power,tp.speed,tp.explosive,tp.height,tp.weight,tp.position p_position,tp.love_num
+				FROM t_team_player tt 
+				LEFT JOIN m_user mu ON tt.user_id = mu.id
+				LEFT JOIN p_player_info tp ON tt.user_id = tp.user_id
+				WHERE tt.id = #{id} LIMIT 1;
+		</select>
+		
+		<select id="queryTeamPlayerByTid" resultType="hashmap">
+		SELECT p.*,u.head_icon,u.phone,u.sex,u.borndate,u.id_card,tp.type tp_type FROM t_team_player tp 
+		LEFT JOIN p_player_info p ON p.user_id=tp.user_id 
+		LEFT JOIN m_user u ON u.id = tp.user_id  
+		WHERE tp.teaminfo_id=#{teaminfo_id}
+		</select>
+		
+		<select id="getBlackPlayer" resultType="hashmap">
+			SELECT bl.*,mu.usernick,mu.head_icon FROM t_team_blacklist bl , m_user mu
+				WHERE bl.teaminfo_id = #{maps.teaminfo_id} and mu.id = bl.user_id
+				<if test="maps.player_id!=null and maps.player_id!=''">
+					AND bl.user_id = #{maps.player_id}
+				</if>
+					ORDER BY bl.create_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		<select id="getBlackPlayerCount" resultType="int">
+			SELECT count(bl.id) FROM t_team_blacklist bl , m_user mu
+				WHERE bl.teaminfo_id = #{maps.teaminfo_id} and mu.id = bl.user_id
+				<if test="maps.player_id!=null and maps.player_id!=''">
+					AND bl.user_id = #{maps.player_id}
+				</if>
+		</select>
+		
+		<insert id="saveBlackPlayer" parameterType="hashmap" >
+			INSERT INTO t_team_blacklist(
+				id,
+				teaminfo_id,
+				user_id,
+				create_time
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{player_id},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="kickfriendPlayer" parameterType="hashmap">
+			DELETE FROM t_team_blacklist
+				WHERE teaminfo_id = #{maps.teaminfo_id} AND user_id = #{maps.player_id}
+		</delete>
+		
+		<update id="checkCaption" parameterType="hashmap">
+			UPDATE t_team_player
+				SET
+					type = #{type}
+				WHERE 
+					teaminfo_id = #{teaminfo_id} AND user_id = #{player_id}		
+		</update>
+		
+		<select id="searchInviteTeam" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT ti.*,
+				(SELECT SUM(score) FROM p_player_info WHERE user_id IN (
+					SELECT tp.user_id from t_team_player AS tp WHERE tp.teaminfo_id = ti.id
+					)
+				)AS abilityValue 
+				FROM t_team_info ti WHERE ti.is_exist = 1 AND is_pk = 1 AND id NOT IN (SELECT DISTINCT t.id FROM t_team_game s, t_team_info t
+					WHERE s.status in(0,3) AND t.is_exist = 1 AND (s.initiate_teaminfo_id = t.id OR s.respond_teaminfo_id = t.id))
+					AND ti.user_id!=#{maps.user_id} 
+				<if test="maps.name!=null and maps.name!=''">
+					AND ti.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.sumballs!=null and maps.sumballs!=''">
+					AND ti.sumballs > #{maps.sumballs}
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+					AND ti.ball_format = #{maps.ball_format}
+				</if>
+				<if test="maps.play_time!=null and maps.play_time!=''">
+					AND ti.play_time = #{maps.play_time}
+				</if>
+				<if test="maps.city!=null and maps.city!=''">
+					AND ti.city = #{maps.city}
+				</if>
+				<choose>
+					<when test="maps.orderSumballs!=null and maps.orderSumballs!=''">
+						ORDER BY ti.sumballs ${maps.orderSumballs} 
+					</when>
+					<when test="maps.orderWin!=null and maps.orderWin!=''">
+						ORDER BY ti.win_count ${maps.orderWin} 
+					</when>
+					<otherwise>
+						ORDER BY ti.city DESC
+					</otherwise>
+				</choose>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+				
+		</select>
+		
+		<select id="searchInviteTeamCount" resultType="int">
+			SELECT count(ti.id) FROM t_team_info ti WHERE ti.is_exist = 1 AND is_pk = 1 AND id NOT IN (SELECT DISTINCT t.id FROM t_team_game s, t_team_info t
+					WHERE s.status in(0,3) AND t.is_exist = 1
+						AND (s.initiate_teaminfo_id = t.id OR s.respond_teaminfo_id = t.id))
+				<if test="maps.name!=null and maps.name!=''">
+					AND ti.name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.sumballs!=null and maps.sumballs!=''">
+					AND ti.sumballs > #{maps.sumballs}
+				</if>
+				<if test="maps.ball_format!=null and maps.ball_format!=''">
+					AND ti.ball_format = #{maps.ball_format}
+				</if>
+				<if test="maps.play_time!=null and maps.play_time!=''">
+					AND ti.play_time = #{maps.play_time}
+				</if>
+				<if test="maps.city!=null and maps.city!=''">
+					AND ti.city = #{maps.city}
+				</if>
+				<choose>
+					<when test="maps.orderSumballs!=null and maps.orderSumballs!=''">
+						ORDER BY ti.sumballs ${maps.orderSumballs} 
+					</when>
+					<when test="maps.orderWin!=null and maps.orderWin!=''">
+						ORDER BY ti.win_count ${maps.orderWin} 
+					</when>
+					<otherwise>
+						ORDER BY ti.city DESC
+					</otherwise>
+				</choose>
+		</select>
+		
+		<select id="getCaption" resultType="com.yt.framework.persistent.entity.User">
+			SELECT mu.* FROM t_team_info t,m_user mu  WHERE t.id = #{teaminfo_id} AND t.user_id = mu.id AND t.is_exist=1
+		</select>
+		
+		<insert id="saveFocus" parameterType="com.yt.framework.persistent.entity.Focus" >
+     		INSERT INTO m_focus(
+     			id,
+     			user_id,
+     			f_teaminfo_id,
+     			f_type,
+     			status,
+     			create_time
+     		)VALUES(
+     			#{id},
+     			#{user_id},
+     			#{f_teaminfo_id},
+     			#{f_type},
+     			#{status},
+     			NOW()
+     		)
+     	</insert>
+     	
+     	<delete id="deleteFocus">
+     		DELETE FROM m_focus WHERE user_id = #{user_id} AND f_teaminfo_id = #{f_teaminfo_id}
+     	</delete>
+     	
+     	<select id="getFocusTeams" resultType="int">
+     		SELECT count(id) from m_focus WHERE user_id = #{user_id} AND f_teaminfo_id = #{f_teaminfo_id}
+     	</select>
+     	
+     	
+     	<select id="getTeamAbilityScore" resultType="hashmap">
+     		SELECT SUM(ply.score)AS p_sum,COUNT(ply.id)AS p_count FROM p_player_info AS ply WHERE ply.user_id IN (
+					SELECT tp.user_id FROM t_team_player AS tp WHERE tp.teaminfo_id=#{teaminfo_id}
+				)
+     	</select>
+     	
+     	<select id="getTeamPlayerInfoByIds" resultType="com.yt.framework.persistent.entity.TeamPlayer">
+     		SELECT * FROM t_team_player WHERE user_id = #{user_id} AND teaminfo_id = #{teaminfo_id}
+     	</select>
+     	
+     	<select id="getTeamPlayerByUserId" resultType="com.yt.framework.persistent.entity.TeamPlayer">
+     		SELECT tp.* FROM t_team_player AS tp
+				LEFT JOIN t_team_info AS ti ON ti.id= tp.teaminfo_id
+			WHERE tp.user_id = #{user_id}
+			AND ti.is_exist = 1
+     	</select>
+     	
+     	<select id="getTeamPlayerByID" resultType="com.yt.framework.persistent.entity.TeamPlayer">
+     		SELECT * FROM t_team_player WHERE id = #{id}
+     	</select>
+     	
+     	<select id="loadHistoryTeamGame" resultType="hashmap">
+     	<!-- 查询历史比赛记录，isInvite ：1表示 主动邀请，2表示受邀俱乐部 -->
+		SELECT tg.*, 
+		   (CASE 
+				WHEN tg.initiate_teaminfo_id = #{teaminfo_id} THEN '1'
+				ELSE '2' END 
+			)AS isInvite		
+		  FROM t_team_game AS tg
+			WHERE 1=1
+				AND (tg.initiate_teaminfo_id = #{teaminfo_id} OR tg.respond_teaminfo_id =#{teaminfo_id})
+				AND tg.status !=0
+				ORDER BY tg.create_time DESC
+		    <if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+     	</select>
+     	
+     	<select id="loadHistoryTeamGameCount" resultType="int">
+     		SELECT COUNT(*) FROM t_team_game AS tg
+	     		WHERE 1=1
+					AND (tg.initiate_teaminfo_id = #{teaminfo_id} OR tg.respond_teaminfo_id =#{teaminfo_id})
+					AND tg.status !=0
+     	</select>
+     	<update id="updateType">
+			UPDATE t_team_player
+				SET
+					type = #{maps.type}
+				WHERE 
+					user_id = #{maps.player_id} AND teaminfo_id = #{maps.teaminfo_id}
+		</update>
+		
+		<update id="updateNotice">
+			UPDATE t_team_info
+				SET
+					notice = #{notice}
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="teamPlayerCount" resultType="int">
+			SELECT count(id) FROM t_team_player where teaminfo_id = #{teaminfo_id}
+		</select>
+		
+		<insert id="saveTeamActiveCode" parameterType="com.yt.framework.persistent.entity.TeamActiveCode">
+			INSERT INTO t_team_active_code(
+				id,
+				teaminfo_id,
+				code_str,
+				create_time,
+				end_time,
+				league_id,
+				if_use
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{code_str},
+				NOW(),
+				#{end_time},
+				#{league_id},
+				#{if_use}
+			)
+		</insert>
+		
+		<update id="updateTeamActiveCode" parameterType="com.yt.framework.persistent.entity.TeamActiveCode">
+			UPDATE t_team_active_code
+				SET
+					user_id = #{user_id},
+					status = #{status},
+					use_time = #{use_time},
+					if_use = #{if_use}
+				WHERE
+					id = #{id}	
+		</update>
+		
+		<select id="getTeamActiveCodeByTid" resultType="com.yt.framework.persistent.entity.TeamActiveCode">
+			SELECT * FROM t_team_active_code WHERE teaminfo_id = #{teaminfo_id} 
+		</select>
+		
+		<select id="getTeamActiveCodeByLeague" resultType="com.yt.framework.persistent.entity.TeamActiveCode">
+			SELECT * FROM t_team_active_code WHERE teaminfo_id = #{teaminfo_id} AND league_id = #{league_id}
+		</select>
+		
+		<select id="getTeamActiveCode" resultType="com.yt.framework.persistent.entity.TeamActiveCode">
+			SELECT * FROM t_team_active_code
+				WHERE code_str = #{code_str} LIMIT 1;
+		</select>
+		
+		<delete id="deleteAllPlayers">
+			DELETE FROM t_team_player
+				WHERE
+					teaminfo_id = #{teaminfo_id} AND type!=1
+		</delete>
+		
+		<select id="teamPlayerPrice" resultType="int">
+			SELECT COALESCE(SUM(pp.current_price),0) FROM t_team_player tt,p_player_info pp 
+				WHERE tt.user_id = pp.user_id AND tt.teaminfo_id = #{teaminfo_id}
+		</select>
+		<update id="updateTeamPlayer" parameterType="com.yt.framework.persistent.entity.TeamPlayer">
+			UPDATE t_team_player
+				SET
+					is_sale = #{is_sale}
+				WHERE
+					id = #{id}	
+		</update>
+		
+		<!-- 公告 -->
+		<select id="queryNoticeForPage" resultType="com.yt.framework.persistent.entity.TeamNotice">
+			SELECT * FROM t_team_notice 
+				WHERE 1=1 
+				<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+					AND teaminfo_id = #{maps.teaminfo_id}	
+				</if>
+					ORDER BY sort ASC,check_count DESC,create_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		<select id="countNotice" resultType="int">
+			SELECT count(id) FROM t_team_notice 
+			WHERE 1=1 
+			<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+				AND teaminfo_id = #{maps.teaminfo_id}	
+			</if>
+		</select>
+		<select id="getNoticeById" resultType="com.yt.framework.persistent.entity.TeamNotice">
+			SELECT * FROM t_team_notice where id = #{id}
+		</select>
+		<insert id="saveTeamNotice" parameterType="com.yt.framework.persistent.entity.TeamNotice">
+			INSERT INTO t_team_notice(
+				id,
+				teaminfo_id,
+				name,
+				describle,
+				check_count,
+				create_time
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{name},
+				#{describle},
+				#{check_count},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="deleteTeamNotice">
+			DELETE FROM t_team_notice WHERE id = #{id}
+		</delete>
+		
+		<update id="updateTeamNotice" parameterType="com.yt.framework.persistent.entity.TeamNotice">
+			UPDATE t_team_notice
+				SET
+					name = #{name},
+					describle = #{describle},
+					check_count = #{check_count}
+					<if test="sort!=null and sort!=''">
+						,sort = #{sort}
+					</if>
+				WHERE 
+					id = #{id}
+		</update>
+		
+		<select id="getCurrentNotice" resultType="com.yt.framework.persistent.entity.TeamNotice">
+			SELECT * FROM t_team_notice where teaminfo_id = #{teaminfo_id} ORDER BY create_time DESC LIMIT 1;
+		</select>
+		
+		<select id="getTeamPlayerByTeamInfoID" resultType="hashmap">
+		SELECT mu.username,mu.head_icon,tp.id,tp.position,tp.player_num,tp.position_num,tp.user_id,
+				pp.height,pp.weight,pp.position AS love_position,pp.score,pp.current_price 
+			FROM t_team_player AS tp 
+			LEFT JOIN p_player_info AS pp ON pp.user_id = tp.user_id
+			LEFT JOIN m_user AS mu ON mu.id = pp.user_id
+			WHERE 1=1
+				AND tp.teaminfo_id = #{teaminfo_id}
+				AND tp.position_num IS NOT NULL
+				AND tp.position_num !=''
+			ORDER BY tp.player_num ASC
+		</select>
+		
+		<select id="getAllTPsTeamInfoID" resultType="hashmap">
+		SELECT mu.username,mu.head_icon,tp.id,tp.position,tp.player_num,tp.position_num,tp.user_id,
+			pp.height,pp.weight,pp.position AS love_position,pp.score,pp.current_price 
+			FROM t_team_player AS tp 
+			LEFT JOIN p_player_info AS pp ON pp.user_id = tp.user_id
+			LEFT JOIN m_user AS mu ON mu.id = pp.user_id
+			WHERE 1=1
+				AND tp.teaminfo_id = #{teaminfo_id}
+			ORDER BY tp.player_num ASC
+		</select>
+				
+		<select id="getMyTeamPlayer" resultType="hashmap">
+			SELECT id,
+			teaminfo_id,
+			user_id,
+			type,
+			player_num,
+			create_time,
+			position_num,
+			position,
+			is_sale FROM t_team_player
+			WHERE teaminfo_id = #{teaminfo_id}
+			ORDER BY player_num ASC
+		</select>
+		
+		
+		<update id="updatePlayerPosition">
+			UPDATE t_team_player
+				SET
+					position = #{maps.position},
+					position_num = #{maps.position_num}
+				WHERE
+					id = #{maps.id}
+		</update>
+		
+		<insert id="saveTeamApply" parameterType="com.yt.framework.persistent.entity.TeamApply">
+			INSERT INTO t_team_apply(
+				id,
+				teaminfo_id,
+				user_id,
+				create_time
+			)VALUES(
+				#{id},
+				#{teaminfo_id},
+				#{user_id},
+				NOW()
+			)
+		</insert>
+		
+		<update id="updateTeamApply" parameterType="com.yt.framework.persistent.entity.TeamApply">
+			UPDATE t_team_apply
+				SET
+					status = #{status}
+				WHERE
+					id = #{id}	
+		</update>
+		
+		<select id="getTeamApplyByID" resultType="com.yt.framework.persistent.entity.TeamApply">
+			SELECT * FROM t_team_apply WHERE id = #{id}
+		</select>
+		
+		<select id="loadAllTeamApplys" resultType="hashmap">
+			SELECT ta.*,
+				ppi.position,ppi.score,ppi.header,ppi.weight,u.city,
+				u.head_icon,u.username,(DATE_FORMAT(NOW(),'%Y')-DATE_FORMAT(u.borndate,'%Y')) AS age
+				FROM t_team_apply AS ta 
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = ta.user_id
+			LEFT JOIN m_user AS u ON u.id = ppi.user_id
+			WHERE 1=1
+			<if test="maps.status!=null and maps.status!=''">
+					AND	ta.status = #{maps.status}	
+			</if>
+			AND ta.teaminfo_id = #{maps.teaminfo_id}
+			ORDER BY ta.create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="loadAllTeamApplysCount" resultType="int">
+			SELECT COUNT(*) FROM t_team_apply AS ta 
+				LEFT JOIN p_player_info AS ppi ON ppi.user_id = ta.user_id
+				LEFT JOIN m_user AS u ON u.id = ppi.user_id
+				WHERE 1=1
+				<if test="maps.status!=null and maps.status!=''">
+					AND	ta.status = #{maps.status}	
+			    </if>
+				AND ta.teaminfo_id = #{maps.teaminfo_id}
+		</select>
+		
+		<select id="getTeamApplyByUIDAndTID" resultType="com.yt.framework.persistent.entity.TeamApply">
+			SELECT * FROM t_team_apply WHERE user_id = #{user_id} AND teaminfo_id = #{teaminfo_id} ORDER BY create_time DESC LIMIT 0,1
+		</select>
+		<select id="getTeamPlayerByUserID" resultType="com.yt.framework.persistent.entity.TeamPlayer">
+			SELECT * FROM t_team_player AS tp
+				LEFT JOIN t_team_info AS ti ON ti.id= tp.teaminfo_id
+			WHERE tp.teaminfo_id = #{teaminfo_id} AND tp.user_id = #{user_id}
+			AND ti.is_exist = 1
+			ORDER BY player_num ASC
+		</select>
+		
+		<update id="updTeamPlayer" parameterType="com.yt.framework.persistent.entity.TeamPlayer" >
+			UPDATE t_team_player
+			SET
+			teaminfo_id = #{teaminfo_id},
+			user_id= #{user_id},
+			type= #{type},
+			player_num= #{player_num},
+			create_time= #{create_time},
+			salary= #{salary},
+			position_num= #{position_num},
+			position= #{position},
+			is_sale= #{is_sale}
+			WHERE
+			id = #{id}
+		</update>
+		
+		<select id="id2Name" resultType="string">
+			SELECT name FROM t_team_info WHERE id = #{id} and is_exist = 1
+		</select>
+		
+		<select id="teamExistByTeamName" resultType="int">
+			SELECT COUNT(*) FROM t_team_info AS ti WHERE ti.name=#{name}
+		</select>
+		
+		<select id="recommendsCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT t.*,r.id rid,r.re_sort,r.user_id ruser_id,r.create_time rcreate_time FROM t_recommendation r    
+				LEFT JOIN t_team_info t ON t.id=r.teaminfo_id     
+			) cot_t)
+		</select>
+		
+		<select id="queryRecommends" parameterType="hashmap" resultType="hashmap">
+			SELECT t.*,r.id rid,r.re_sort,r.user_id ruser_id,r.create_time rcreate_time FROM t_recommendation r
+			LEFT JOIN t_team_info t ON t.id=r.teaminfo_id 
+	   		ORDER BY r.re_sort DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="queryTeamInfoByName"  resultType="hashmap">
+		    SELECT id,name FROM t_team_info WHERE name LIKE CONCAT('%',#{name},'%')
+		</select>
+		
+		<select id="loadAllTeamMsg" resultType="hashmap">
+			SELECT sm.*,le.name AS league_name,er.rounds FROM a_salary_msg AS sm
+				LEFT JOIN a_event_record AS er ON er.id = sm.event_id
+				LEFT JOIN a_league AS le ON le.id = er.league_id
+			WHERE 1=1
+				<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+					AND sm.teaminfo_id = #{maps.teaminfo_id}	
+			    </if>
+				<if test="maps.is_send!=null and maps.is_send!=''">
+					AND	sm.is_send = #{maps.is_send}	
+			    </if>
+			<if test="maps.firstNum!=null and maps.pageSize!=null">
+				LIMIT #{maps.firstNum},#{maps.pageSize}
+			</if>	
+		</select>
+		
+		<select id="loadAllTeamMsgCount" resultType="int">
+			SELECT COUNT(*) FROM a_salary_msg AS sm
+				LEFT JOIN a_event_record AS er ON er.id = sm.event_id
+				LEFT JOIN a_league AS le ON le.id = er.league_id
+			WHERE 1=1
+				<if test="maps.teaminfo_id!=null and maps.teaminfo_id!=''">
+					AND sm.teaminfo_id = #{maps.teaminfo_id}	
+			    </if>
+				<if test="maps.is_send!=null and maps.is_send!=''">
+					AND	sm.is_send = #{maps.is_send}	
+			    </if>
+		</select>
+</mapper>

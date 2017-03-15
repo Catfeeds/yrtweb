@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.BbsNoteMapper">
+	
+	<!-- 论坛板块 -->
+	<insert id="savePlate" parameterType="com.yt.framework.persistent.entity.BbsPlate">
+		INSERT INTO b_plate(
+			id,
+			name,
+			type,
+			image_url,
+			rar_max,
+			remark,
+			sort,
+			if_show,
+			create_time
+		)VALUES(
+			#{id},
+			#{name},
+			#{type},
+			#{image_url},
+			#{rar_max},
+			#{remark},
+			#{sort},
+			#{if_show},
+			NOW()
+		)
+	</insert>
+	
+	<update id="updatePlate" parameterType="com.yt.framework.persistent.entity.BbsPlate">
+		UPDATE b_plate
+			SET
+				name = #{name},
+				type = #{type},
+				image_url = #{image_url},
+				rar_max = #{rar_max},
+				remark = #{remark},
+				sort = #{sort},
+				if_show = #{if_show}
+			WHERE
+				id = #{id}
+	</update>
+	<delete id="deletePlate">
+		DELETE FROM b_plate WHERE id = #{id}
+	</delete>
+	
+	<select id="getPlateById" resultType="com.yt.framework.persistent.entity.BbsPlate">
+		SELECT * FROM b_plate WHERE id = #{id}
+	</select>
+	
+	<select id="queryPlateList" resultType="hashmap">
+		SELECT b.* FROM b_plate b 
+	</select>
+	
+	<select id="queryLeaderList" resultType="hashmap">
+		SELECT b.*,p.name FROM b_leader b 
+			LEFT JOIN b_plate p ON b.plate_id = p.id 
+			WHERE b.plate_id = #{id}
+	</select>
+	
+	<insert id="saveBbsLeader" parameterType="com.yt.framework.persistent.entity.BbsLeader">
+		INSERT INTO b_leader(
+			id,
+			plate_id,
+			user_id,
+			duty_time,
+			remark
+		)VALUES(
+			#{id},
+			#{plate_id},
+			#{user_id},
+			#{duty_time},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="updateBbsLeader" parameterType="com.yt.framework.persistent.entity.BbsLeader">
+		UPDATE b_leader
+			SET
+				user_id = #{user_id},
+				plate_id = #{plate_id},
+				duty_time = #{duty_time},
+				remark = #{remark}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<delete id="deleteBbsLeader">
+		DELETE FROM b_leader WHERE id = #{id}
+	</delete>	
+	
+	<select id="getBbsLeaderById" resultType="com.yt.framework.persistent.entity.BbsLeader">
+		SELECT * FROM b_leader WHERE id = #{id}
+	</select>
+	
+	<select id="getBbsLeaderByUserID" resultType="com.yt.framework.persistent.entity.BbsLeader">
+		SELECT * FROM b_leader WHERE user_id = #{user_id} AND plate_id = #{plate_id}
+	</select>
+	
+	<!-- 论坛板块 -->	
+	
+	<!-- 帖子 -->
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.BbsNote">
+		INSERT INTO b_note(
+			id,
+			plate_id,
+			user_id,
+			title,
+			content,
+			pre_content,
+			if_reply,
+			type,
+			if_video,
+			if_image,
+			create_time,
+			last_reply_time,
+			update_time
+		)VALUES(
+			#{id},
+			#{plate_id},
+			#{user_id},
+			#{title},
+			#{content},
+			#{pre_content},
+			#{if_reply},
+			#{type},
+			#{if_video},
+			#{if_image},
+			NOW(),
+			NOW(),
+			NOW()
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.BbsNote">
+		UPDATE b_note
+			SET
+				plate_id = #{plate_id},
+				user_id = #{user_id},
+				title = #{title},
+				content = #{content},
+				pre_content = #{pre_content},
+				if_top = #{if_top},
+				if_show = #{if_show},
+				unpriase_count = #{unpriase_count},
+				priase_count = #{priase_count},
+				type = #{type},
+				last_reply_time = #{last_reply_time},
+				last_reply_user_id = #{last_reply_user_id},
+				update_time = #{update_time},
+				if_pick = #{if_pick},
+				if_reply = #{if_reply},
+				if_lock = #{if_lock},
+				if_del = #{if_del},
+				if_video = #{if_video},
+			    if_image = #{if_image},
+				write_content = #{write_content}
+			WHERE
+				id = #{id}
+		</update>
+		
+		<delete id="delete">
+			DELETE FROM b_note WHERE id = #{id}
+		</delete>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.BbsNote">
+			SELECT * FROM b_note WHERE id = #{id} 
+		</select>
+		
+		<select id="getBbsNoteById" resultType="hashmap">
+			SELECT bn.*,u.usernick,u.head_icon,lu.usernick lusernick,lu.head_icon lhead_icon,
+			<choose>
+				<when test="user_id !=null and user_id !='' ">
+				(CASE WHEN bn.user_id=#{user_id} THEN 1 ELSE 0 END) isme,
+				(CASE WHEN uf.id IS NULL THEN 0 ELSE 1 END) guanzhu,
+				bp.praise,bp.unpraise  
+				</when>
+				<otherwise>
+				0 isme,
+				0 guanzhu,
+				0 praise,0 unpraise
+				</otherwise>
+			</choose>
+			FROM b_note bn
+			LEFT JOIN m_user u ON u.id=bn.user_id
+			LEFT JOIN m_user lu ON lu.id=bn.last_reply_user_id 
+			<if test="user_id !=null and user_id !='' ">
+			LEFT JOIN (SELECT * FROM m_focus WHERE user_id=#{user_id}) uf ON uf.f_user_id=bn.user_id 
+			LEFT JOIN (SELECT b_id,user_id,(CASE WHEN MAX(state)=2 THEN 2 ELSE 0 END) unpraise,MIN(state) praise,type FROM b_praise GROUP BY b_id,user_id) bp ON bp.b_id=bn.id AND bp.type=1 AND bp.user_id=#{user_id}  
+			</if>
+			WHERE bn.id = #{note_id} 	
+		</select>
+		
+		<select id="getBbsNoteByNoteIdUserID" resultType="com.yt.framework.persistent.entity.BbsNote">
+			SELECT * FROM b_note WHERE id = #{note_id} AND user_id = #{user_id} AND if_del = 2 AND if_show=1
+		</select>
+
+		<select id="queryForPageForMap" resultType="hashmap">
+			SELECT n.*,u.usernick,
+				(SELECT mu.usernick from m_user AS mu WHERE mu.id = n.last_reply_user_id)AS last_reply_usernick,
+				(SELECT COUNT(*) FROM b_note_reply AS nr WHERE nr.note_id = n.id AND nr.if_del=1)AS sumFloor
+			FROM b_note AS n 
+				LEFT JOIN b_plate AS p ON p.id = n.plate_id
+				LEFT JOIN m_user AS u ON u.id = n.user_id
+				<if test="maps.focus != null and maps.foucs != ''">
+				 LEFT JOIN m_focus AS f ON u.id = f.f_user_id 
+				</if>
+			WHERE 1=1
+					AND n.plate_id = #{maps.plate_id}
+					<if test="maps.if_del!=null and maps.if_del!=''">
+						AND n.if_del = #{maps.if_del}
+					</if>
+					<if test="maps.usernick!=null and maps.usernick!=''">
+						AND u.usernick LIKE CONCAT('%',#{maps.usernick},'%')
+					</if>
+					<if test="maps.title!=null and maps.title!=''">
+						AND n.title LIKE CONCAT('%',#{maps.title},'%')
+					</if>
+					<if test="maps.show!=null and maps.show!=''">
+						AND n.if_show = #{maps.show}			
+					</if>
+					<if test="maps.user_id !=null and maps.user_id != '' and (maps.focus==null or maps.focus=='')">
+					    AND n.user_id = #{maps.user_id}
+					</if>
+					<if test="maps.user_id !=null and maps.user_id !='' and maps.focus!=null and maps.focus!=''">
+					    AND f.user_id = #{maps.user_id}
+					</if>
+					<if test="maps.status!=null and maps.status!=''">
+						<if test="maps.status=='LOCK'">
+							AND n.if_lock = 1
+						</if>
+						<if test="maps.status=='UNLOCK'">
+							AND n.if_lock = 2
+						</if>
+						<if test="maps.status=='PICK'">
+							AND n.if_pick = 1
+						</if>
+						<if test="maps.status=='UNPICK'">
+							AND n.if_pick = 2
+						</if>
+					</if>
+					<if test="maps.top!=null and maps.top!=''">
+						AND n.if_top = #{maps.top}
+					</if>
+				ORDER BY n.last_reply_time DESC
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+		</select>
+		<select id="count" resultType="int">
+			SELECT COUNT(*) 
+				FROM b_note AS n 
+					LEFT JOIN b_plate AS p ON p.id = n.plate_id
+					LEFT JOIN m_user AS u ON u.id = n.user_id
+					<if test="maps.focus != null and maps.foucs != ''">
+					  LEFT JOIN m_focus AS f ON u.id = f.f_user_id 
+					</if>
+				WHERE 1=1
+					AND n.plate_id = #{maps.plate_id}
+				<if test="maps.if_del!=null and maps.if_del!=''">
+					AND n.if_del = #{maps.if_del}
+				</if>
+				<if test="maps.user_id !=null and maps.user_id != '' and (maps.focus==null or maps.focus=='')">
+					AND n.user_id = #{maps.user_id}
+				</if>
+				<if test="maps.user_id !=null and maps.user_id !='' and maps.focus!=null and maps.focus!=''">
+				    AND f.user_id = #{maps.user_id}
+				</if>
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND u.usernick LIKE CONCAT('%',#{maps.usernick},'%')
+				</if>
+				<if test="maps.title!=null and maps.title!=''">
+					AND n.title LIKE CONCAT('%',#{maps.title},'%')
+				</if>
+				<if test="maps.show!=null and maps.show!=''">
+					AND n.if_show = #{maps.show}			
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					<if test="maps.status=='LOCK'">
+						AND n.if_lock = 1
+					</if>
+					<if test="maps.status=='UNLOCK'">
+						AND n.if_lock = 2
+					</if>
+					<if test="maps.status=='PICK'">
+						AND n.if_pick = 1
+					</if>
+					<if test="maps.status=='UNPICK'">
+						AND n.if_pick = 2
+					</if>
+				</if>
+				<if test="maps.top!=null and maps.top!=''">
+					AND n.if_top = #{maps.top}
+				</if>
+		</select>
+		<update id="updateBbsNoteIf" parameterType="com.yt.framework.persistent.entity.BbsNote">
+		UPDATE b_note  
+		   SET 
+				<if test="if_top!=null and if_top!=''">
+				       if_top = #{if_top}
+				</if>
+				<if test="if_show!=null and if_show!=''">
+				       if_show = #{if_show}
+				</if>	
+				<if test="if_pick!=null and if_pick!=''">
+				       if_pick = #{if_pick}
+				</if>
+				<if test="if_reply!=null and if_reply!=''">
+				       if_reply = #{if_reply}
+				</if>	
+				<if test="if_lock!=null and if_lock!=''">
+				       if_lock = #{if_lock}
+				</if>
+				<if test="if_del!=null and if_del!=''">
+				       if_del = #{if_del}
+				</if>
+			WHERE id = #{id}
+		</update>
+		
+		<update id="updateBbsNotewriteContent">
+		      UPDATE b_note  
+		           SET write_content = write_content +1
+		           WHERE id = #{id} 
+		</update>
+		<!-- 帖子 -->
+		
+		<!-- 举报 -->
+		<insert id="saveTip" parameterType="com.yt.framework.persistent.entity.BbsTip">
+			INSERT INTO b_tip(
+				id,
+				user_id,
+				b_user_id,
+				note_id,
+				note_reply_id,
+				content,
+				create_time,
+				type,
+				status
+			) VALUES(
+				#{id},
+				#{user_id},
+				#{b_user_id},
+				#{note_id},
+				#{note_reply_id},
+				#{content},
+				NOW(),
+				#{type},
+				#{status}
+			);
+		</insert>
+		<update id="updateTip" parameterType="com.yt.framework.persistent.entity.BbsTip">
+		     UPDATE b_tip
+		          SET 
+		             status = #{status},
+		             deal_time = NOW()
+		          WHERE 
+		              id=#{id}
+		</update>
+		<select id="getTipById" resultType="com.yt.framework.persistent.entity.BbsTip">
+		     SELECT * FROM b_tip WHERE id = #{id}
+	    </select>
+	    
+	    <select id="queryTipsForPageSign" resultType="hashmap">
+			SELECT * from b_tip t
+				WHERE 1=1
+				<if test="maps.b_user_id!=null and maps.b_user_id!=''">
+					AND t.b_user_id = #{maps.b_user_id}
+				</if>
+				<if test="maps.note_id!=null and maps.note_id!=''">
+					AND t.note_id = #{maps.note_id}
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+				    AND t.status = #{maps.status}
+				</if>
+				<if test="maps.type!=null and maps.type!=''">
+				    AND t.type = #{maps.type}
+				</if>
+				ORDER BY t.create_time desc
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+	   </select>
+	   <select id="countTips" resultType="int">
+	        select COUNT(t.id) from b_tip t
+	            WHERE 1=1
+				<if test="maps.b_user_id!=null and maps.b_user_id!=''">
+					AND t.b_user_id = #{maps.b_user_id}
+				</if>
+				<if test="maps.note_id!=null and maps.note_id!=''">
+					AND t.note_id = #{maps.note_id}
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+				    AND t.status = #{maps.status}
+				</if>
+				<if test="maps.type!=null and maps.type!=''">
+				    AND t.type like CONCAT('%',#{maps.type},'%')
+				</if>
+	   </select>
+	   <select id="getBbsTipById" resultType="com.yt.framework.persistent.entity.BbsTip">
+		    SELECT t.*,n.title,r.floor_num 
+			  FROM b_tip t 
+			    LEFT JOIN b_note n ON t.note_id = n.id
+			    LEFT JOIN b_note_reply r ON t.note_reply_id = r.id 
+			   WHERE 
+			      t.id=#{id} AND n.if_del = 2;
+		</select>
+	   <!-- 举报 -->
+	   
+		<!-- 投票 -->
+		<insert id="saveVote" parameterType="com.yt.framework.persistent.entity.BbsVote">
+			INSERT b_vote(
+				id,
+				note_id,
+				user_id,
+				type,
+				end_time,
+				create_time
+			)VALUES(
+				#{id},
+				#{note_id},
+				#{user_id},
+				#{type},
+				#{end_time},
+				NOW()
+			)
+		</insert>
+		<update id="updateVote" parameterType="com.yt.framework.persistent.entity.BbsVote">
+			UPDATE b_vote
+				SET
+					type = #{type},
+					end_time = #{end_time}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<delete id="deleteVote">
+			DELETE FROM b_vote WHERE id = #{id}
+		</delete>
+		
+		<insert id="saveVoteClick" parameterType="com.yt.framework.persistent.entity.BbsVoteClick">
+			INSERT b_vote_click(
+				id,
+				votedata_id,
+				user_id,
+				create_time
+			)VALUES(
+				#{id},
+				#{votedata_id},
+				#{user_id},
+				NOW()
+			)
+		</insert>
+		
+		<delete id="deleteVoteClick">
+			DELETE FROM b_vote_click WHERE id = #{id}
+		</delete>
+		
+		<select id="getVoteClickByNoteIdAndUserId" resultType="com.yt.framework.persistent.entity.BbsVoteClick">
+			SELECT c.* FROM b_vote_click c,b_vote_data d, b_vote b 
+				WHERE c.user_id = #{user_id} AND b.note_id = #{note_id}  
+					AND c.votedata_id = d.id AND d.vote_id = b.id
+		</select>
+		
+		<insert id="saveVoteData" parameterType="com.yt.framework.persistent.entity.BbsVoteData">
+			INSERT b_vote_data(
+				id,
+				vote_id,
+				name,
+				sort
+			)VALUES(
+				#{id},
+				#{vote_id},
+				#{name},
+				#{sort}
+			)
+		</insert>
+		<update id="updateVoteData" parameterType="com.yt.framework.persistent.entity.BbsVoteData">
+			UPDATE b_vote_data
+				SET
+					name = #{name},
+					sort = #{sort}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<update id="updateVoteDataCount" >
+			UPDATE b_vote_data
+				SET
+					vote_count = vote_count + 1 
+				WHERE
+					id = #{data_id}
+		</update>
+		
+		<delete id="deleteVoteData">
+			DELETE FROM b_vote_data WHERE id = #{id}
+		</delete>
+		
+		<select id="getVoteDataByNoteId" resultType="hashmap">
+			SELECT d.*,v.type,v.end_time FROM b_vote v,b_vote_data d 
+				WHERE v.id = d.vote_id AND v.note_id = #{note_id} ORDER BY d.sort 
+		</select>
+		
+		<select id="getVoteData" resultType="com.yt.framework.persistent.entity.BbsVoteData">
+			SELECT *　FROM b_vote_data WHERE id = #{id} 
+		</select>
+		<!-- 投票 -->
+		
+		<!-- 帖子回复 -->
+		<insert id="saveBBbsNoteReply" parameterType="com.yt.framework.persistent.entity.BbsNoteReply">
+			INSERT INTO b_note_reply(
+				id,
+				note_id,
+				user_id,
+				floor_num,
+				content,
+				reply_time,
+				update_time
+			)VALUES(
+				#{id},
+				#{note_id},
+				#{user_id},
+				#{floor_num},
+				#{content},
+				NOW(),
+				NOW()
+			)
+		</insert>
+		
+		<select id="getBbsNoteReplyById" resultType="com.yt.framework.persistent.entity.BbsNoteReply">
+			SELECT * FROM b_note_reply WHERE id = #{id} AND if_del = 1
+		</select>
+		
+		<update id="updateBbsNoteReply" parameterType="com.yt.framework.persistent.entity.BbsNoteReply">
+			UPDATE b_note_reply
+				SET
+					content = #{content},
+					update_time = NOW(),
+					unpriase_count = #{unpriase_count},
+					priase_count = #{priase_count},
+					if_del = #{if_del}
+				WHERE
+					id = #{id}	
+		</update>
+		
+		<select id="getLastBbsNoteReply" resultType="com.yt.framework.persistent.entity.BbsNoteReply">
+			SELECT * FROM b_note_reply where note_id = #{note_id} ORDER BY reply_time DESC LIMIT 0,1
+		</select>
+		
+		<select id="queryBbsNoteReplys" parameterType="hashmap" resultType="hashmap">
+			SELECT nr.*,u.usernick,u.head_icon,
+			(CASE WHEN nr.user_id=#{maps.lz_id} THEN 1 ELSE 0 END) islz,
+			<choose>
+				<when test="maps.user_id !=null and maps.user_id !='' ">
+				(CASE WHEN nr.user_id=#{maps.user_id} THEN 1 ELSE 0 END) isme,
+				(CASE WHEN uf.id IS NULL THEN 0 ELSE 1 END) guanzhu,
+				bp.praise,bp.unpraise 
+				</when>
+				<otherwise>
+				0 isme,
+				0 guanzhu,
+				0 praise,0 unpraise  
+				</otherwise>
+			</choose>
+			FROM b_note_reply nr
+			LEFT JOIN m_user u ON u.id=nr.user_id 
+			<if test="maps.user_id !=null and maps.user_id !='' ">
+			LEFT JOIN (SELECT * FROM m_focus WHERE user_id=#{maps.user_id}) uf ON uf.f_user_id=nr.user_id 
+			LEFT JOIN (SELECT b_id,user_id,(CASE WHEN MAX(state)=2 THEN 2 ELSE 0 END) unpraise,MIN(state) praise,type FROM b_praise GROUP BY b_id,user_id) bp ON bp.b_id=nr.id AND bp.type=2 AND bp.user_id=#{maps.user_id} 
+			</if>
+			<where>
+				nr.note_id=#{maps.note_id} 
+				<if test="maps.see_lz !=null and maps.see_lz !='' ">
+					AND nr.user_id=#{maps.lz_id} 
+				</if>
+	   		</where>
+	   		ORDER BY nr.floor_num ASC 
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+		</select>
+		
+		<select id="queryBbsNoteReplysCount" parameterType="hashmap" resultType="int">
+			SELECT COUNT(1) FROM( (
+				SELECT nr.*,u.usernick,u.head_icon,
+				(CASE WHEN nr.user_id=#{maps.lz_id} THEN 1 ELSE 0 END) islz,
+				<choose>
+					<when test="maps.user_id !=null and maps.user_id !='' ">
+					(CASE WHEN nr.user_id=#{maps.user_id} THEN 1 ELSE 0 END) isme,
+					(CASE WHEN uf.id IS NULL THEN 0 ELSE 1 END) guanzhu,
+					bp.praise,bp.unpraise 
+					</when>
+					<otherwise>
+					0 isme,
+					0 guanzhu,
+					0 praise,0 unpraise  
+					</otherwise>
+				</choose>
+				FROM b_note_reply nr
+				LEFT JOIN m_user u ON u.id=nr.user_id 
+				<if test="maps.user_id !=null and maps.user_id !='' ">
+				LEFT JOIN (SELECT * FROM m_focus WHERE user_id=#{maps.user_id}) uf ON uf.f_user_id=nr.user_id 
+				LEFT JOIN (SELECT b_id,user_id,(CASE WHEN MAX(state)=2 THEN 2 ELSE 0 END) unpraise,MIN(state) praise,type FROM b_praise GROUP BY b_id,user_id) bp ON bp.b_id=nr.id AND bp.type=2 AND bp.user_id=#{maps.user_id} 
+				</if>
+				<where>
+					nr.note_id=#{maps.note_id} 
+					<if test="maps.see_lz !=null and maps.see_lz !='' ">
+						AND nr.user_id=#{maps.lz_id} 
+					</if>
+		   		</where>
+			) cot_t)
+		</select>
+		
+		<select id="getBbsNoteReplyCountByIds" resultType="int">
+			SELECT COUNT(*) FROM b_note_reply WHERE note_id = #{note_id} AND user_id = #{user_id} AND if_del = 1
+		</select>
+		<!-- 帖子回复 -->
+		
+		<!-- 点赞 -->
+		<select id="praiseCount" parameterType="hashmap" resultType="String">
+			SELECT count(1) praise FROM b_praise WHERE b_id=#{bid} AND state=1
+			UNION ALL
+			SELECT count(1) praise FROM b_praise WHERE b_id=#{bid} AND state=2
+		</select>
+		
+		<select id="queryPraise" parameterType="com.yt.framework.persistent.entity.BbsPraise" resultType="hashmap">
+			SELECT * FROM b_praise WHERE user_id=#{user_id} AND b_id=#{b_id} 
+			<if test="state!=null and state!=''">
+			AND state=#{state} 
+			</if>
+		</select>
+		
+		<delete id="deletePraise" parameterType="com.yt.framework.persistent.entity.BbsPraise">
+			DELETE FROM b_praise WHERE user_id=#{user_id} AND b_id=#{b_id} AND state=#{state} 
+		</delete>
+		
+		<insert id="savePraise" parameterType="com.yt.framework.persistent.entity.BbsPraise">
+			INSERT INTO b_praise(
+				id,
+				user_id,
+				b_id,
+				state,
+				type,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{b_id},
+				#{state},
+				#{type},
+				NOW()
+			)
+		</insert>
+		<!-- 点赞 -->
+		
+		<!-- 附件 -->
+		<select id="getBbsAccessoriesById" resultType="com.yt.framework.persistent.entity.BbsAccessories">
+			SELECT * FROM b_accessories WHERE id = #{ac_id} AND if_del=1
+		</select>
+		
+		<update id="deleteAccessories">
+			UPDATE b_accessories SET if_del = 2 WHERE id = #{id}	
+			<!-- DELETE FROM b_accessories WHERE id = #{id} -->
+		</update>
+		
+		<update id="updateBbsAccessories" parameterType="com.yt.framework.persistent.entity.BbsAccessories">
+			UPDATE b_accessories
+				SET
+					name = #{name},
+					file_url = #{file_url},
+					price = #{price},
+					download = #{download}
+				WHERE
+					id = #{id}	
+		</update>
+		
+		<insert id="saveChargeInfo" parameterType="com.yt.framework.persistent.entity.BbsChargeInfo">
+			INSERT INTO b_charge_info(
+				id,
+				user_id,
+				note_id,
+				amount,
+				acc_id,
+				create_time
+			)VALUES(
+				#{id},
+				#{user_id},
+				#{note_id},
+				#{amount},
+				#{acc_id},
+				NOW()
+			)
+		</insert>
+		
+		<select id="getBbsChargeInfoByIds" resultType="com.yt.framework.persistent.entity.BbsChargeInfo">
+			SELECT * FROM b_charge_info WHERE user_id = #{user_id} AND note_id = #{note_id}
+		</select>
+		<select id="getAccIDFromBbsCharge" resultType="string">
+			SELECT acc_id FROM b_charge_info WHERE user_id = #{user_id} AND note_id = #{note_id}
+		</select>
+		
+		<insert id="saveBbsAccessories" parameterType="com.yt.framework.persistent.entity.BbsAccessories">
+			INSERT INTO b_accessories(
+				id,
+				note_id,
+				user_id,
+				name,
+				file_url,
+				price,
+				size,
+				download,
+				if_del
+			)VALUES(
+				#{id},
+				#{note_id},
+				#{user_id},
+				#{name},
+				#{file_url},
+				#{price},
+				#{size},
+				0,
+				1
+			)
+		</insert>
+		
+		<select id="getBbsAccessoriesByNoteId" resultType="com.yt.framework.persistent.entity.BbsAccessories">
+			SELECT * FROM b_accessories WHERE note_id = #{note_id} AND if_del=1
+		</select>
+		
+		<select id="getBuyBbsChargeCountByNoteId" resultType="int">
+			SELECT COUNT(*) FROM b_charge_info WHERE note_id = #{note_id}
+		</select>
+		
+		<select id="getBuyBbsChargeCountByIDs" resultType="int">
+			SELECT COUNT(*) FROM b_charge_info WHERE note_id = #{note_id} AND acc_id = #{acc_id}
+		</select>
+		<!-- 附件 -->
+		
+		<select id="queryTipsCountByReplyIdAndNoteId" resultType="int">
+		     SELECT COUNT(t.id) FROM b_tip t LEFT JOIN b_note_reply r
+		      ON r.id = t.note_reply_id 
+		      WHERE t.note_id = #{maps.note_id}  
+		      <if test="maps.note_reply_id!=null and maps.note_reply_id!=''">
+		         AND t.note_reply_id = #{maps.note_reply_id} 
+		      </if>
+		      <if test="maps.b_user_id!=null and maps.b_user_id!=''">
+		         AND t.b_user_id = #{maps.b_user_id} 
+		      </if>
+		      <if test="maps.floor_num != null and maps.floor_num !='' and maps.floor_num > 1">
+		         AND r.floor_num = #{maps.floor_num} 
+		      </if>   
+		         AND t.user_id =#{maps.user_id};
+		</select>
+		
+		<select id="queryBbsNoteTopCount" resultType="int">
+		     SELECT count(*) FROM b_note WHERE plate_id = #{plate_id} AND if_top = 1 AND if_del=2 AND if_show = 1
+		</select>
+</mapper>

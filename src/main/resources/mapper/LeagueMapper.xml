@@ -1,0 +1,954 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.LeagueMapper">
+	<!--赛事-->
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.League" >
+		INSERT INTO a_league(
+			 id,
+			 name,
+			 simple_name, 
+			 ball_format,
+			 city,
+			 s_id,
+			 image_src,
+			 banner_src,
+			 backgroud_src,
+			 bg_time,
+			 end_time,
+			 s_starttime,
+			 s_endtime,
+			 status,
+			 salary,
+			 if_show,
+			 sort,
+			 rounds,
+			 describle
+		)VALUES(
+			 #{id},
+			 #{name},
+			 #{simple_name},  
+			 #{ball_format},
+			 #{city},
+			 #{s_id},
+			 #{image_src},
+			 #{banner_src},
+			 #{backgroud_src},
+			 #{bg_time},
+			 #{end_time},
+			 #{s_starttime},
+			 #{s_endtime},
+			 #{status},
+			 #{salary},
+			 #{if_show},
+			 #{sort},
+			 #{rounds},
+			 #{describle}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.League">
+		UPDATE a_league
+			SET
+				 name=#{name},
+				 simple_name=#{simple_name},
+				 salary=#{salary},
+				 ball_format=#{ball_format},
+				 city=#{city},
+				 image_src=#{image_src},
+				 banner_src=#{banner_src},
+				 backgroud_src=#{backgroud_src},
+				 bg_time=#{bg_time},
+				 end_time=#{end_time},
+				 s_starttime=#{s_starttime},
+				 s_endtime=#{s_endtime},
+				 status=#{status},
+				 s_id=#{s_id},
+				 if_show=#{if_show},
+				 sort=#{sort},
+			     rounds=#{rounds}, 
+				 describle=#{describle}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.League">
+		SELECT * FROM a_league WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPage" resultType="com.yt.framework.persistent.entity.League">
+		SELECT * FROM a_league 
+			<where>
+				<if test="maps.name!=null and maps.name!=''">
+					 name like CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.s_id!=null and maps.s_id!=''">
+					AND s_id = #{maps.s_id}
+				</if>
+				<if test="maps.league_id!=null and maps.league_id!=''">
+					AND id = #{maps.league_id}
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					AND status = #{maps.status}
+				</if>
+			</where>
+			ORDER BY city,bg_time	
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(id) FROM a_league
+			WHERE 1=1 
+			<if test="maps.name!=null and maps.name!=''">
+				AND name like CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND s_id = #{maps.s_id}
+			</if>
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND id = #{maps.league_id}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND status = #{maps.status}
+			</if>
+	</select>
+	
+	<select id="getLeague" resultType="com.yt.framework.persistent.entity.League">
+		SELECT * FROM a_league limit 0,1 
+	</select>
+	
+	<select id="getLeagues" resultType="com.yt.framework.persistent.entity.League">
+		SELECT * FROM a_league WHERE if_show = 1 ORDER BY sort DESC
+	</select>
+	
+	<select id="getLeaguesByCondition" resultType="com.yt.framework.persistent.entity.League">
+		SELECT * FROM a_league 
+			<where>
+				<if test="maps.name!='' and maps.name!=null">
+					name like CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+				<if test="maps.if_show!='' and maps.if_show!=null">
+					AND if_show = #{if_show}
+				</if>
+				<if test="maps.status!='' and maps.status!=null">
+					AND status = #{status}
+				</if>
+				<if test="maps.s_id!='' and maps.s_id!=null">
+					AND s_id = #{maps.s_id}
+				</if>
+			</where>	
+			ORDER BY sort DESC
+	</select>
+	
+	<!--球员报名-->
+	<select id="queryLeagueArea" parameterType="hashmap" resultType="hashmap">
+		SELECT cfg.* FROM a_league_cfg cfg
+		WHERE 1=1
+		<if test="maps.status!=null and maps.status!=''">
+			AND cfg.status=#{maps.status} 
+		</if>
+		<if test="maps.if_show!=null and maps.if_show!=''">
+			AND cfg.if_show=#{maps.if_show} 
+		</if>
+		ORDER BY cfg.sort DESC
+	</select>
+	
+	<insert id="saveLeagueSign" parameterType="com.yt.framework.persistent.entity.LeagueSign" >
+		INSERT INTO a_league_sign(
+			id,
+	 		user_id,
+	 		leagues_id, 
+	 		reason,
+	 		status,
+	 		image_src,
+	 		mobile,
+	 		sex,
+	 		height,
+	 		weight,
+	 		position,
+	 		cfoot,
+	 		invalid,
+	 		love_num,
+	 		birth_date,
+	 		idCard,
+	 		active_code,
+	 		entry_mode,
+	 		create_time,
+	 		s_id
+		)VALUES(
+			#{id},
+			#{user_id},
+	 		#{leagues_id}, 
+	 		#{reason},
+	 		#{status},
+	 		#{image_src},
+	 		#{mobile},
+	 		#{sex},
+	 		#{height},
+	 		#{weight},
+	 		#{position},
+	 		#{cfoot},
+	 		1,
+	 		#{love_num},
+	 		#{birth_date},
+	 		#{idCard},
+	 		#{active_code},
+	 		#{entry_mode},
+			NOW(),
+			#{s_id}
+		)
+	</insert>
+	<select id="queryForPageSign" resultType="hashmap">
+		SELECT al.*,mu.username,mu.usernick,mu.head_icon FROM a_league_sign al
+			LEFT JOIN m_user mu ON mu.id = al.user_id
+			WHERE 1=1
+				<if test="maps.s_id!=null and maps.s_id!=''">
+					AND al.s_id = #{maps.s_id}
+				</if>
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND mu.usernick like CONCAT('%',#{maps.usernick},'%')
+				</if>
+				<if test="maps.username!=null and maps.username!=''">
+					AND mu.username like CONCAT('%',#{maps.username},'%')
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					AND al.status = #{maps.status}
+				</if>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+	</select>
+	
+	<select id="countSign" resultType="int">
+		SELECT count(al.id) FROM a_league_sign al
+			LEFT JOIN m_user mu ON mu.id = al.user_id
+			LEFT JOIN a_league a ON al.leagues_id = a.id
+			WHERE 1=1
+				<if test="maps.s_id!=null and maps.s_id!=''">
+					AND al.s_id = #{maps.s_id}
+				</if>
+				<if test="maps.usernick!=null and maps.usernick!=''">
+					AND mu.usernick like CONCAT('%',#{maps.usernick},'%')
+				</if>
+				<if test="maps.username!=null and maps.username!=''">
+					AND mu.username like CONCAT('%',#{maps.username},'%')
+				</if>
+				<if test="maps.status!=null and maps.status!=''">
+					AND al.status = #{maps.status}
+				</if>
+	</select>
+	<!-- 检测俱乐部是否已经报名 -->
+	<select id="getTeamSignByLeague" resultType="com.yt.framework.persistent.entity.TeamLeague">
+		SELECT tl.* from a_team_league tl
+		LEFT JOIN a_league_cfg lc ON lc.id=tl.s_id 
+		WHERE tl.teaminfo_id=#{teamId} AND lc.status!=2 AND tl.status=1 
+		<if test="cfgId!=null and cfgId!=''">
+			AND tl.s_id=#{cfgId} 
+		</if>
+	</select>
+	<!-- 检测球员是否已经报名 -->
+	<select id="getSignByLeague" resultType="com.yt.framework.persistent.entity.LeagueSign">
+		SELECT ls.* FROM a_league_sign ls
+		LEFT JOIN a_league_cfg lc ON lc.id=ls.s_id 
+		WHERE ls.user_id=#{userId} AND lc.status!=2 AND ls.invalid=1 
+		<if test="cfgId!=null and cfgId!=''">
+			AND ls.s_id=#{cfgId} 
+		</if>
+	</select>
+	
+	<select id="getLeagueSign" resultType="com.yt.framework.persistent.entity.LeagueSign">
+		SELECT * FROM a_league_sign 
+			WHERE user_id = #{user_id} AND s_id = #{s_id}
+			 ORDER BY create_time DESC LIMIT 1;
+	</select>
+	
+	<select id="getLeagueSignInvalid" resultType="com.yt.framework.persistent.entity.LeagueSign">
+		SELECT * FROM a_league_sign 
+			WHERE user_id = #{userId} AND invalid=1 AND status!=3 
+			 ORDER BY create_time DESC LIMIT 1;
+	</select>
+	
+	<select id="getLeagueSignById" resultType="com.yt.framework.persistent.entity.LeagueSign">
+		SELECT * FROM a_league_sign WHERE id = #{id}
+	</select>
+	
+	<select id="getLeagueSignByIdMap" resultType="hashmap">
+		SELECT al.*,mu.username,mu.usernick,mu.head_icon FROM a_league_sign al
+			LEFT JOIN m_user mu ON mu.id = al.user_id
+			WHERE 1=1 AND al.id = #{id}
+	</select>
+	
+	<update id="updateLeagueSign" parameterType="com.yt.framework.persistent.entity.LeagueSign">
+		UPDATE a_league_sign
+			SET
+		 		reason=#{reason},
+		 		status=#{status},
+		 		image_src=#{image_src},
+		 		mobile=#{mobile},
+		 		sex=#{sex},
+		 		height=#{height},
+		 		weight=#{weight},
+		 		position=#{position},
+		 		love_num = #{love_num},
+		 		cfoot=#{cfoot},
+		 		entry_mode=#{entry_mode},
+		 		birth_date=#{birth_date},
+		 		idCard=#{idCard},
+		 		active_code=#{active_code},
+		 		s_id=#{s_id}
+		 		<if test="invalid!=null and invalid!=''">
+		 		,invalid=#{invalid}
+		 		</if>
+			WHERE
+				id = #{id}
+	</update>
+	
+	<insert id="saveTeamLeague" parameterType="com.yt.framework.persistent.entity.TeamLeague" >
+		INSERT INTO a_team_league(
+			 id,
+			 league_id, 
+			 teaminfo_id,
+			 status,
+			 s_id,
+			 create_time
+		)VALUES(
+			#{id},
+			#{league_id}, 
+			#{teaminfo_id},
+			1,
+			#{s_id},
+			NOW()
+		)
+	</insert>
+	
+	<select id="getTeamLeague" resultType="com.yt.framework.persistent.entity.TeamLeague">
+		SELECT * from a_team_league 
+			WHERE teaminfo_id = #{teaminfo_id} AND status = 1
+			<!-- <if test="league_id!=null and league_id!=''">
+				AND league_id=#{league_id} 
+			</if> -->
+	</select>
+	
+	<select id="getTeamLeagueByLeague" resultType="hashmap">
+		SELECT a.id,a.league_id,t.id teaminfo_id,t.name from a_team_league a 
+			LEFT JOIN t_team_info t ON a.teaminfo_id = t.id 
+			WHERE a.league_id=#{league_id} AND a.status = 1 
+	</select>
+	
+	
+	<delete id="deleteLeagueSign">
+   		DELETE FROM a_league_sign WHERE id = #{sign_id}	AND user_id=#{user_id} 
+   	</delete>
+   	
+   	<select id="loadScorerDatas" resultType="hashmap">
+   		SELECT play.play_num,play.jinqiu_num,u.username,u.usernick,u.head_icon,tp.* FROM t_team_player tp 
+		LEFT JOIN m_user AS u ON u.id = tp.user_id 
+		LEFT JOIN (SELECT COUNT(1) play_num,qd.rel_palyer_id,SUM(qd.jinqiu_num) jinqiu_num FROM q_user_data qd GROUP BY qd.q_match_id,qd.rel_palyer_id) play ON play.rel_palyer_id=u.id 
+		WHERE tp.teaminfo_id=#{teaminfo_id}  
+		ORDER BY play.jinqiu_num DESC limit 0,8
+   	</select>
+   	
+   	<select id="loadHisDatas" resultType="hashmap">
+   		SELECT COUNT(pkp.id)AS pkpCount,u.username,u.head_icon,pp.love_num,tp.position,tp.player_num FROM a_pk_player AS pkp 
+			LEFT JOIN m_user AS u ON u.id = pkp.user_id
+			LEFT JOIN p_player_info pp ON pp.user_id = u.id
+			LEFT JOIN t_team_player AS tp ON tp.user_id = pp.user_id
+			WHERE 1=1
+				AND EXISTS(
+		      SELECT pkr.id FROM a_pk_record AS pkr WHERE 1=1 AND (pkr.m_teaminfo_id = #{teaminfo_id} OR pkr.g_teaminfo_id = #{teaminfo_id})
+		) GROUP BY pkp.user_id
+   	</select>
+   	
+   	<select id="loadFrontDatas" resultType="hashmap">
+   		SELECT u.username,u.head_icon,pp.love_num,tp.position,tp.player_num FROM m_user AS u 
+			LEFT JOIN p_player_info AS pp ON pp.user_id = u.id
+			LEFT JOIN t_team_player AS tp ON tp.user_id = pp.user_id
+			LEFT JOIN t_team_info AS t ON t.id = tp.teaminfo_id
+			WHERE 1=1
+		AND t.id = #{teaminfo_id}
+		AND (tp.position LIKE CONCAT('%','st','%') OR tp.position LIKE CONCAT('%','lw','%') OR tp.position LIKE CONCAT('%','rw','%')
+			OR tp.position LIKE CONCAT('%','lf','%') OR tp.position LIKE CONCAT('%','rf','%'))
+   	</select>
+	
+	<select id="loadMidfieldDatas" resultType="hashmap">
+		SELECT u.username,u.head_icon,pp.love_num,tp.position,tp.player_num  FROM m_user AS u 
+		LEFT JOIN p_player_info AS pp ON pp.user_id = u.id
+		LEFT JOIN t_team_player AS tp ON tp.user_id = pp.user_id
+		LEFT JOIN t_team_info AS t ON t.id = tp.teaminfo_id
+		WHERE 1=1
+			AND t.id = #{teaminfo_id}
+			AND (
+				tp.position LIKE CONCAT('%','cam','%') OR tp.position LIKE CONCAT('%','lm','%') OR tp.position LIKE CONCAT('%','rm','%')
+				OR tp.position LIKE CONCAT('%','cm','%') OR tp.position LIKE CONCAT('%','cdm','%')
+				OR tp.position LIKE CONCAT('%','lcm','%') OR tp.position LIKE CONCAT('%','rcm','%')
+				OR tp.position LIKE CONCAT('%','lcb','%') OR tp.position LIKE CONCAT('%','rcb','%')
+			)
+	</select>
+	
+	<select id="loadBackDatas" resultType="hashmap">
+		SELECT u.username,u.head_icon,pp.love_num,tp.position,tp.player_num  FROM m_user AS u 
+		LEFT JOIN p_player_info AS pp ON pp.user_id = u.id
+		LEFT JOIN t_team_player AS tp ON tp.user_id = pp.user_id
+		LEFT JOIN t_team_info AS t ON t.id = tp.teaminfo_id
+		WHERE 1=1
+			AND (
+				tp.position LIKE CONCAT('%','lb','%') OR tp.position LIKE CONCAT('%','cb','%') OR tp.position LIKE CONCAT('%','rb','%')
+			)
+		AND t.id = #{teaminfo_id}
+	</select>
+	
+	<select id="loadGatekeeperDatas" resultType="hashmap">
+		SELECT u.username,u.head_icon,pp.love_num,tp.position,tp.player_num FROM m_user AS u 
+		LEFT JOIN p_player_info AS pp ON pp.user_id = u.id
+		LEFT JOIN t_team_player AS tp ON tp.user_id = pp.user_id
+		LEFT JOIN t_team_info AS t ON t.id = tp.teaminfo_id
+		WHERE 1=1
+			AND (
+				tp.position LIKE CONCAT('%','gk','%') 
+			)
+		AND t.id = #{teaminfo_id}
+	</select>
+	
+	<select id="loadBabyDatas" resultType="hashmap">
+		SELECT u.username,u.head_icon,u.usercp FROM m_user AS u
+		LEFT JOIN f_baby_team AS bt ON bt.user_id = u.id
+	    LEFT JOIN f_baby_info AS bi ON bi.user_id = u.id
+		LEFT JOIN t_team_info AS t ON t.id = bt.teaminfo_id
+		WHERE 1=1
+		AND bt.`status` = 1
+		AND t.id = #{teaminfo_id}
+	</select>
+	
+	<select id="getLeagueEventTime" resultType="string">
+		SELECT DATE_FORMAT(er.play_time,'%Y-%m-%d')AS play_time FROM a_event_record AS er
+		WHERE 1=1
+			AND er.league_id =#{league_id}
+   		 GROUP BY DATE_FORMAT(er.play_time,'%Y-%m-%d')
+	</select>
+	
+	<select id="queryEventForecast" resultType="hashmap">
+   		SELECT mt.name mname,gt.name gname,mt.logo mlogo,gt.logo glogo,ef.m_teaminfo_id,ef.g_teaminfo_id,ef.ball_format,ef.rounds,ef.position,DATE_FORMAT(ef.play_time,'%Y-%m-%d')AS play_date,DATE_FORMAT(ef.play_time,'%H:%i')AS play_time
+		FROM a_event_forecast ef 
+		LEFT JOIN t_team_info mt ON mt.id=ef.m_teaminfo_id 
+		LEFT JOIN t_team_info gt ON gt.id=ef.g_teaminfo_id 
+		WHERE ef.league_id=#{league_id} AND ef.play_time > DATE_FORMAT(NOW(),'%Y-%m-%d') 
+		ORDER BY ef.play_time
+	</select>
+	
+	<select id="loadLeagueGroup" resultType="hashmap">
+		SELECT lg.* FROM a_league_group AS lg WHERE lg.league_id = #{league_id} ORDER BY create_time ASC
+	</select>
+	
+	<select id="loadEventRecord" resultType="hashmap">
+	SELECT er.*,DATE_FORMAT(er.play_time,'%H:%i')AS time,lg.`name`,lg.id AS group_id FROM a_event_record AS er
+		LEFT JOIN a_league_group AS lg ON lg.id = er.group_id
+	WHERE 1=1 
+		AND er.league_id=#{maps.league_id}
+		AND DATE_FORMAT(er.play_time,'%Y-%m-%d')=#{maps.play_time}
+	</select>
+	
+	<select id="queryEventRecords" parameterType="hashmap" resultType="hashmap">
+		SELECT mt.name mname,gt.name gname,mt.logo mlogo,gt.logo glogo,lg.name name,e.* 
+		FROM a_event_record e 
+		LEFT JOIN a_league_group AS lg ON lg.id = e.group_id 
+		LEFT JOIN t_team_info mt ON mt.id=e.m_teaminfo_id 
+		LEFT JOIN t_team_info gt ON gt.id=e.g_teaminfo_id 
+		<where>
+			e.league_id=#{maps.league_id}
+			<if test="maps.group_id !=null and maps.group_id !='' ">
+				AND e.group_id=#{maps.group_id} 
+			</if>
+			<if test="maps.rounds !=null and maps.rounds !='' ">
+				AND e.rounds=#{maps.rounds} 
+			</if>
+   		 	<if test="maps.tname !=null and maps.tname !='' ">
+				AND (mt.name LIKE CONCAT(CONCAT('%', #{maps.tname}),'%') OR gt.name LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')) 
+			</if>
+   		 </where>
+   		 ORDER BY e.play_time 
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="queryEventRecordsCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT mt.name mname,gt.name gname,mt.logo mlogo,gt.logo glogo,e.* 
+			FROM a_event_record e 
+			LEFT JOIN a_league_group AS lg ON lg.id = e.group_id
+			LEFT JOIN t_team_info mt ON mt.id=e.m_teaminfo_id 
+			LEFT JOIN t_team_info gt ON gt.id=e.g_teaminfo_id 
+			<where>
+				e.league_id=#{maps.league_id}
+				<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND e.group_id=#{maps.group_id} 
+				</if>
+				<if test="maps.rounds !=null and maps.rounds !='' ">
+					AND e.rounds=#{maps.rounds} 
+				</if>
+	   		 	<if test="maps.tname !=null and maps.tname !='' ">
+					AND (mt.name LIKE CONCAT(CONCAT('%', #{maps.tname}),'%') OR gt.name LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')) 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="loadIntegral" resultType="hashmap">
+	SELECT ti.*,t.`name` FROM a_team_integral AS ti
+		LEFT JOIN t_team_info AS t ON t.id = ti.teaminfo_id
+		 WHERE 1=1
+		 		<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND ti.group_id = #{maps.group_id}
+				</if>
+				AND ti.league_id = #{maps.league_id}
+		 ORDER BY ti.ranking
+		<if test="maps.start!=null and maps.rows!=null">
+		LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="loadIntegralCount" resultType="int">
+		SELECT COUNT(*) FROM a_team_integral AS ti
+		LEFT JOIN t_team_info AS t ON t.id = ti.teaminfo_id
+		 WHERE 1=1
+				AND ti.group_id = #{maps.group_id}
+				AND ti.league_id = #{maps.league_id}
+	</select>
+	
+	<select id="loadLeagueScorer" resultType="hashmap">
+			SELECT u.username,u.usernick,u.head_icon,ti.`name`,tp.teaminfo_id,ls.* FROM a_league_scorer ls
+			LEFT JOIN m_user AS u ON u.id = ls.user_id
+			LEFT JOIN t_team_player AS tp ON tp.user_id = u.id
+			LEFT JOIN t_team_info AS ti ON ti.id = tp.teaminfo_id 
+			WHERE ls.league_id=#{maps.league_id} 
+			ORDER BY ls.goal DESC,ls.s_sort DESC 
+			<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+			</if>    
+	</select>
+	
+	<select id="loadLeagueScorerCount" resultType="int">
+		SELECT COUNT(*) FROM(
+			SELECT u.username,u.usernick,u.head_icon,ti.`name`,tp.teaminfo_id,ls.* FROM a_league_scorer ls
+			LEFT JOIN m_user AS u ON u.id = ls.user_id
+			LEFT JOIN t_team_player AS tp ON tp.user_id = u.id
+			LEFT JOIN t_team_info AS ti ON ti.id = tp.teaminfo_id 
+			WHERE ls.league_id=#{maps.league_id} 
+		)AS a
+	</select>
+	
+	<select id="loadLeagueGroups" resultType="com.yt.framework.persistent.entity.LeagueGroup">
+	    SELECT g.* FROM a_league_group g WHERE league_id = #{league_id} ORDER BY sort
+	</select>
+	
+	<select id="loadLeagueIntegralRecord" resultType="hashmap">
+	    SELECT ti.*,t.`name`,t.logo, g.name as groupName FROM a_team_integral AS ti
+		     LEFT JOIN t_team_info AS t ON t.id = ti.teaminfo_id
+		     LEFT JOIN a_league_group g ON g.id = ti.group_id 
+		     WHERE 1=1 
+                AND g.id = #{maps.gid}
+		     ORDER BY ti.ranking
+	</select>
+	
+	<select id="getFootBabyCharm" resultType="hashmap">
+		SELECT bi.score,u.username,u.usernick,cv.price FROM f_baby_info AS bi 
+		LEFT JOIN m_user AS u ON u.id = bi.user_id
+		LEFT JOIN charm_value AS cv ON cv.user_id = u.id
+		WHERE 1=1
+			AND cv.role_type = #{maps.role_type} GROUP BY u.id
+		ORDER BY cv.price DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>   
+	</select>
+	
+	<select id="getFootBabyCharmCount" resultType="int">
+	SELECT COUNT(*) FROM(
+		SELECT u.id,bi.score,u.username,u.usernick,cv.price FROM f_baby_info AS bi 
+			LEFT JOIN m_user AS u ON u.id = bi.user_id
+			LEFT JOIN charm_value AS cv ON cv.user_id = u.id
+			WHERE 1=1
+				AND cv.role_type = #{maps.role_type} GROUP BY u.id
+			ORDER BY cv.price DESC
+		)as aa
+	</select>
+	
+	<select id="loadLeagueScorerRecord" parameterType="hashmap" resultType="hashmap">
+		SELECT ls.*,l.`name` lname,u.username,u.usernick,u.head_icon,t.`name` tname,t.logo,lg.name gname FROM a_league_scorer ls
+		LEFT JOIN a_league l ON l.id=ls.league_id 
+		LEFT JOIN m_user u ON u.id=ls.user_id 
+		LEFT JOIN t_team_info t ON t.id=ls.team_id 
+		LEFT JOIN a_league_group lg ON lg.id=ls.group_id 
+		<where>
+   		 	<if test="maps.username !=null and maps.username !='' ">
+				AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.group_id !=null and maps.group_id !='' ">
+				AND ls.group_id=#{maps.group_id} 
+			</if>
+			<if test="maps.league_id !=null and maps.league_id !='' ">
+				AND ls.league_id=#{maps.league_id} 
+			</if>
+   		 </where>
+   		 ORDER BY ls.goal DESC,ls.s_sort DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="loadLeagueScorerRecordCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT ls.*,l.`name` lname,u.username,u.usernick,u.head_icon,t.`name` tname,t.logo,lg.name gname FROM a_league_scorer ls
+			LEFT JOIN a_league l ON l.id=ls.league_id 
+			LEFT JOIN m_user u ON u.id=ls.user_id 
+			LEFT JOIN t_team_info t ON t.id=ls.team_id 
+			LEFT JOIN a_league_group lg ON lg.id=ls.group_id 
+			<where>
+	   		 	<if test="maps.username !=null and maps.username !='' ">
+					AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+				</if>
+				<if test="maps.group_id !=null and maps.group_id !='' ">
+					AND ls.group_id=#{maps.group_id} 
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND ls.league_id=#{maps.league_id} 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="id2Name" resultType="string">
+		SELECT name FROM a_league WHERE id = #{id}
+	</select>
+	
+	<select id="getTeamIntegralByID" resultType="com.yt.framework.persistent.entity.TeamIntegral">
+		SELECT * FROM a_team_integral
+			WHERE 1=1
+				AND teaminfo_id = #{teaminfo_id}
+				AND league_id = #{league_id}
+	</select>
+	
+	<select id="loadBidRecords" resultType="hashmap">
+		SELECT ar.*,ti.`name`,ti.logo FROM a_auction_records AS ar
+			LEFT JOIN a_league_auction AS la ON la.id = ar.auc_id
+			LEFT JOIN t_team_info AS ti ON ti.id = ar.team_id
+			WHERE 1=1
+				AND la.user_id = #{maps.user_id}
+				AND la.id = #{maps.au_id}
+				AND la.s_id = #{maps.s_id}
+				ORDER BY ar.bid_price DESC,ar.bid_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>  		
+	</select>
+	
+	<select id="loadBidRecordCount" resultType="int">
+		SELECT COUNT(*) FROM a_auction_records AS ar
+			LEFT JOIN a_league_auction AS la ON la.id = ar.auc_id
+			LEFT JOIN t_team_info AS ti ON ti.id = ar.team_id
+			WHERE 1=1
+				AND la.user_id = #{maps.user_id}
+				AND la.id = #{maps.au_id}
+				AND la.s_id = #{maps.s_id}
+	</select>
+	
+	<select id="getEventRecordById" resultType="com.yt.framework.persistent.entity.EventRecord">
+		SELECT * FROM a_event_record WHERE id = #{id}
+	</select>
+	
+	<!-- 禁赛 -->
+	<select id="getSuspendById" resultType="com.yt.framework.persistent.entity.SuspendPlayer">
+		SELECT * FROM a_suspend_player WHERE id = #{id}
+	</select>
+	
+	<insert id="saveSuspend" parameterType="com.yt.framework.persistent.entity.SuspendPlayer" >
+		INSERT INTO a_suspend_player(
+			 id,
+			 user_id, 
+			 league_id,
+			 begin_time,
+			 end_time,
+			 create_time,
+			 update_time,
+			 status,
+			 remark
+		)VALUES(
+			 #{id},
+			 #{user_id}, 
+			 #{league_id},
+			 #{begin_time},
+			 #{end_time},
+			 NOW(),
+			 NOW(),
+			 #{status},
+			 #{remark}
+		)
+	</insert>
+	
+	<update id="updateSuspend" parameterType="com.yt.framework.persistent.entity.SuspendPlayer">
+		UPDATE a_suspend_player
+			SET
+				 user_id=#{user_id}, 
+				 begin_time=#{begin_time},
+				 end_time=#{end_time},
+				 status=#{status}, 
+				 update_time=NOW(),
+				 remark=#{remark}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<delete id="deleteSuspend">
+   		DELETE FROM a_suspend_player WHERE id = #{id}
+   	</delete>
+	
+	<select id="queryForPageSuspend" resultType="hashmap">
+		SELECT ap.*,mu.username,mu.usernick FROM a_suspend_player ap
+			LEFT JOIN m_user mu ON ap.user_id = mu.id
+			WHERE 1=1
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND ap.league_id = #{maps.league_id}
+			</if>   
+			<if test="maps.user_id!=null and maps.user_id!=''">
+				AND ap.user_id = #{maps.user_id}
+			</if> 
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND mu.usernick like CONCAT('%',#{maps.usernick},'%')
+			</if>
+			<if test="maps.username!=null and maps.username!=''">
+				AND mu.username like CONCAT('%',#{maps.username},'%')
+			</if>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>  	
+	</select>
+	
+	<select id="suspendCount" resultType="int">
+		SELECT count(ap.id) FROM a_suspend_player ap
+			LEFT JOIN m_user mu ON ap.user_id = mu.id
+			WHERE 1=1
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND ap.league_id = #{maps.league_id}
+			</if>   
+			<if test="maps.user_id!=null and maps.user_id!=''">
+				AND ap.user_id = #{maps.user_id}
+			</if> 
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND mu.usernick like CONCAT('%',#{maps.usernick},'%')
+			</if>
+			<if test="maps.username!=null and maps.username!=''">
+				AND mu.username like CONCAT('%',#{maps.username},'%')
+			</if>
+	</select>
+	
+	<select id="loadAllLeagueTeam" resultType="hashmap">
+			SELECT t.*,er.id AS event_id FROM t_team_info AS t
+			LEFT JOIN a_event_record AS er ON (t.id = er.g_teaminfo_id OR t.id = er.m_teaminfo_id)
+			WHERE 1=1
+				AND er.league_id = #{maps.league_id}
+			<if test="maps.rounds!=null and maps.rounds!=''">
+				AND er.rounds = #{maps.rounds}
+			</if>
+			
+	</select>
+	
+	<!-- 赛季分类管理 -->
+	<insert id="saveLeagueCfg" parameterType="com.yt.framework.persistent.entity.LeagueCfg" >
+		INSERT INTO a_league_cfg(
+			 id,
+			 year,
+			 area_code,
+			 season,
+			 s_starttime,
+			 s_endtime,
+			 status,
+			 sort,
+			 image_src,
+			 if_show,
+			 create_time
+		)VALUES(
+			 #{id},
+			 #{year},
+			 #{area_code},
+			 #{season},
+			 #{s_starttime},
+			 #{s_endtime},
+			 #{status},
+			 #{sort},
+			 #{image_src},
+			 #{if_show},
+			 NOW()
+		)
+	</insert>
+	
+	<update id="updateLeagueCfg" parameterType="com.yt.framework.persistent.entity.LeagueCfg">
+		UPDATE a_league_cfg
+			SET
+				year = #{year},
+				area_code = #{area_code},
+			 	season = #{season},
+			 	s_starttime = #{s_starttime},
+			 	s_endtime = #{s_endtime},
+			 	status= #{status},
+			 	sort = #{sort},
+				image_src = #{image_src},
+				if_show = #{if_show},
+				if_balance = #{if_balance}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="getLeagueCfgById" resultType="com.yt.framework.persistent.entity.LeagueCfg">
+		SELECT * FROM a_league_cfg WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageLeagueCfgList" resultType="com.yt.framework.persistent.entity.LeagueCfg">
+		SELECT * FROM a_league_cfg 
+			<where>
+			<if test="maps.area_code!=null and maps.area_code!=null">
+				AND area_code = #{area_code}
+			</if>
+			<if test="maps.status!=null and maps.status!=null">
+				AND status = #{status}
+			</if>
+			<if test="maps.season!=null and maps.season!=null">
+				AND season = #{season}
+			</if>
+			</where>
+			ORDER BY year,area_code
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="leagueCfgCount" resultType="int">
+		SELECT count(id) FROM a_league_cfg
+			WHERE 1=1 
+			<if test="maps.area_code!=null and maps.area_code!=null">
+				AND area_code = #{area_code}
+			</if>
+			<if test="maps.status!=null and maps.status!=null">
+				AND status = #{status}
+			</if>
+			<if test="maps.season!=null and maps.season!=null">
+				AND season = #{season}
+			</if>
+	</select>
+	
+	<select id="getLeaugeCfgList" resultType="com.yt.framework.persistent.entity.LeagueCfg">
+		SELECT * FROM a_league_cfg WHERE if_show = 1 ORDER BY sort
+	</select>
+	
+	<select id="getLeagueCfgMap" resultType="hashmap">
+		SELECT al.id,al.year,al.season,ma.area_name FROM a_league_cfg al 
+			LEFT JOIN m_sys_area ma ON al.area_code = ma.area_code
+		WHERE al.if_show = 1 AND al.status = 1 ORDER BY al.sort 
+	</select>
+	
+	<select id="balanceLeagueTeam" statementType="CALLABLE">  
+		{call leagueTeamCalculate(#{league_id})}  
+  	</select> 
+  	
+  	<select id="balanceSeasonPlayer" statementType="CALLABLE">  
+		{call seasonPlayerCalculate(#{s_id})}  
+  	</select> 
+	<!-- 赛季分类管理 -->
+	
+	<!-- 联赛邀请信息记录 -->
+	<insert id="saveLeagueInviteMsg" parameterType="com.yt.framework.persistent.entity.InviteMsg">
+		INSERT INTO a_invite_msg(
+			id,
+			league_id,
+			teaminfo_id,
+			end_time,
+			create_time
+		)VALUE(
+			#{id},
+			#{league_id},
+			#{teaminfo_id},
+			#{end_time},
+			NOW()
+		)
+	</insert>
+	
+	<update id="updateInviteMsg" parameterType="com.yt.framework.persistent.entity.InviteMsg">
+		UPDATE a_invite_msg
+			SET
+				status = #{status}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<update id="updateTeamLeagueStatus">
+		UPDATE a_team_league
+			SET
+				status = #{status}
+			WHERE
+				teaminfo_id = #{teaminfo_id}
+	</update>
+	
+	<select id="getBeGood4InviteMsg" resultType="com.yt.framework.persistent.entity.InviteMsg">  
+		SELECT * FROM a_invite_msg WHERE teaminfo_id=#{tid} AND status=1
+  	</select> 
+	
+	<select id="loadAllInviteMsg" resultType="hashmap">
+		SELECT im.*,le.name AS league_name,ti.name AS team_name FROM a_invite_msg AS im
+			LEFT JOIN a_league AS le ON le.id = im.league_id
+			LEFT JOIN t_team_info AS ti ON ti.id = im.teaminfo_id
+			WHERE 1=1
+				AND im.league_id = #{maps.league_id}
+				<if test="maps.firstNum!=null and maps.pageSize!=null">
+					LIMIT #{maps.firstNum},#{maps.pageSize}
+				</if>
+	</select>
+	
+	<select id="loadAllInviteMsgCount" resultType="int">
+		SELECT COUNT(*) FROM a_invite_msg AS im
+			LEFT JOIN a_league AS le ON le.id = im.league_id
+			LEFT JOIN t_team_info AS ti ON ti.id = im.teaminfo_id
+			WHERE 1=1
+				AND im.league_id = #{maps.league_id}
+	</select>
+	
+	<select id="loadLeagueAssistsCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT ls.*,l.`name` lname,u.username,u.usernick,u.head_icon,t.`name` tname,t.logo FROM a_league_statistics ls
+			LEFT JOIN a_league l ON l.id=ls.league_id 
+			LEFT JOIN m_user u ON u.id=ls.user_id 
+			LEFT JOIN t_team_info t ON t.id=ls.teaminfo_id 
+			<where>
+	   		 	<if test="maps.username !=null and maps.username !='' ">
+					AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND ls.league_id=#{maps.league_id} 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	<select id="loadLeagueAssists" parameterType="hashmap" resultType="hashmap">
+		SELECT ls.*,l.`name` lname,u.username,u.usernick,u.head_icon,t.`name` tname,t.logo FROM a_league_statistics ls
+		LEFT JOIN a_league l ON l.id=ls.league_id 
+		LEFT JOIN m_user u ON u.id=ls.user_id 
+		LEFT JOIN t_team_info t ON t.id=ls.teaminfo_id 
+		<where>
+   		 	<if test="maps.username !=null and maps.username !='' ">
+				AND u.username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.league_id !=null and maps.league_id !='' ">
+				AND ls.league_id=#{maps.league_id} 
+			</if>
+   		 </where>
+   		 ORDER BY ls.zhugong_num DESC,ls.zg_sort DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	
+	<select id="getActiveCodeByLidAndTid" resultType="com.yt.framework.persistent.entity.ActiveCode">
+		SELECT * FROM a_active_code WHERE league_id=#{league_id} AND teaminfo_id=#{team_id} 
+	</select>
+	
+</mapper>

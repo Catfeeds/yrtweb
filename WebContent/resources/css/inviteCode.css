@@ -1,0 +1,156 @@
+.buyInviteCode{
+	width: 975px;
+	height: 540px;
+	margin-top: -117px;
+  	margin-left: 12px;
+	background: #111111;
+	border: 1px solid gray;
+	position: absolute;
+	z-index: 200;
+}
+
+#inviteCode{
+  background: #EB6100;
+  border-radius: 4px;
+  padding: 5px;
+  margin-left: 6px;
+}
+
+.buyInviteCode .closeBtn{
+	position: absolute;
+  	right: 8px;
+  top: 8px;
+	width: 30px;
+	height: 30px;
+	background: url(../images/closebtn.png) no-repeat;
+	cursor: pointer;
+}
+
+.buyInviteCode_title{
+	width: 850px;
+	margin: 20px auto;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #666;
+}
+
+.showCode{
+	width: 900px;
+	margin: 70px auto;
+}
+
+	.codeImg{
+		width: 60px;
+		height: 60px;
+	}
+	
+	
+	
+.codeTable th{
+	font-size: 18px;
+	color: gray;
+	width: 169px;
+}	
+
+.codeTable td{
+	text-align: center;
+	height: 80px;
+} 
+
+.codeTable td input{
+	width: 54px;
+    height: 28px;
+	background: transparent;
+	color: white;
+	border: 1px solid #666;
+}
+
+	.codeTable td select{
+	width: 54px;
+  height: 28px;
+  background: transparent;
+  color: white;
+  border: 1px solid #666;
+  padding-left: 18px;
+  border-radius: 4px;
+}
+
+	.codeTable td select option{
+		color: black;
+	}
+
+.codeBtn{
+	margin-top: 40px;
+}
+
+	.BuyCodeBtn{
+		width: 75px;
+	  height: 38px;
+	  border: none;
+	  border-radius: 4px;
+	  font-size: 18px;
+	  background: #EB6100;
+	  color: white;
+	}
+	
+	.chargeCodeBtn{
+		width: 75px;
+	  height: 38px;
+	  border: none;
+	  border-radius: 4px;
+	  font-size: 18px;
+	  background: #027ded;
+	  color: white;
+	  margin-left: 10px;
+	}
+	
+.myCode h3{
+	color: white;
+	font-size: 20px;
+	background: #202b18;
+	padding: 5px 0 5px 15px;
+}	
+
+
+.inviteCodes{
+	width: 840px;
+	margin: 50px auto;
+}
+
+.inviteCodes li{
+	float: left;
+	margin-left: 20px;
+}
+
+.ableCode{
+	border: 1px solid #017be3;
+    width: 142px;
+  text-align: center;
+  border-radius: 4px;
+  height: 34px;
+  line-height: 34px;
+  color: #017be3;
+}
+
+.nouse{
+	margin-top: 5px;
+	width: 142px;
+	color: #017be3;
+	text-align: center;
+}
+
+.unableCode{
+	border: 1px solid #666;
+    width: 142px;
+  text-align: center;
+  border-radius: 4px;
+  height: 34px;
+  line-height: 34px;
+  color: #666;
+}
+
+.use{
+	margin-top: 5px;
+	width: 142px;
+	color: #666;
+	text-align: center;
+}

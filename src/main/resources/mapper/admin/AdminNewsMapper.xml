@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminNewsMapper">
+	<sql id="news">
+		id,
+		title,
+		content,
+		cover_img,
+		is_special,
+		show_num,
+		type,
+		hava_iv,
+		model_id,
+		n_state,
+		create_time
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.News">
+		INSERT INTO m_news(
+			id,
+			title,
+			content,
+			cover_img,
+			is_special,
+			show_num,
+			type,
+			hava_iv,
+			model_id,
+			n_state,
+			create_time
+		)VALUES(
+			#{id},
+			#{title},
+			#{content},
+			#{cover_img},
+			#{is_special},
+			#{show_num},
+			#{type},
+			#{hava_iv},
+			#{model_id},
+			0,
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.News">
+		UPDATE m_news
+		SET
+			title = #{title},
+			content = #{content},
+			cover_img = #{cover_img},
+			is_special = #{is_special},
+			show_num = #{show_num},
+			type = #{type},
+			hava_iv = #{hava_iv},
+			model_id = #{model_id},
+			n_state = #{n_state}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM m_news WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.News">
+		SELECT
+		<include refid="news" />
+		FROM m_news WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT <include refid="news" /> from m_news
+		<where>
+   		 	<if test="maps.title !=null and maps.title !='' ">
+				AND title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+			</if>
+			<if test="maps.n_state !=null and maps.n_state !='' ">
+				AND n_state=#{maps.n_state} 
+			</if>
+   		 </where>
+   		 ORDER BY create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT * from m_news
+			<where>
+	   		 	<if test="maps.title !=null and maps.title !='' ">
+					AND title LIKE CONCAT(CONCAT('%', #{maps.title}),'%')
+				</if>
+				<if test="maps.n_state !=null and maps.n_state !='' ">
+					AND n_state=#{maps.n_state} 
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="queryTeamInfoByNid" resultType="hashmap">
+		SELECT nt.*,t.`name` FROM a_news_team nt,t_team_info t
+		WHERE nt.teaminfo_id=t.id AND nt.news_id= #{newsId}
+	</select>
+	
+	<delete id="deleteNewsTeam">
+		DELETE FROM a_news_team WHERE news_id = #{newsId}
+	</delete>
+	
+	<insert id="saveNewsTeam" parameterType="hashmap">
+		INSERT INTO a_news_team(
+			id,news_id,teaminfo_id 
+		)VALUES(
+			#{id},#{news_id},#{teaminfo_id}
+		)
+	</insert>
+</mapper>

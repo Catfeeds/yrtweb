@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.IndexModelMapper">
+	<sql id="indexModel">
+		id,
+		user_id,
+		name,
+		images_url,
+		url,
+		context,
+		order_num,
+		is_show,
+		create_time
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.IndexModel">
+		INSERT INTO m_index(
+			id,
+			user_id,
+			name,
+			images_url,
+			url,
+			context,
+			order_num,
+			is_show,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{name},
+			#{images_url},
+			#{url},
+			#{context},
+			#{order_num},
+			#{is_show},
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.IndexModel">
+		UPDATE m_index
+		SET
+			user_id=#{user_id},
+			name=#{name},
+			images_url=#{images_url},
+			url=#{url},
+			context=#{context},
+			order_num=#{order_num},
+			is_show=#{is_show}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM m_index WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.IndexModel">
+		SELECT
+		<include refid="indexModel" />
+		FROM m_index WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT id,user_id,name,images_url,url,context,order_num,is_show,create_time from m_index
+		<where>
+   		 	<if test="maps.name !=null and maps.name !='' ">
+				AND name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+   		 </where>
+   		 ORDER BY create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT id,user_id,name,images_url,url,context,order_num,is_show,create_time from m_index
+			<where>
+	   		 	<if test="maps.name !=null and maps.name !='' ">
+					AND name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+</mapper>

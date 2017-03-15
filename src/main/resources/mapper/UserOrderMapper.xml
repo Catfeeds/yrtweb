@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.UserOrderMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.UserOrder" >
+		INSERT INTO or_order(
+			order_id,
+			order_sn,
+			data_sn,
+			data_id,
+			user_id,
+			create_time,
+			order_pay_time,
+			order_pay_num,
+			order_user_name,
+			order_user_phone,
+			order_user_offer,
+			order_address,
+			order_check_time,
+			order_ifcheck,
+			order_send_time,
+			order_actual_cash,
+			order_cash,
+			order_ifsend,
+			order_nums,
+			order_count,
+			order_ifwin,
+			order_buy_channel,
+			order_status
+		)VALUES(
+			#{order_id},
+			#{order_sn},
+			#{data_sn},
+			#{data_id},
+			#{user_id},
+			NOW(),
+			#{order_pay_time},
+			#{order_pay_num},
+			#{order_user_name},
+			#{order_user_phone},
+			#{order_user_offer},
+			#{order_address},
+			#{order_check_time},
+			#{order_ifcheck},
+			#{order_send_time},
+			#{order_actual_cash},
+			#{order_cash},
+			#{order_ifsend},
+			#{order_nums},
+			#{order_count},
+			#{order_ifwin},
+			#{order_buy_channel},
+			#{order_status}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.UserOrder">
+		UPDATE or_order
+			SET
+				order_sn = #{order_sn},
+				data_id = #{data_id},
+				data_sn = #{data_sn},
+				user_id = #{user_id},
+				order_pay_time = #{order_pay_time},
+				order_pay_num = #{order_pay_num},
+				order_user_name = #{order_user_name},
+				order_user_phone = #{order_user_phone},
+				order_user_offer = #{order_user_offer},
+				order_address = #{order_address},
+				order_check_time = #{order_check_time},
+				order_ifcheck = #{order_ifcheck},
+				order_send_time = #{order_send_time},
+				order_actual_cash = #{order_actual_cash},
+				order_cash = #{order_cash},
+				order_ifsend = #{order_ifsend},
+				order_nums = #{order_nums},
+				order_count = #{order_count},
+				order_ifwin = #{order_ifwin},
+				order_ifvalid = #{order_ifvalid},
+				order_status = #{order_status},
+				order_send = #{order_send},
+				order_send_no = #{order_send_no},
+				order_send_cash = #{order_send_cash},
+				order_buy_channel = #{order_buy_channel}
+			WHERE
+				order_id = #{order_id}	
+	</update>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+				o.*,
+				p.product_id,
+				p.product_title,
+				p.product_header,
+				pd.data_win_num,
+				pd.data_total_count,
+				pd.data_win_user,
+				pd.data_finish_time,
+				pd.data_count,
+				pd.data_status
+			FROM 
+				or_order o 
+			LEFT JOIN 
+				product_data pd 
+			ON 
+				pd.data_id = o.data_id
+			LEFT JOIN 
+				product p 
+			ON 
+				p.product_id = pd.product_id
+		<where>
+			<if test="maps.order_sn !=null and maps.order_sn !='' ">
+				 o.order_sn = #{maps.order_sn}
+			</if>
+			<if test="maps.order_ifwin !=null and maps.order_ifwin !='' ">
+				AND o.order_ifwin = #{maps.order_ifwin}
+			</if>
+			<if test="maps.user_id !=null and maps.user_id !='' ">
+				AND o.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.order_status !=null and maps.order_status !='' ">
+				AND o.order_status = #{maps.order_status}
+			</if>
+			<if test="maps.order_ifcheck !=null and maps.order_ifcheck !='' ">
+				AND o.order_ifcheck = #{maps.order_ifcheck}
+			</if>
+   		 </where>
+   		 ORDER BY o.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( 
+			SELECT o.order_id
+				FROM 
+					or_order o 
+				LEFT JOIN 
+					product_data pd 
+				ON 
+					pd.data_id = o.data_id
+				LEFT JOIN 
+					product p 
+				ON 
+					p.product_id = pd.product_id
+			<where>
+				<if test="maps.order_sn !=null and maps.order_sn !='' ">
+					 o.order_sn = #{maps.order_sn}
+				</if>
+				<if test="maps.order_ifwin !=null and maps.order_ifwin !='' ">
+					AND o.order_ifwin = #{maps.order_ifwin}
+				</if>
+				<if test="maps.user_id !=null and maps.user_id !='' ">
+					AND o.user_id = #{maps.user_id}
+				</if>
+				<if test="maps.order_status !=null and maps.order_status !='' ">
+					AND o.order_status = #{maps.order_status}
+				</if>
+				<if test="maps.order_ifcheck !=null and maps.order_ifcheck !='' ">
+					AND o.order_ifcheck = #{maps.order_ifcheck}
+				</if>
+	   		 </where>
+		) cot_t 
+	</select>
+	
+	<select id="getOrderById" resultType="hashmap">
+		SELECT 	o.*,
+				p.product_title,
+				p.product_header,
+				pd.data_sn,
+				pd.data_win_num
+			FROM 
+				or_order o 
+			LEFT JOIN 
+				product_data pd 
+			ON 
+				pd.data_id = o.data_id
+			LEFT JOIN 
+				product p 
+			ON 
+				p.product_id = pd.product_id
+			WHERE 
+				o.order_id = #{order_id}
+	</select>
+	
+	<select id="getOrderBySn" resultType="hashmap">
+		SELECT 	
+				o.*,
+				p.product_header,
+				p.product_title,
+				pd.data_sn,
+				pd.data_win_num,
+				pd.data_total_count,
+				pd.data_win_user,
+				pd.data_finish_time,
+				pd.data_count
+			FROM 
+				or_order o 
+			LEFT JOIN 
+				product_data pd 
+			ON 
+				pd.data_id = o.data_id
+			LEFT JOIN 
+				product p 
+			ON 
+				p.product_id = pd.product_id
+			WHERE 
+				o.order_sn = #{order_sn}
+	</select>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.UserOrder">
+		SELECT *
+			FROM 
+				or_order o 
+			WHERE 
+				o.order_id = #{id}
+	</select>
+	
+	<select id="getOrderEntityBySn" resultType="com.yt.framework.persistent.entity.UserOrder">
+		SELECT *
+			FROM 
+				or_order o 
+			WHERE 
+				o.order_sn = #{order_sn}
+	</select>
+	
+	<!-- 用户地址 -->
+	<insert id="saveUserAddress" parameterType="com.yt.framework.persistent.entity.UserAddress" >
+		INSERT INTO m_user_address(
+			address_id,
+			user_id,
+			user_name,
+			user_province,
+			user_city,
+			user_area,
+			user_address,
+			user_default,
+			user_phone,
+			user_postcode
+		)VALUES(
+			#{address_id},
+			#{user_id},
+			#{user_name},
+			#{user_province},
+			#{user_city},
+			#{user_area},
+			#{user_address},
+			#{user_default},
+			#{user_phone},
+			#{user_postcode}
+		)
+	</insert>
+	
+	<update id="updateUserAddress" parameterType="com.yt.framework.persistent.entity.UserAddress">
+		UPDATE m_user_address
+			SET
+				user_id = #{user_id},
+				user_name = #{user_name},
+				user_province = #{user_province},
+				user_city = #{user_city},
+				user_area = #{user_area},
+				user_address = #{user_address},
+				user_default = #{user_default},
+				user_phone = #{user_phone},
+				user_postcode = #{user_postcode}
+			WHERE
+				address_id = #{address_id}	
+	</update>
+	
+	<delete id="delUserAddress">
+		DELETE FROM m_user_address WHERE address_id = #{address_id}
+	</delete>
+	
+	<select id="getUserAddress" resultType="com.yt.framework.persistent.entity.UserAddress">
+		SELECT *
+			FROM 
+				m_user_address m 
+			WHERE 
+				m.user_id = #{user_id}
+	</select>
+	
+	<select id="getDefaultUserAddress" resultType="com.yt.framework.persistent.entity.UserAddress">
+		SELECT *
+			FROM 
+				m_user_address m 
+			WHERE 
+				m.user_id = #{user_id} AND user_default = 1 
+	</select>
+	
+	<update id="updateDefaultBatch">
+		UPDATE m_user_address
+			SET
+				user_default = 0
+			WHERE
+				user_id = #{user_id} 
+	</update>
+	
+	<select id="getUserAddressById" resultType="com.yt.framework.persistent.entity.UserAddress">
+		SELECT *
+			FROM 
+				m_user_address m 
+			WHERE 
+				m.address_id = #{address_id}
+	</select>
+	
+	
+	<insert id="addOrderNumData" parameterType="com.yt.framework.persistent.entity.OrderNumData" >
+		INSERT INTO order_num(
+			num_id,
+			data_sn,
+			order_num,
+			order_num_mark,
+			order_sn
+		)VALUES(
+			#{num_id},
+			#{data_sn},
+			#{order_num},
+			#{order_num_mark},
+			#{order_sn}
+		)
+	</insert>
+	
+	
+	
+</mapper>

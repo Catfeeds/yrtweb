@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminUserMapper">
+	<sql id="teamInfo">
+		id,
+		usernick,
+		phone,
+		username,
+		password,
+		email,
+		create_time,
+		video_count,
+		image_count,
+		sex,
+		borndate,
+		signature,
+		area,
+		city,
+		province,
+		head_icon,
+		last_login,
+		last_login_ip,
+		id_card,
+		receive_sms
+	</sql>
+
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM m_user 
+		<where>
+   		 	<if test="maps.usernick !=null and maps.usernick !='' ">
+				AND usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.username !=null and maps.username !='' ">
+				AND username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.phone !=null and maps.phone !='' ">
+				AND phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+			</if>
+			<if test="maps.email !=null and maps.email !='' ">
+				AND email LIKE CONCAT(CONCAT('%', #{maps.email}),'%')
+			</if>
+   		 </where>
+   		 ORDER BY create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT * FROM m_user 
+			<where>
+	   		 	<if test="maps.usernick !=null and maps.usernick !='' ">
+					AND usernick LIKE CONCAT(CONCAT('%', #{maps.usernick}),'%')
+				</if>
+				<if test="maps.username !=null and maps.username !='' ">
+					AND username LIKE CONCAT(CONCAT('%', #{maps.username}),'%')
+				</if>
+				<if test="maps.phone !=null and maps.phone !='' ">
+					AND phone LIKE CONCAT(CONCAT('%', #{maps.phone}),'%')
+				</if>
+				<if test="maps.email !=null and maps.email !='' ">
+					AND email LIKE CONCAT(CONCAT('%', #{maps.email}),'%')
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	
+	<select id="getUserById" resultType="com.yt.framework.persistent.entity.User">
+		SELECT * FROM m_user WHERE id=#{id}
+	</select>
+	
+	<select id="queryBmsRoles" resultType="com.yt.framework.persistent.entity.Role">
+		SELECT * FROM m_role WHERE role_state=1
+	</select>
+	<select id="queryBUserRoles" resultType="com.yt.framework.persistent.entity.Role">
+		SELECT r.* FROM m_user_role ur,m_role r WHERE ur.role_id=r.role_id AND ur.user_id=#{userId} AND r.role_state=1
+	</select>
+	
+	<delete id="deleteBUserRole">
+		DELETE ur FROM m_user_role ur,m_role r WHERE ur.role_id=r.role_id AND ur.user_id=#{userId} AND r.role_state=1
+	</delete>
+	
+	<insert id="saveBUserRole">
+		INSERT INTO m_user_role(
+			user_id,
+			role_id
+		)VALUES(
+			#{userId},
+			#{roleId}
+		)
+	</insert>
+</mapper>

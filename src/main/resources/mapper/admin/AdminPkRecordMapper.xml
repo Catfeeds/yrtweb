@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminPkRecordMapper">
+		
+		<insert id="save" parameterType="com.yt.framework.persistent.entity.AdminPkRecord">
+			INSERT INTO a_pk_record(
+				  id,
+				  league_id,
+				  m_teaminfo_id,
+				  m_team_name,
+				  m_score,
+				  win_teaminfo_id,
+				  g_teaminfo_id,
+				  g_score,
+				  g_team_name,
+				  ball_format,
+				  position,
+				  play_time,
+				  create_time,
+				  rounds,
+				  group_id
+			)VALUES(
+				  #{id},
+				  #{league_id},
+				  #{m_teaminfo_id},
+				  #{m_team_name},
+				  #{m_score},
+				  #{win_teaminfo_id},
+				  #{g_teaminfo_id},
+				  #{g_score},
+				  #{g_team_name},
+				  #{ball_format},
+				  #{position},
+				  #{play_time},
+				  NOW(),
+				  #{rounds},
+				  #{group_id}
+			)
+		</insert>
+
+		<update id="update" parameterType="com.yt.framework.persistent.entity.AdminPkRecord">
+			UPDATE a_pk_record
+				SET
+				   m_score = #{m_score},
+				   win_teaminfo_id = #{win_teaminfo_id},
+				   g_score = #{g_score},
+				   position = #{position},
+				   play_time = #{play_time}
+				WHERE
+					id = #{id}
+		</update>
+		
+		<select id="getEntityById" resultType="com.yt.framework.persistent.entity.AdminPkRecord">
+			SELECT * FROM a_pk_record WHERE id = #{id}
+		</select>
+		
+		<select id="queryForPageForMap" resultType="hashmap">
+			SELECT pk.*,al.name FROM a_pk_record AS pk,a_league al
+				WHERE 1=1 AND pk.league_id = al.id
+					<if test="maps.league_id !=null and maps.league_id !=''">
+					    AND pk.league_id = #{maps.league_id}
+					</if>
+			    ORDER BY play_time ASC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>    
+		</select>
+		
+		<select id="count" resultType="int">
+			SELECT COUNT(*) FROM a_pk_record AS pk  
+			LEFT JOIN t_team_info AS ti ON (ti.id = pk.m_teaminfo_id OR ti.id = pk.g_teaminfo_id)
+			WHERE 1=1
+			    AND pk.league_id = #{maps.league_id}
+		        AND ti.id = #{maps.teaminfo_id}
+		</select>
+		
+		<select id="teamLeagueWinCount" resultType="int">
+			SELECT COUNT(*) FROM a_pk_record AS pr
+			WHERE 1=1
+			AND (pr.m_teaminfo_id = #{maps.teaminfo_id} OR pr.g_teaminfo_id = #{maps.teaminfo_id})
+			AND pr.league_id = #{maps.league_id}
+			<choose>
+				<when test="maps.num!=null and maps.num!=''">
+					AND pr.win_teaminfo_id = #{maps.num}
+				</when>
+				<otherwise>
+					AND pr.win_teaminfo_id IS NULL
+				</otherwise>
+			</choose>
+		</select>
+		
+		<select id="teamLeagueCount" resultType="int">
+			SELECT COUNT(*) FROM a_pk_record AS pr
+			WHERE 1=1
+			AND (pr.m_teaminfo_id = #{maps.teaminfo_id} OR pr.g_teaminfo_id = #{maps.teaminfo_id})
+			AND pr.league_id = #{maps.league_id}
+		</select>
+		
+		<select id="getPkRecordByTeam" resultType="com.yt.framework.persistent.entity.AdminPkRecord">
+			SELECT *
+				FROM a_pk_record
+				WHERE league_id = #{league_id} AND g_teaminfo_id = #{g_teaminfo_id} AND m_teaminfo_id = #{m_teaminfo_id} Limit 1;
+		</select>
+		
+</mapper>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.CommonMapper">
+	<select id="queryIvComments" parameterType="hashmap" resultType="hashmap">
+		SELECT ic.id,ic.user_id,u.usernick,u.head_icon,ic.iv_id,ic.content,ic.level,ic.is_show,ic.create_time 
+		FROM m_iv_comments ic,m_user u
+		WHERE ic.user_id=u.id 
+		AND ic.id=#{maps.ivId} 
+		ORDER BY ic.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="ivCommentCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT ic.id,ic.user_id,u.usernick,u.head_icon,ic.iv_id,ic.content,ic.level,ic.is_show,ic.create_time 
+			FROM m_iv_comments ic,m_user u
+			WHERE ic.user_id=u.id 
+			AND ic.id=#{maps.ivId} 
+		) cot_t)
+	</select>
+	
+	
+	<insert id="replyIvComment" parameterType="com.yt.framework.persistent.entity.IvComment">
+		INSERT INTO m_iv_comments(
+			id,
+			user_id,
+			iv_id,
+			content,
+			level,
+			is_show,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{iv_id},
+			#{content},
+			#{level},
+			1,
+			NOW()
+		)
+	</insert>
+	
+	<select id="queryIndexImages" resultType="hashmap">
+		SELECT * FROM m_index WHERE is_show=1 ORDER BY order_num DESC,create_time DESC 
+	</select>
+	
+	<update id="praiseIv">
+		update m_image_video set praise_count=praise_count+1 WHERE id=#{ivId}
+	</update>
+	
+	<select id="queryPraiseRecord" parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM m_praise_record WHERE user_id=#{user_id} AND dynamic_id=#{dynamic_id} 
+	</select>
+	
+	<delete id="deletePraiseRecord" parameterType="hashmap">
+		DELETE FROM m_praise_record WHERE user_id=#{user_id} AND dynamic_id=#{dynamic_id} 
+	</delete>
+	
+	<insert id="savePraiseRecord" parameterType="hashmap">
+		INSERT INTO m_praise_record(
+			id,
+			user_id,
+			iv_id,
+			dynamic_id,
+			ip_str,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{iv_id},
+			#{dynamic_id},
+			#{ip_str},
+			NOW()
+		)
+	</insert>
+	
+	<insert id="saveMsgHistory" parameterType="com.yt.framework.persistent.entity.IvComment">
+		INSERT INTO msg_history(
+			id,
+			phone,
+			email,
+			result,
+			content,
+			type,
+			create_time
+		)VALUES(
+			#{id},
+			#{phone},
+			#{email},
+			#{result},
+			#{content},
+			#{type},
+			NOW()
+		)
+	</insert>
+	
+	
+	<select id="queryUserComments" parameterType="hashmap" resultType="hashmap">
+		SELECT c.*,u1.usernick,u1.head_icon 
+		<choose>
+			<when test="maps.me_id!=null and maps.me_id!=''">
+				,(CASE WHEN c.user_id=#{maps.me_id} THEN 1 ELSE 0 END) isme 
+			</when>
+			<otherwise>
+				,0  isme 
+			</otherwise>
+		</choose>
+	 	FROM m_user_comments c 
+		LEFT JOIN m_user u1 ON u1.id=c.user_id 
+		WHERE c.s_user_id=#{maps.s_user_id} AND (c.parent_id IS NULL OR c.parent_id='') 
+		<if test="maps.createTime!=null and maps.createTime!=''">
+			AND c.create_time &lt; #{maps.createTime} 
+		</if>
+		ORDER BY c.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	<select id="userCommentsCount" parameterType="hashmap" resultType="int">
+		SELECT count(1) FROM m_user_comments c 
+		LEFT JOIN m_user u1 ON u1.id=c.user_id 
+		WHERE c.s_user_id=#{maps.s_user_id} AND (c.parent_id IS NULL OR c.parent_id='') 
+		<if test="maps.createTime!=null and maps.createTime!=''">
+			AND c.create_time &lt; #{maps.createTime} 
+		</if>
+	</select>
+	
+	<select id="queryUserCommentChilds" parameterType="hashmap" resultType="hashmap">
+		SELECT c.*,u1.usernick,u1.head_icon,u2.usernick susernick 
+		<choose>
+			<when test="maps.me_id!=null and maps.me_id!=''">
+				,(CASE WHEN c.user_id=#{maps.me_id} THEN 1 ELSE 0 END) isme 
+			</when>
+			<otherwise>
+				,0  isme 
+			</otherwise>
+		</choose>
+		FROM m_user_comments c 
+		LEFT JOIN m_user u1 ON u1.id=c.user_id 
+		LEFT JOIN m_user u2 ON u2.id=c.s_user_id 
+		WHERE c.parent_id=#{maps.parent_id} 
+		ORDER BY c.create_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	<select id="userCommentChildsCount" parameterType="hashmap" resultType="int">
+		SELECT count(1) FROM m_user_comments c 
+		LEFT JOIN m_user u1 ON u1.id=c.user_id 
+		LEFT JOIN m_user u2 ON u2.id=c.s_user_id 
+		WHERE c.parent_id=#{maps.parent_id} 
+	</select>
+	
+	
+	<insert id="saveUserComment" parameterType="com.yt.framework.persistent.entity.UserComment">
+		INSERT INTO m_user_comments(
+			id,
+			user_id,
+			s_user_id,
+			parent_id,
+			content,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{s_user_id},
+			#{parent_id},
+			#{content},
+			NOW()
+		)
+	</insert>
+	
+	<delete id="deleteUserComment" parameterType="hashmap">
+		DELETE FROM m_user_comments WHERE id=#{id} or parent_id=#{id}
+	</delete>
+	
+	<insert id="savePageCount" parameterType="com.yt.framework.persistent.entity.PageCount">
+		INSERT INTO m_page_count(
+			id,
+			user_id,
+			count,
+			code_str,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{count},
+			#{code_str},
+			NOW()
+		)
+	</insert>
+	
+	<select id="getPageCount" resultType="com.yt.framework.persistent.entity.PageCount">
+		SELECT * FROM m_page_count WHERE user_id = #{user_id} AND code_str = #{code_str}
+	</select>
+	
+	<update id="updatePageCount" parameterType="com.yt.framework.persistent.entity.PageCount">
+		UPDATE m_page_count
+			SET
+				count = #{count}
+			WHERE
+				id = #{id}	
+	</update>
+</mapper>

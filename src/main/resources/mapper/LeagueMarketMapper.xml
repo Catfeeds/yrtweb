@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.LeagueMarketMapper">
+	<!--赛事-->
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.LeagueMarket">
+		INSERT INTO a_league_market(
+			 id,
+			 user_id, 
+			 status,
+			 buyer,
+			 end_time,
+			 price,
+			 if_up,
+			 buy_time,
+			 team_id,
+			 create_time,
+			 s_id,
+			 if_sold,
+			 league_id,
+			 version,
+			 r_id,
+			 if_one,
+			 turn_num
+		)VALUES(
+			 #{id},
+			 #{user_id}, 
+			 #{status},
+			 #{buyer},
+			 #{end_time},
+			 #{price},
+			 #{if_up},
+			 #{buy_time},
+			 #{team_id},
+			 NOW(),
+			 #{s_id},
+			 #{if_sold},
+			 #{league_id},
+			 #{version},
+			 #{r_id},
+			 #{if_one},
+			 #{turn_num}
+		)
+	</insert>
+	
+	<select id="getByUserId" resultType="com.yt.framework.persistent.entity.LeagueMarket">
+		SELECT * FROM a_league_market WHERE user_id = #{userId}
+	</select>
+	
+	<select id="getLeagueMarketByUserIDAndStatus" resultType="com.yt.framework.persistent.entity.LeagueMarket">
+		SELECT * FROM a_league_market WHERE user_id = #{user_id} AND status = #{status} ORDER BY create_time DESC LIMIT 0,1
+	</select>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.LeagueMarket">
+		UPDATE a_league_market
+			SET
+				status = #{status},
+				buyer = #{buyer},
+				end_time = #{end_time},
+				price = #{price},
+				if_up = #{if_up},
+				buy_time = #{buy_time},
+				team_id = #{team_id},
+				if_sold = #{if_sold},
+				version = #{version},
+				turn_num = #{turn_num},
+				r_id = #{r_id},
+				if_one = #{if_one}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<update id="updateLock" parameterType="int">
+		UPDATE a_league_market
+			SET
+				status = #{status},
+				buyer = #{buyer},
+				end_time = #{end_time},
+				price = #{price},
+				if_up = #{if_up},
+				buy_time = #{buy_time},
+				team_id = #{team_id},
+				if_sold = #{if_sold},
+				version = #{version},
+				turn_num = #{turn_num},
+				r_id = #{r_id},
+				if_one = #{if_one},
+				version = (${version} + 1)
+			WHERE
+				id = #{id} AND version = ${version}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_league_market WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteByUser">
+		DELETE FROM a_league_market WHERE user_id = #{user_id}
+	</delete>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.LeagueMarket">
+		SELECT * FROM a_league_market WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" resultType="hashmap">
+		SELECT al.*,mu.username user_name,mu.head_icon FROM a_league_market al
+		 LEFT JOIN m_user mu ON al.user_id = mu.id
+			WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND mu.username like CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND al.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND al.status = #{maps.status}
+			</if>
+			<if test="maps.turn_num!=null and maps.turn_num!=''">
+				AND al.turn_num = #{maps.turn_num}
+			</if>
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(al.id) FROM a_league_market al, m_user mu  
+			WHERE 1=1 AND al.user_id = mu.id
+			<if test="maps.username!=null and maps.username!=''">
+				AND mu.username like CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND al.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND al.status = #{maps.status}
+			</if>
+			<if test="maps.turn_num!=null and maps.turn_num!=''">
+				AND al.turn_num = #{maps.turn_num}
+			</if>
+	</select>
+	
+	<select id="getMarketUser" resultType="com.yt.framework.persistent.entity.LeagueMarket">
+		SELECT count(al.id) FROM a_league_market al, m_user mu  
+			WHERE al.user_id = #{user_id} 
+				AND al.status = #{status}
+				AND al.user_id = mu.id  
+	</select>
+	
+	<!--交易市场配置表-->
+	<insert id="saveMarketCfg" parameterType="com.yt.framework.persistent.entity.MarketCfg" >
+		INSERT INTO a_marketcfg(
+			 id,
+			 league_id, 
+			 s_id,
+			 if_open,
+			 start_time,
+			 end_time,
+			 team_percent,
+			 user_percent,
+			 per_price,
+			 turn_num,
+			 next_num,
+			 create_time
+		)VALUES(
+			 #{id},
+			 #{league_id},
+			 #{s_id}, 
+			 #{if_open},
+			 #{start_time},
+			 #{end_time},
+			 #{team_percent},
+			 #{user_percent},
+			 #{per_price},
+			 #{turn_num},
+			 #{next_num},
+			 NOW()
+		)
+	</insert>
+	
+	<update id="updateMarketCfg" parameterType="com.yt.framework.persistent.entity.MarketCfg" >
+		UPDATE a_marketcfg
+			SET
+			 	start_time = #{start_time},
+			 	end_time = #{end_time},
+			 	if_open = #{if_open},
+			 	league_id = #{league_id},
+			 	team_percent = #{team_percent},
+			 	user_percent = #{user_percent},
+			 	per_price = #{per_price},
+			 	turn_num = #{turn_num},
+			 	next_num = #{next_num}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="queryCfgForMap" resultType="hashmap">
+		SELECT aa.* FROM a_marketcfg aa
+			WHERE 1=1 
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND aa.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND aa.s_id = #{maps.s_id}
+			</if>
+			ORDER BY aa.turn_num
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="cfgCount" resultType="int">
+		SELECT count(aa.id) FROM a_marketcfg aa
+			WHERE 1=1 
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND aa.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND aa.s_id = #{maps.s_id}
+			</if>
+	</select>
+	
+	<select id="getCfgById" resultType="com.yt.framework.persistent.entity.MarketCfg">
+		SELECT * FROM a_marketcfg WHERE id = #{id}
+	</select>
+	
+	<select id="getCurrentMarket" resultType="com.yt.framework.persistent.entity.MarketCfg">
+		SELECT * 
+		FROM 
+			a_marketcfg 
+		WHERE
+			s_id = #{s_id} AND if_open = 1 LIMIT 1
+	</select>
+	
+	<delete id="deleteCfg">
+		DELETE FROM a_marketcfg WHERE id = #{id}
+	</delete>
+	
+	<!--交易市纪录表-->
+	<insert id="saveMarketRecords" parameterType="com.yt.framework.persistent.entity.MarketRecords" >
+		INSERT INTO a_market_records(
+			 id,
+			 manager_id, 
+			 m_id,
+			 buy_price,
+			 f_id,
+			 if_bid,
+			 buy_time
+		)VALUES(
+			 #{id},
+			 #{manager_id}, 
+			 #{m_id},
+			 #{buy_price},
+			 #{f_id},
+			 #{if_bid},
+			 NOW()
+		)
+	</insert>
+	
+	<select id="leagueMarketCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT u.username,u.usernick,u.head_icon,tout.name outname,tin.name inname,lm.* FROM a_league_market lm 
+			LEFT JOIN m_user u ON u.id=lm.user_id
+			LEFT JOIN t_team_info tout ON tout.id=lm.team_id 
+			LEFT JOIN t_team_info tin ON tin.id=lm.buyer
+			<where>
+				1=1 AND lm.status=1 
+	   		 	<if test="maps.s_id !=null and maps.s_id !='' ">
+					AND lm.s_id=#{maps.s_id}
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+	<select id="queryLeagueMarket" parameterType="hashmap" resultType="hashmap">
+		SELECT u.username,u.usernick,u.head_icon,tout.name outname,tin.name inname,lm.* FROM a_league_market lm 
+		LEFT JOIN m_user u ON u.id=lm.user_id
+		LEFT JOIN t_team_info tout ON tout.id=lm.team_id 
+		LEFT JOIN t_team_info tin ON tin.id=lm.buyer
+		<where>
+			1=1 AND lm.status=1 
+   		 	<if test="maps.s_id !=null and maps.s_id !='' ">
+				AND lm.s_id=#{maps.s_id}
+			</if>
+   		 </where>
+   		 ORDER BY lm.buy_time DESC
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+ 	
+ 	<select id="updateBatchMarket" statementType="CALLABLE">  
+		{call marketCalculate_all(#{turn_num},#{next_num},#{user_percent},#{team_percent},#{s_id})}  
+  	</select> 
+ 	
+ 	<select id="getPlayerInfoForMarketById" resultType="hashmap">
+		SELECT ppi.*,lm.id AS m_id,lm.price,lm.if_one,mu.username,mu.head_icon,mu.borndate,lm.buyer FROM a_league_market AS lm
+			LEFT JOIN p_player_info AS ppi ON ppi.user_id = lm.user_id
+			LEFT JOIN m_user AS mu ON mu.id = ppi.user_id
+			WHERE lm.id = #{m_id}
+	</select>
+	
+	<select id="getRecordsById" resultType="com.yt.framework.persistent.entity.MarketRecords">
+ 		SELECT * FROM a_market_records 
+			WHERE id = #{id}
+ 	</select>
+	
+  	<select id="marketHistorysCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT am.*,ti.`name`,ti.logo FROM a_market_records am
+			LEFT JOIN a_league_market AS lm ON lm.id = am.m_id
+			LEFT JOIN t_team_info AS ti ON ti.id = am.manager_id
+			<where>
+				1=1 
+				AND lm.s_id = #{maps.s_id} 
+				AND lm.id = #{maps.m_id} 
+				AND lm.user_id = #{maps.user_id} 
+	   		</where>
+		) cot_t)
+	</select>
+	<select id="queryMarketHistorys" parameterType="hashmap" resultType="hashmap">
+		SELECT am.*,ti.`name`,ti.logo FROM a_market_records am
+		LEFT JOIN a_league_market AS lm ON lm.id = am.m_id
+		LEFT JOIN t_team_info AS ti ON ti.id = am.manager_id
+		<where>
+			1=1 
+			AND lm.s_id = #{maps.s_id} 
+			AND lm.id = #{maps.m_id} 
+			AND lm.user_id = #{maps.user_id} 
+   		</where>
+		ORDER BY am.buy_price DESC,am.buy_time DESC 
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="clearMsg" statementType="CALLABLE">  
+ 		{call clearMarketMsg(#{id})}  
+ 	</select>
+		
+	<select id="getMarketDetailData" resultType="hashmap">  
+		SELECT 
+			DISTINCT aa.id, 
+					 mu.username,
+					 mc.id_card,
+					 mu.phone,
+					 (SELECT t.name FROM t_team_info t WHERE t.id = aa.team_id) old_name, 
+					 tt.name 
+			FROM 
+					a_league_market aa 
+			LEFT JOIN 
+					m_user mu ON aa.user_id = mu.id
+			LEFT JOIN 
+					m_certification mc ON aa.user_id = mc.user_id
+			LEFT JOIN 
+					t_team_info tt ON aa.buyer = tt.id
+			WHERE 
+					aa.status = 1 AND aa.turn_num = #{turn_num} AND aa.s_id = #{s_id}	
+ 	</select>	
+	
+</mapper>

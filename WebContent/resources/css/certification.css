@@ -1,0 +1,71 @@
+.middle{
+	width: 740px;
+	height: 446px;
+	/*background: url(../images/messageRadius.png);*/
+	margin: 0 auto;
+    background: url(../images/home_baby_bg.png) repeat-y;
+	border-radius:10px ;
+	
+}
+
+.middle p{
+	width: 60px;
+	text-align: center;
+	margin: 0 auto;
+	color: white;
+	padding-top: 10px;
+}
+
+.middle table{
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.middle table tr{
+	height: 50px;
+}
+
+.middle form td{
+	color: white;
+	margin-right: 10px;
+}
+
+.middle form input{
+	background: transparent;
+	border: 1px solid white;
+	
+}
+
+.images img{
+	float: left;
+	margin-left: 10px;	
+}
+.images img:first-child{
+	margin-left: 0px;
+	
+}
+.imgfile{
+	width: 51px;
+	height: 52px;
+	opacity: 0;
+	position: absolute;
+	margin-left: 10px;
+}
+
+.confirm{
+	text-align: center;
+	margin-top: 50px;
+}
+
+.confirm .btn_st{
+	width: 80px;
+	height:25px;
+	color: white;
+	border-radius: 6px;
+	background: #ff7a03;
+	border: none;
+	
+}
+.confirm .btn_st:hover{
+	background: #ffbb03;
+}

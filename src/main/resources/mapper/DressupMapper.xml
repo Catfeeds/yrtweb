@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.DressupMapper">
+	<sql id="dressup">
+		id,
+		user_id,
+		dr_id,
+		status,
+		period,
+		is_per,
+		enable,
+		end_time,
+		create_time
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.Dressup">
+		INSERT INTO m_dressup(
+			id,
+			user_id,
+			dr_id,
+			status,
+			period,
+			is_per,
+			create_time,
+			end_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{dr_id},
+			#{status},
+			#{period},
+			#{is_per},
+			#{create_time},
+			#{end_time}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.Dressup">
+		UPDATE m_dressup
+		SET
+			dr_id=#{dr_id},
+			status=#{status},
+			period=#{period},
+			is_per=#{is_per},
+			enable = #{enable},
+			end_time = #{end_time}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM m_dressup WHERE id = #{id}
+	</delete>
+	
+	<update id="updateDressupEnable" parameterType="java.util.List">
+		 UPDATE m_dressup 
+        	SET enable = 0
+        	WHERE id IN
+		 <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                ${item.id}
+         </foreach>
+	</update>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.Dressup">
+		SELECT
+		<include refid="dressup" />
+		FROM m_dressup WHERE id = #{id}
+	</select>
+	
+	<select id="getDressup" resultType="com.yt.framework.persistent.entity.Dressup">
+		SELECT
+		<include refid="dressup" />
+		FROM m_dressup WHERE user_id = #{userId} AND dr_id=#{drId}
+	</select>
+	
+	<update id="updateDressupStatusOff">
+		UPDATE m_dressup SET status=0 WHERE user_id = #{userId}
+	</update>
+	<update id="updateDressupStatusOn">
+		UPDATE m_dressup SET status=1 WHERE user_id = #{userId} and dr_id=#{drId}
+	</update>
+	
+	<select id="getDressupsByDate" resultType="com.yt.framework.persistent.entity.Dressup">
+		SELECT
+			<include refid="dressup" />
+		FROM m_dressup WHERE enable =1 AND end_time = DATE_FORMAT(#{date} ,'%y-%m-%d')
+	</select>
+</mapper>

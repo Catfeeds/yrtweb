@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.LeagueAuctionMapper">
+	<!--赛事-->
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.LeagueAuction" >
+		INSERT INTO a_league_auction(
+			 id,
+			 user_id, 
+			 status,
+			 bidder,
+			 end_time,
+			 bid_price,
+			 r_id,
+			 if_sold,
+			 init_price,
+			 if_up,
+			 turn_num,
+			 version,
+			 league_id,
+			 s_id
+		)VALUES(
+			 #{id},
+			 #{user_id}, 
+			 #{status},
+			 #{bidder},
+			 #{end_time},
+			 #{bid_price},
+			 #{r_id},
+			 #{if_sold},
+			 #{init_price},
+			 #{if_up},
+			 #{turn_num},
+			 #{version},
+			 #{league_id},
+			 #{s_id}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.yt.framework.persistent.entity.LeagueAuction">
+		UPDATE a_league_auction
+			SET
+				status = #{status},
+				bidder = #{bidder},
+				end_time = #{end_time},
+				bid_price = #{bid_price},
+				r_id = #{r_id},
+				if_sold = #{if_sold},
+				init_price = #{init_price},
+				if_up = #{if_up},
+				turn_num = #{turn_num},
+				league_id = #{league_id}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<update id="updateLock" parameterType="int">
+		UPDATE a_league_auction
+			SET
+				status = #{status},
+				bidder = #{bidder},
+				end_time = #{end_time},
+				bid_price = #{bid_price},
+				r_id = #{r_id},
+				if_sold = #{if_sold},
+				init_price = #{init_price},
+				if_up = #{if_up},
+				turn_num = #{turn_num},
+				league_id = #{league_id},
+				version = (${version} + 1)
+			WHERE
+				id = #{id} AND version = ${version}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_league_auction WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteByUser">
+		DELETE FROM a_league_auction
+			WHERE user_id = #{user_id} AND s_id = #{cfg_id}
+	</delete>
+	<delete id="deleteByUserId">
+		DELETE FROM a_league_auction
+			WHERE user_id = #{user_id} AND (bidder is null or bidder='')
+	</delete>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.LeagueAuction">
+		SELECT * FROM a_league_auction WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" resultType="hashmap">
+		SELECT al.*,mu.username user_name,mu.head_icon,p.level FROM a_league_auction al
+		 LEFT JOIN m_user mu ON al.user_id = mu.id
+		 LEFT JOIN p_player_info p ON al.user_id = p.user_id
+			<where>
+			<if test="maps.username!=null and maps.username!=''">
+				AND mu.username like CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND mu.usernick like CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND al.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND al.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND al.status = #{maps.status}
+			</if>
+			<if test="maps.if_up!=null and maps.if_up!=''">
+				AND al.if_up = #{maps.if_up}
+			</if>
+			<if test="maps.turn_num!=null and maps.turn_num!=''">
+				AND al.turn_num = #{maps.turn_num}
+			</if>
+			</where>
+			ORDER BY al.turn_num	
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(al.id) FROM a_league_auction al
+		 LEFT JOIN m_user mu ON al.user_id = mu.id
+		 LEFT JOIN p_player_info p ON al.user_id = p.user_id
+		 WHERE 1=1
+			<if test="maps.username!=null and maps.username!=''">
+				AND mu.username like CONCAT(CONCAT('%', #{maps.username}),'%')
+			</if>
+			<if test="maps.usernick!=null and maps.usernick!=''">
+				AND mu.usernick like CONCAT(CONCAT('%', #{maps.usernick}),'%')
+			</if>
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND al.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND al.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.status!=null and maps.status!=''">
+				AND al.status = #{maps.status}
+			</if>
+			<if test="maps.turn_num!=null and maps.turn_num!=''">
+				AND al.turn_num = #{maps.turn_num}
+			</if>
+			<if test="maps.if_up!=null and maps.if_up!=''">
+				AND al.if_up = #{maps.if_up}
+			</if>
+	</select>
+	
+	<!--竞拍市场配置表-->
+	<insert id="saveAuctionCfg" parameterType="com.yt.framework.persistent.entity.LeagueAuctionCfg" >
+		INSERT INTO a_league_auctioncfg(
+			 id,
+			 league_id, 
+			 s_id,
+			 turn_num,
+			 next_num,
+			 status,
+			 start_time,
+			 end_time,
+			 init_price,
+			 y_init_price,
+			 per_price,
+			 add_price,
+			 user_percent,
+			 create_time
+		)VALUES(
+			 #{id},
+			 #{league_id},
+			 #{s_id}, 
+			 #{turn_num},
+			 #{next_num},
+			 #{status},
+			 #{start_time},
+			 #{end_time},
+			 #{init_price},
+			 #{y_init_price},
+			 #{per_price},
+			 #{add_price},
+			 #{user_percent},
+			 NOW()
+		)
+	</insert>
+	
+	<update id="updateAuctionCfg" parameterType="com.yt.framework.persistent.entity.LeagueAuctionCfg" >
+		UPDATE a_league_auctioncfg
+			SET
+		         turn_num = #{turn_num},
+				 next_num = #{next_num},	
+				 status = #{status},
+				 start_time = #{start_time},
+				 end_time = #{end_time},
+				 init_price = #{init_price},
+				 y_init_price = #{y_init_price},
+				 per_price = #{per_price},
+				 add_price = #{add_price},
+				 user_percent = #{user_percent}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="queryCfgForMap" resultType="hashmap">
+		SELECT aa.*,mu.area_code,mu.year,mu.season FROM a_league_auctioncfg aa, a_league_cfg mu  
+			WHERE 1=1 AND aa.s_id = mu.id
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND aa.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND aa.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.turn_num!=null and maps.turn_num!=''">
+				AND aa.turn_num = #{maps.turn_num}
+			</if>
+			ORDER BY 
+				aa.turn_num
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="queryCfg" resultType="com.yt.framework.persistent.entity.LeagueAuctionCfg">
+		SELECT * FROM a_league_auctioncfg aa 
+			WHERE s_id = #{s_id} AND turn_num = #{turn_num}
+	</select>
+	
+	<select id="cfgCount" resultType="int">
+		SELECT count(aa.id) FROM a_league_auctioncfg aa, a_league_cfg mu  
+			WHERE 1=1 AND aa.s_id = mu.id
+			<if test="maps.league_id!=null and maps.league_id!=''">
+				AND aa.league_id = #{maps.league_id}
+			</if>
+			<if test="maps.s_id!=null and maps.s_id!=''">
+				AND aa.s_id = #{maps.s_id}
+			</if>
+			<if test="maps.turn_num!=null and maps.turn_num!=''">
+				AND aa.turn_num = #{maps.turn_num}
+			</if>
+	</select>
+	
+	<select id="getCfgById" resultType="com.yt.framework.persistent.entity.LeagueAuctionCfg">
+		SELECT * FROM a_league_auctioncfg WHERE id = #{id}
+	</select>
+	
+	<select id="getCfgByLeague" resultType="com.yt.framework.persistent.entity.LeagueAuctionCfg">
+		SELECT * FROM a_league_auctioncfg WHERE league_id = #{league_id} ORDER BY turn_num
+	</select>
+	
+	<select id="getCfgByLeagueCfg" resultType="com.yt.framework.persistent.entity.LeagueAuctionCfg">
+		SELECT * FROM a_league_auctioncfg WHERE s_id = #{s_id} ORDER BY turn_num
+	</select>
+	
+	<delete id="deleteCfg">
+		DELETE FROM a_league_auctioncfg WHERE id = #{id}
+	</delete>
+	
+	<select id="queryAuctionForMap" resultType="hashmap">
+		SELECT aa.*,
+			   mu.head_icon,mu.username,mu.borndate,
+     		   p.score,p.pass_ability,p.header,p.shot,p.power,p.speed,p.explosive,p.height,p.weight,p.position,p.love_num,p.level
+ 			FROM a_league_auction aa 
+			LEFT JOIN p_player_info p ON aa.user_id = p.user_id
+			LEFT JOIN m_user mu ON aa.user_id = mu.id
+			WHERE 1=1 AND aa.if_up = 1
+				<if test="maps.league_id!=null and maps.league_id!=''">
+					AND aa.league_id = #{maps.league_id} 
+				</if>
+				<if test="maps.s_id!=null and maps.s_id!=''">
+					AND aa.s_id = #{maps.s_id} 
+				</if>
+				<if test="maps.user_name!=null and maps.user_name!=''">
+					AND mu.username like CONCAT(CONCAT('%', #{maps.user_name}),'%')
+				</if>
+				<if test="maps.position!=null and maps.position!=''">
+					AND p.position like CONCAT(CONCAT('%', #{maps.position}),'%')
+				</if>
+				<if test="maps.turn_num!=null and maps.turn_num!=''">
+					AND aa.turn_num = #{maps.turn_num}
+				</if>
+				<if test="maps.level!=null and maps.level!=''">
+					AND p.level = #{maps.level}
+				</if>
+					<choose>
+						<when test="maps.age_sort!=null and maps.age_sort!=''">
+							ORDER BY mu.borndate ${maps.age_sort}
+						</when>
+						<when test="maps.bid_sort!=null and maps.bid_sort!=''">
+							ORDER BY aa.bid_price ${maps.bid_sort}
+						</when>
+						<when test="maps.score_sort!=null and maps.score_sort!=''">
+							ORDER BY p.score ${maps.score_sort}
+						</when>
+						<otherwise>
+							ORDER BY aa.bid_price DESC,p.score DESC,mu.borndate DESC
+						</otherwise>	
+					</choose>
+				<if test="maps.start!=null and maps.rows!=null">
+					LIMIT #{maps.start},#{maps.rows}
+				</if>
+	</select>
+	
+	<select id="auctionCount" resultType="int">
+		SELECT count(aa.id)
+ 			FROM a_league_auction aa 
+			LEFT JOIN p_player_info p ON aa.user_id = p.user_id
+			LEFT JOIN m_user mu ON aa.user_id = mu.id
+			WHERE 1=1 AND aa.if_up = 1
+				<if test="maps.league_id!=null and maps.league_id!=''">
+					AND aa.league_id = #{maps.league_id} 
+				</if>
+				<if test="maps.s_id!=null and maps.s_id!=''">
+					AND aa.s_id = #{maps.s_id} 
+				</if>
+				<if test="maps.user_name!=null and maps.user_name!=''">
+					AND mu.username like CONCAT(CONCAT('%', #{maps.user_name}),'%')
+				</if>
+				<if test="maps.position!=null and maps.position!=''">
+					AND p.position like CONCAT(CONCAT('%', #{maps.position}),'%')
+				</if>
+				<if test="maps.turn_num!=null and maps.turn_num!=''">
+					AND aa.turn_num = #{maps.turn_num}
+				</if>
+				<if test="maps.level!=null and maps.level!=''">
+					AND p.level = #{maps.level}
+				</if>
+	</select>
+	
+	<select id="getCurrentAuction" resultType="com.yt.framework.persistent.entity.LeagueAuctionCfg">
+		SELECT * FROM a_league_auctioncfg 
+			WHERE s_id = #{s_id} AND status = 1 ORDER BY create_time ASC LIMIT 1;
+	</select>
+	
+	<select id="getAuctionPlayerDetail" resultType="hashmap">
+		SELECT aa.*,
+			   mu.head_icon,mu.username,mu.borndate,
+     		   p.score,p.pass_ability,p.header,p.shot,p.power,p.speed,p.explosive,p.height,p.weight,p.position,p.level
+ 			FROM a_league_auction aa 
+			LEFT JOIN p_player_info p ON aa.user_id = p.user_id
+			LEFT JOIN m_user mu ON aa.user_id = mu.id
+			WHERE aa.id = #{id}
+ 	</select>
+ 	
+ 	<select id="queryMyAuctionForMap" resultType="hashmap">
+		SELECT ala.*,
+			   mu.head_icon,mu.username,mu.borndate,
+     		   p.score,p.pass_ability,p.header,p.shot,p.power,p.speed,p.explosive,p.height,p.weight,p.position,p.love_num
+ 			FROM (SELECT aa.* FROM (SELECT DISTINCT ar.auc_id auc_id FROM a_auction_records ar WHERE ar.manager_id = #{maps.teaminfo_id}) AS auc ,a_league_auction aa
+ 					WHERE auc.auc_id = aa.id 
+ 						<if test="maps.league_id!=null and maps.league_id!=''">
+							AND aa.league_id = #{maps.league_id} 
+						</if>
+						<if test="maps.s_id!=null and maps.s_id!=''">
+							AND aa.s_id = #{maps.s_id} 
+						</if>
+						<if test="maps.turn_num!=null and maps.turn_num!=''">
+							AND aa.turn_num = #{maps.turn_num} 
+						</if>
+				) AS ala		
+					LEFT JOIN p_player_info p ON ala.user_id = p.user_id
+					LEFT JOIN m_user mu ON ala.user_id = mu.id
+						WHERE 1=1 
+						<if test="maps.user_name!=null and maps.user_name!=''">
+							AND mu.username like CONCAT(CONCAT('%', #{maps.user_name}),'%')
+						</if>
+						<if test="maps.position!=null and maps.position!=''">
+							AND p.position like CONCAT(CONCAT('%', #{maps.position}),'%')
+						</if>
+						<if test="maps.level!=null and maps.level!=''">
+							AND p.level = #{maps.level}
+						</if>
+							<choose>
+								<when test="maps.age_sort!=null and maps.age_sort!=''">
+									ORDER BY mu.borndate ${maps.age_sort}
+								</when>
+								<when test="maps.bid_sort!=null and maps.bid_sort!=''">
+									ORDER BY ala.bid_price ${maps.bid_sort}
+								</when>
+								<when test="maps.score_sort!=null and maps.score_sort!=''">
+									ORDER BY p.score ${maps.score_sort}
+								</when>
+								<otherwise>
+									ORDER BY ala.bid_price DESC,p.score DESC,mu.borndate DESC
+								</otherwise>	
+							</choose>
+						<if test="maps.start!=null and maps.rows!=null">
+							LIMIT #{maps.start},#{maps.rows}
+						</if>
+	</select>
+	
+	<select id="myAuctionCount" resultType="int">
+		SELECT count(ala.id)
+ 			FROM (SELECT aa.* FROM (SELECT DISTINCT ar.auc_id auc_id FROM a_auction_records ar WHERE ar.manager_id = #{maps.teaminfo_id}) AS auc ,a_league_auction aa
+ 					WHERE auc.auc_id = aa.id 
+ 						<if test="maps.league_id!=null and maps.league_id!=''">
+							AND aa.league_id = #{maps.league_id} 
+						</if>
+						<if test="maps.s_id!=null and maps.s_id!=''">
+							AND aa.s_id = #{maps.s_id} 
+						</if>
+				) AS ala		
+					LEFT JOIN p_player_info p ON ala.user_id = p.user_id
+					LEFT JOIN m_user mu ON ala.user_id = mu.id
+						WHERE 1=1 
+						<if test="maps.user_name!=null and maps.user_name!=''">
+							AND mu.username like CONCAT(CONCAT('%', #{maps.user_name}),'%')
+						</if>
+						<if test="maps.position!=null and maps.position!=''">
+							AND p.position like CONCAT(CONCAT('%', #{maps.position}),'%')
+						</if>
+						<if test="maps.level!=null and maps.level!=''">
+							AND p.level = #{maps.level}
+						</if>
+	</select>
+ 	
+ 	<!--竞拍市场纪录-->
+	<insert id="saveRecords" parameterType="com.yt.framework.persistent.entity.LeagueAuctionRecords" >
+		INSERT INTO a_auction_records(
+			 id,
+			 manager_id, 
+			 auc_id,
+			 bid_price,
+			 bid_time,
+			 team_id,
+			 f_id,
+			 if_bid
+		)VALUES(
+			 #{id},
+			 #{manager_id}, 
+			 #{auc_id},
+			 #{bid_price},
+			 #{bid_time},
+			 #{team_id},
+			 #{f_id},
+			 #{if_bid}
+		)
+	</insert>
+ 	
+ 	<select id="getRecordsById" resultType="com.yt.framework.persistent.entity.LeagueAuctionRecords">
+ 		SELECT * FROM a_auction_records 
+			WHERE id = #{id}
+ 	</select>
+ 	
+ 	<select id="updateBatchAuction" statementType="CALLABLE">  
+		{call auctionCalculate_all(#{turn_num},#{next_num},#{user_percent},#{s_id})}  
+  	</select> 
+  	
+  	<select id="getAuctionPlayer" resultType="com.yt.framework.persistent.entity.LeagueAuction">
+  		SELECT * FROM a_league_auction WHERE s_id=#{s_id} AND user_id=#{user_id} 
+	</select>
+	<select id="getAuctionCheckedPlayer" resultType="com.yt.framework.persistent.entity.LeagueAuction">
+  		SELECT * FROM a_league_auction WHERE s_id=#{s_id} AND user_id=#{user_id} AND bidder is not null AND bidder!='' LIMIT 1
+	</select>
+	<select id="getAuctionNoCheckedPlayer" resultType="com.yt.framework.persistent.entity.LeagueAuction">
+  		SELECT * FROM a_league_auction WHERE user_id=#{user_id} AND (bidder is null or bidder='') LIMIT 1
+	</select>
+	
+	<select id="getAuctionDetailData" resultType="hashmap">
+		SELECT 
+			DISTINCT aa.id, 
+					 mu.username,
+					 mc.id_card,
+					 mu.phone,
+					 tt.name 
+			FROM 
+					a_league_auction aa 
+			LEFT JOIN 
+					m_user mu ON aa.user_id = mu.id
+			LEFT JOIN 
+					m_certification mc ON aa.user_id = mc.user_id
+			LEFT JOIN 
+					t_team_info tt ON aa.bidder = tt.id
+			WHERE 
+					aa.status = 1 AND aa.turn_num = #{turn_num} AND aa.s_id = #{s_id}	
+		
+	</select>
+ 		
+ 		
+</mapper>

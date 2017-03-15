@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_1.xsd"
+	version="2.1">
+	<tlib-version>1.0</tlib-version>
+	<short-name>el</short-name>
+	<function>
+		<name>filePath</name>
+		<function-class>com.yt.framework.utils.tag.FileUtilsTag</function-class>
+		<function-signature>
+			java.lang.String filePath(java.lang.String,java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>headPath</name>
+		<function-class>com.yt.framework.utils.tag.FileUtilsTag</function-class>
+		<function-signature>
+			java.lang.String headPath()
+		</function-signature>
+	</function>
+	<function>
+		<name>long2Date</name>
+		<function-class>com.yt.framework.utils.tag.FileUtilsTag</function-class>
+		<function-signature>
+			java.lang.String long2Date(java.lang.Long)
+		</function-signature>
+	</function>
+	<function>
+		<name>long2DateTime</name>
+		<function-class>com.yt.framework.utils.tag.FileUtilsTag</function-class>
+		<function-signature>
+			java.lang.String long2DateTime(java.lang.Long)
+		</function-signature>
+	</function>
+
+</taglib>                                          

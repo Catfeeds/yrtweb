@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.PlayerCareerMapper">
+	<sql id="playerCareer">
+		 id,
+		 user_id,
+		 start_date,
+		 end_date,
+		 played_team,
+		 play_team,
+		 played_count,
+		 goal_count,
+		 yellow_card,
+		 red_card,
+		 assists_count,
+		 honor_desc,
+		 injured_area
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.PlayerCareer">
+		INSERT INTO p_player_career(
+			 id,
+			 user_id,
+			 start_date,
+		 	 end_date,
+			 played_team,
+			 play_team,
+			 played_count,
+			 goal_count,
+			 yellow_card,
+			 red_card,
+			 assists_count,
+			 honor_desc,
+			 injured_area
+		)VALUES(
+			 #{id},
+			 #{user_id},
+			 #{start_date},
+			 #{end_date},
+			 #{played_team},
+			 #{play_team},
+			 #{played_count},
+			 #{goal_count},
+			 #{yellow_card},
+			 #{red_card},
+			 #{assists_count},
+			 #{honor_desc},
+			 #{injured_area}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.PlayerCareer">
+		UPDATE p_player_career
+		SET
+			 start_date=#{start_date},
+			 end_date=#{end_date},
+			 played_team=#{played_team},
+			 play_team=#{play_team},
+			 played_count=#{played_count},
+			 goal_count=#{goal_count},
+			 yellow_card=#{yellow_card},
+			 red_card=#{red_card},
+			 assists_count=#{assists_count},
+			 honor_desc = #{honor_desc},
+			 injured_area = #{injured_area}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM p_player_career WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.PlayerCareer">
+		SELECT
+		<include refid="playerCareer" />
+		FROM p_player_career WHERE id = #{id}
+	</select>
+	
+	<select id="queryByUserId" resultType="com.yt.framework.persistent.entity.PlayerCareer">
+		SELECT
+		<include refid="playerCareer" />
+		FROM p_player_career WHERE user_id = #{userId} order by end_date+'0' desc 
+	</select>
+</mapper>

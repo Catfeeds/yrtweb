@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.FeedBackBsMapper">
+
+
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT id,name,phone,email,content,ip_str,image_url,status,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') create_time FROM m_feedback WHERE 1=1 
+		<if test="maps.name!=null">
+		AND name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+		</if>
+		<if test="maps.status!=null">
+		AND status=#{maps.status}
+		</if>
+		ORDER BY create_time DESC 
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT id,name,phone,email,content,ip_str,image_url,status,create_time FROM m_feedback WHERE 1=1 
+			<if test="maps.name!=null">
+			AND name LIKE CONCAT(CONCAT('%', #{maps.name}),'%')
+			</if>
+			<if test="maps.status!=null">
+			AND status=#{maps.status}
+			</if>
+		) cot_t)
+	</select>
+	
+	<update id="changeStatus">
+		UPDATE m_feedback SET status=1 WHERE id = #{id}
+	</update>
+		
+		
+		
+</mapper>

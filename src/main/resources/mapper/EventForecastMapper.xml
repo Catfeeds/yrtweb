@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.EventForecastMapper">
+	<select id="getEventForecastLastByUserId" resultType="hashmap">
+		SELECT ef.*,
+			(SELECT tii.logo FROM t_team_info AS tii WHERE tii.id=ef.m_teaminfo_id)AS m_logo,
+			(SELECT tiii.logo FROM t_team_info AS tiii WHERE tiii.id=ef.g_teaminfo_id)AS g_logo 
+		FROM a_event_forecast AS ef 
+			LEFT JOIN t_team_info AS ti ON (ti.id = ef.m_teaminfo_id OR ti.id = ef.g_teaminfo_id)
+			WHERE 1=1
+				AND ef.league_id = #{league_id}
+				AND ti.id = #{teaminfo_id}
+				AND ef.play_time > NOW()
+				ORDER BY ef.play_time ASC
+			LIMIT 0,1
+	</select>
+</mapper>

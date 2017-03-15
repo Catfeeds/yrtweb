@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.BabyInMapper">
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.BabyIn">
+		INSERT INTO f_baby_in(
+			id,
+			user_id,
+			teaminfo_id,
+			days,
+			status,
+			sure_time,
+			contact_person,
+			contact_phone,
+			remark,
+			create_time
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{teaminfo_id},
+			#{days},
+			#{status},
+			#{sure_time},
+			#{contact_person},
+			#{contact_phone},
+			#{remark},
+			NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.BabyIn">
+		UPDATE f_baby_in
+		SET
+			user_id = #{user_id},
+			teaminfo_id = #{teaminfo_id},
+			days = #{days},
+			status = #{status},
+			sure_time = #{sure_time},
+			contact_person = #{contact_person},
+			contact_phone = #{contact_phone},
+			remark = #{remark}
+		WHERE
+			id = #{id}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM f_baby_in WHERE id = #{id}
+	</delete>
+	
+	<select id="queryForPageForMap" resultType="hashmap">
+		SELECT bi.*,ti.name,ti.logo,(TO_DAYS(bi.sure_time) - TO_DAYS(NOW())) AS over_time FROM f_baby_in AS bi 
+			LEFT JOIN t_team_info AS ti ON ti.id = bi.teaminfo_id
+			WHERE 1=1 
+			<if test="maps.user_id!='' and maps.user_id!=null">
+				AND bi.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.teaminfo_id!='' and maps.teaminfo_id!=null">
+				AND bi.teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.status!='' and maps.status!=null">
+				AND bi.status = #{maps.status}
+			</if>
+			<if test="maps.days!='' and maps.days!=null">
+				AND bi.days = #{maps.days}
+			</if>
+				ORDER BY create_time DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM f_baby_in AS bi 
+			LEFT JOIN t_team_info AS ti ON ti.id = bi.teaminfo_id
+			WHERE 1=1 
+			<if test="maps.user_id!='' and maps.user_id!=null">
+				AND bi.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.teaminfo_id!='' and maps.teaminfo_id!=null">
+				AND bi.teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.status!='' and maps.status!=null">
+				AND bi.status = #{maps.status}
+			</if>
+			<if test="maps.days!='' and maps.days!=null">
+				AND bi.days = #{maps.days}
+			</if>
+	</select>
+	
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.BabyIn">
+		SELECT * FROM f_baby_in WHERE id = #{id}
+	</select>
+	
+	<insert id="saveBabyTeam" parameterType="com.yt.framework.persistent.entity.BabyTeam">
+		INSERT INTO f_baby_team(
+			id,
+			user_id,
+			teaminfo_id,
+			join_date,
+			days,
+			end_date,
+			status
+		)VALUES(
+			#{id},
+			#{user_id},
+			#{teaminfo_id},
+			#{join_date},
+			#{days},
+			#{end_date},
+			#{status}
+		)
+	</insert>
+	
+	<update id="updateBabyTeam" parameterType="com.yt.framework.persistent.entity.BabyTeam">
+		UPDATE f_baby_team
+			SET
+				status = #{status}
+			WHERE
+				id = #{id}
+	</update>
+	
+	<select id="getBabyTeamById" resultType="com.yt.framework.persistent.entity.BabyTeam">
+		SELECT * FROM f_baby_team WHERE id = #{id}
+	</select>
+	
+	<select id="getBabyInInfo" resultType="com.yt.framework.persistent.entity.BabyIn">
+		SELECT * FROM f_baby_in WHERE user_id = #{user_id} AND teaminfo_id = #{teaminfo_id} AND status = #{status}
+	</select>
+	
+	
+	<select id="queryBabyTeamForMap" resultType="hashmap">
+		SELECT bi.*,ti.name,ti.logo,(TO_DAYS(bi.end_date) - TO_DAYS(NOW())) AS over_time,m.head_icon,m.usernick,m.borndate,fb.chest,fb.hip,fb.waist
+			FROM m_user AS m ,f_baby_team AS bi 
+			LEFT JOIN t_team_info AS ti ON ti.id = bi.teaminfo_id
+			LEFT JOIN f_baby_info AS fb ON fb.user_id = bi.user_id
+			WHERE 1=1 AND bi.user_id = m.id
+			<if test="maps.user_id!='' and maps.user_id!=null">
+				AND bi.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.teaminfo_id!='' and maps.teaminfo_id!=null">
+				AND bi.teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.status!='' and maps.status!=null">
+				AND bi.status = #{maps.status}
+			</if>
+			<if test="maps.days!='' and maps.days!=null">
+				AND bi.days = #{maps.days}
+			</if>
+				ORDER BY bi.days DESC
+			<if test="maps.start!=null and maps.rows!=null">
+				LIMIT #{maps.start},#{maps.rows}
+			</if>
+	</select>
+	
+	<select id="countBabyTeam" resultType="int">
+		SELECT COUNT(bi.id) FROM m_user AS m,f_baby_team AS bi 
+			LEFT JOIN t_team_info AS ti ON ti.id = bi.teaminfo_id
+			WHERE 1=1 AND bi.user_id = m.id
+			<if test="maps.user_id!='' and maps.user_id!=null">
+				AND bi.user_id = #{maps.user_id}
+			</if>
+			<if test="maps.teaminfo_id!='' and maps.teaminfo_id!=null">
+				AND bi.teaminfo_id = #{maps.teaminfo_id}
+			</if>
+			<if test="maps.status!='' and maps.status!=null">
+				AND bi.status = #{maps.status}
+			</if>
+			<if test="maps.days!='' and maps.days!=null">
+				AND bi.days = #{maps.days}
+			</if>
+	</select>
+	
+	<select id="loadCurretDateBabyTeams" resultType="com.yt.framework.persistent.entity.BabyTeam">
+		SELECT * FROM f_baby_team AS ft WHERE  DATE_FORMAT(ft.end_date,'%Y-%m-%d') = #{date_str}
+	</select>
+	
+	<update id="updateBabyTeamStatus" parameterType="java.util.List">
+        UPDATE f_baby_team 
+        	SET  status = 0
+        	WHERE id IN
+		 <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                ${item.id}
+         </foreach>
+	</update>
+	
+	<update id="dissolveAllBabyTeam">
+        UPDATE f_baby_team 
+        	SET  status = 0
+        	WHERE teaminfo_id = #{teaminfo_id} AND status = 1
+	</update>
+	
+	<select id="joinTeamCount" resultType="int">
+		SELECT COUNT(*) FROM f_baby_team WHERE user_id = #{baby_user_id} AND (status =1 OR status =2)
+	</select>
+	
+	<select id="teamBabyCount" resultType="int">
+		SELECT COUNT(id) FROM f_baby_team 
+			WHERE teaminfo_id = #{teaminfo_id} AND status =1
+	</select>
+	
+</mapper>

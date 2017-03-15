@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<mappers>
+	    <mapper resource="mapper/IndexMapper.xml" />
+	    <mapper resource="mapper/UserMapper.xml" />
+	    <mapper resource="mapper/SecurityMapper.xml" />
+	    <mapper resource="mapper/PlayerInfoMapper.xml" />
+	    <mapper resource="mapper/PlayerHobbyMapper.xml" />
+	    <mapper resource="mapper/PlayerCareerMapper.xml" />
+	    <mapper resource="mapper/PlayerHonorMapper.xml" />
+	    <mapper resource="mapper/PlayerOtherMapper.xml" />
+	    <mapper resource="mapper/TeamInfoMapper.xml" />
+	    <mapper resource="mapper/AgentInfoMapper.xml" />
+	    <mapper resource="mapper/CoachInfoMapper.xml" />
+	    <mapper resource="mapper/CoachHonorMapper.xml" />
+	    <mapper resource="mapper/CoachCareerMapper.xml" />
+	    <mapper resource="mapper/DynamicMapper.xml" />
+	    <mapper resource="mapper/CommonMapper.xml" />
+	    <mapper resource="mapper/MessageMapper.xml" />
+	    <mapper resource="mapper/PayRecordMapper.xml" />
+	    <mapper resource="mapper/PayCostMapper.xml" />
+	    <mapper resource="mapper/ImageVideoMapper.xml" />
+	    <mapper resource="mapper/ImageVideoTeamMapper.xml" />
+	    <mapper resource="mapper/TeamInviteMapper.xml" />
+	    <mapper resource="mapper/DressResourcesMapper.xml" />
+	    <mapper resource="mapper/DressupMapper.xml" />
+	    <mapper resource="mapper/MessageRecordsMapper.xml" />
+	    <mapper resource="mapper/CertificationMapper.xml" />
+	    <mapper resource="mapper/FeedBackMapper.xml" />
+	    <mapper resource="mapper/VisitorMapper.xml" />
+	    <mapper resource="mapper/SpaceMapper.xml" />
+	    <mapper resource="mapper/ScheduleSmsMapper.xml" />
+	    <mapper resource="mapper/BabyInfoMapper.xml" />
+	    <mapper resource="mapper/BabyInMapper.xml" />
+	    <mapper resource="mapper/BabyCheerMapper.xml" />
+	    <mapper resource="mapper/BabyEvalMapper.xml" />
+	    <mapper resource="mapper/BabyScoreMapper.xml" />
+	    <mapper resource="mapper/LeagueMapper.xml" />
+	    <mapper resource="mapper/UserAmountMapper.xml" />
+	    <mapper resource="mapper/LeagueAuctionMapper.xml" />
+	    <mapper resource="mapper/LeagueCostMapper.xml" />
+	    <mapper resource="mapper/PkRecordMapper.xml" />
+	    <mapper resource="mapper/EventRecordMapper.xml" />
+	    <mapper resource="mapper/EventForecastMapper.xml" />
+	    <mapper resource="mapper/NewsMapper.xml" />
+	    <mapper resource="mapper/ImageVideoLeagueMapper.xml" />
+	    <mapper resource="mapper/ScheduleMapper.xml" />
+	    <mapper resource="mapper/SysDictMapper.xml" />
+	    <mapper resource="mapper/PriceSlaveMapper.xml" />
+	    <mapper resource="mapper/ActivitySignMapper.xml" />
+	    <mapper resource="mapper/OrderMapper.xml" />
+	    <mapper resource="mapper/LeagueMarketMapper.xml" />
+	    <mapper resource="mapper/BabyInfoMapper.xml" />
+	    <mapper resource="mapper/ReceiveGiftsMapper.xml" />
+	    <mapper resource="mapper/ProductMapper.xml" />
+	    <mapper resource="mapper/BbsNoteMapper.xml" />
+	    <mapper resource="mapper/SalaryRecordMapper.xml" />
+	    <mapper resource="mapper/LeagueStatisticsMapper.xml" />
+	    <mapper resource="mapper/TeamLoanPlayerMapper.xml" />
+	    <mapper resource="mapper/UserOrderMapper.xml" />
+	    <mapper resource="mapper/UserProductMapper.xml" />
+	    
+	    <!-- 后台管理系统 start -->
+	    <mapper resource="mapper/admin/AdminUserMapper.xml" />
+	    <mapper resource="mapper/admin/AdminPlayerInfoMapper.xml" />
+	    <mapper resource="mapper/admin/AdminTeamInfoMapper.xml" />
+	    <mapper resource="mapper/admin/AccountMapper.xml" />
+	    <mapper resource="mapper/admin/FeedBackBsMapper.xml" />
+	    <mapper resource="mapper/admin/IndexModelMapper.xml" />
+	    <mapper resource="mapper/admin/AdminBabyInfoMapper.xml" />
+	    <mapper resource="mapper/admin/ResourcesMapper.xml" />
+	    <mapper resource="mapper/admin/ActiveCodeMapper.xml" />
+	    <mapper resource="mapper/admin/AdminSignMapper.xml" />
+	    <mapper resource="mapper/admin/AdminNewsMapper.xml" />
+	    <mapper resource="mapper/admin/AdminLeagueGroupMapper.xml" />
+	    <mapper resource="mapper/admin/AdminImageVideoLeagueMapper.xml" />
+	    <mapper resource="mapper/admin/AdminTeamIntegralMapper.xml" />
+	    <mapper resource="mapper/admin/AdminLeagueScorerMapper.xml" />
+	    <mapper resource="mapper/admin/AdminLeagueStatisticsMapper.xml" />
+	    <mapper resource="mapper/admin/AdminEventForecastMapper.xml" />
+	    <mapper resource="mapper/admin/AdminEventRecordMapper.xml" />
+	    <mapper resource="mapper/admin/AdminPkRecordMapper.xml" />
+	    <mapper resource="mapper/admin/QuanLeagueMapper.xml" />
+	    <mapper resource="mapper/admin/AdminSysAreaMapper.xml" />
+	    <mapper resource="mapper/admin/AdminUserOrderMapper.xml" />
+	    <mapper resource="mapper/admin/AdminUserProductMapper.xml" />
+	    
+	</mappers>
+</configuration>

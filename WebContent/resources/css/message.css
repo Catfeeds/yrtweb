@@ -1,0 +1,166 @@
+.middle{
+	width: 738px;
+	height: 506px;
+	background: url(../images/messageRadius.png);
+	margin: 0 auto;
+	
+}
+
+/*信息列表部分*/
+.message_list{
+	width: 184px;
+	height: 500px;
+	float: left;
+	overflow: auto;
+}
+
+.message_list ul{
+	padding-top: 5px;
+	margin-left: 15px;
+}
+
+.message_list li{
+	position:relative;
+	margin-top: 20px;
+	height: 40px;
+	cursor: pointer;
+}
+
+.message_list span{
+	float: left;
+  	margin-top: 10px;
+  	margin-left: 10px;
+  	color: white;
+}
+
+/*聊天部分*/
+.chatBox{
+	width: 546px;
+	height: 490px;
+	float: left;
+	background: url(../images/home_baby_bg.png) repeat-y;
+	border-radius: 6px;
+	margin-top: 8px;
+}
+
+.messageShow{
+	width: 100%;
+	height: 360px;
+	overflow: auto;
+	border-bottom: 1px solid gray;
+    margin-bottom: 10px;
+}
+
+/*.messageShow p{
+	margin: 0 auto; 
+	width: 60px;
+	text-align: center;
+	background: #e2e2e2;
+	color: white;
+	margin-top: 10px;
+}*/
+.messageShow .qipao_tinme{
+	text-align: left;
+	color: #666666;
+	padding-top:5px;
+	padding-left: 5px;
+}
+/*左边聊天气泡*/
+.message_left{
+	
+	min-height: 40px;
+	margin-bottom: 10px;
+	float: left;
+	margin-left: 10px;
+}
+
+/*右边聊天气泡*/
+.message_right{
+
+	min-height: 40px;
+	margin-bottom: 10px;
+	float: right;
+	margin-right:10px;
+}
+
+/*聊天气泡*/
+.message_left .message_qipao{
+	width: 280px;
+	/*max-width: 280px;*/
+	min-height: 30px;
+	margin-left: 10px;
+	margin-top: 4px;
+}
+
+.message_right .message_qipao{
+	
+	/*max-width: 280px;*/
+	width: 280px;
+	min-height: 30px;
+	margin-right: 10px;
+}
+.qipao{
+	min-height: 360px;
+    padding-top: 10px;
+}
+.qipao_content{
+	border-radius: 8px;
+	background: #DCDCDC;
+	padding: 8px;
+	word-break: break-word;
+}
+@-moz-document url-prefix() {
+            .qipao_content {
+                word-wrap:break-word; 
+                overflow:hidden;
+            }
+        }
+/*.message_qipao img{
+	width: 6px;
+  	margin-top: 10px;
+  	float: left;
+}*/
+
+.message_left img{
+	
+  	margin-top: 10px;
+  	float: left;
+}
+
+.message_right img{
+	
+  	margin-top: 10px;
+  	float: right;
+}
+
+.EditMessage{
+	width: 100%;
+	height: 120px;
+	margin-right: 25px;
+}
+
+.EditMessage textarea{
+	width: 518px;
+  	height: 66px;
+  	border-bottom: none;
+  	margin-left: 10px;
+}
+
+.sendMessage{
+	/* margin-right: 25px; */
+  	margin-top: 10px;
+  	float: right;
+}
+
+.sendMessage span{
+	color: #C9C9C9;
+}
+
+.sendMessage input{
+	width: 60px;
+	height: 22px;
+	background: #b37406;
+	border-radius: 6px;
+	border: none;
+	color: white;
+}

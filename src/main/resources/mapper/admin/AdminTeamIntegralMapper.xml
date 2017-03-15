@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yt.framework.mapper.admin.AdminTeamIntegralMapper">
+	<sql id="teamIntegral">
+		id,
+		league_id,
+		group_id,
+		teaminfo_id,
+		games,
+		win_games,
+		lose_ball,
+		in_ball,
+		lose_games,
+		sum_integral,
+		flat_games,
+		ranking
+	</sql>
+
+	<insert id="save" parameterType="com.yt.framework.persistent.entity.TeamIntegral">
+		INSERT INTO a_team_integral(
+			id,
+			league_id,
+			group_id,
+			teaminfo_id,
+			games,
+			win_games,
+			lose_ball,
+			in_ball,
+			lose_games,
+			sum_integral,
+			flat_games,
+			ranking
+		)VALUES(
+			#{id},
+			#{league_id},
+			#{group_id},
+			#{teaminfo_id},
+			#{games},
+			#{win_games},
+			#{lose_ball},
+			#{in_ball},
+			#{lose_games},
+			#{sum_integral},
+			#{flat_games},
+			#{ranking}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yt.framework.persistent.entity.TeamIntegral">
+		UPDATE a_team_integral
+		SET
+			teaminfo_id = #{teaminfo_id},
+			games = #{games},
+			win_games = #{win_games},
+			lose_ball = #{lose_ball},
+			in_ball = #{in_ball},
+			lose_games = #{lose_games},
+			sum_integral = #{sum_integral},
+			flat_games = #{flat_games},
+			ranking = #{ranking}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM a_team_integral WHERE id = #{id}
+	</delete>
+
+	<select id="getEntityById" resultType="com.yt.framework.persistent.entity.TeamIntegral">
+		SELECT
+		<include refid="teamIntegral" />
+		FROM a_team_integral WHERE id = #{id}
+	</select>
+	
+	<select id="queryForPageForMap" parameterType="hashmap" resultType="hashmap">
+		SELECT ati.*,l.`name` lname,lg.`name` gname,t.`name` tname FROM a_team_integral ati
+		LEFT JOIN a_league l ON l.id=ati.league_id 
+		LEFT JOIN a_league_group lg ON lg.id=ati.group_id 
+		LEFT JOIN t_team_info t ON t.id = ati.teaminfo_id 
+		<where>
+   		 	<if test="maps.tname !=null and maps.tname !='' ">
+				AND t.`name` LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')
+			</if>
+			<if test="maps.league_id !=null and maps.league_id !='' ">
+				AND l.id = #{maps.league_id}
+			</if>
+   		 </where>
+		<if test="maps.start!=null and maps.rows!=null">
+			LIMIT #{maps.start},#{maps.rows}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT ati.*,l.`name` lname,lg.`name` gname,t.`name` tname FROM a_team_integral ati
+			LEFT JOIN a_league l ON l.id=ati.league_id 
+			LEFT JOIN a_league_group lg ON lg.id=ati.group_id 
+			LEFT JOIN t_team_info t ON t.id = ati.teaminfo_id 
+			<where>
+	   		 	<if test="maps.tname !=null and maps.tname !='' ">
+					AND t.`name` LIKE CONCAT(CONCAT('%', #{maps.tname}),'%')
+				</if>
+				<if test="maps.league_id !=null and maps.league_id !='' ">
+					AND l.id = #{maps.league_id}
+				</if>
+	   		 </where>
+		) cot_t)
+	</select>
+</mapper>
