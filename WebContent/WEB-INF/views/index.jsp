@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<html>
+	<html >
 		<head>
 		<%@ include file="common/common_new.jsp" %>
 			<meta charset="utf-8">
@@ -40,6 +40,12 @@
 			<link rel="stylesheet" href="${ctx}/resources/new/css/color.css">
 			<!--RESPONCIVE CSS-->
 			<link rel="stylesheet" href="${ctx}/resources/new/css/responsive.css">
+			<style type="text/css">
+			
+			#nt-title li {
+				font-size: 20px;
+			}
+			</style>
 		</head>
 		<body class="kode-football">
 			<!--// Wrapper //-->
@@ -51,75 +57,20 @@
 					<div class="pull-right">
 						<div class="login-wraper3">
 							<ul class="login-meta">
-							  <li><a href="#">help desk</a></li>
-							  <li><a href="#">live score</a></li>
-								<li>
-									<!-- Large modal -->
-									<a type="button" class="btn btn-primary" data-toggle="modal" data-target=".media01">Login</a>
-
-									<div class="modal fade bs-example-modal-lg media01" tabindex="-1" role="login" aria-labelledby="login">
-									  <div class="modal-dialog modal-lg" role="document">
-										<div class="modal-content">
-											<div class="kode_modal_body">
-												<a href="#"><i class="fa fa-user"></i></a>
-												<h2>member  login</h2>
-												<form>
-													<div class="kode_modal_field">
-														<input type="text" placeholder="username" required>
-													</div>
-													<div class="kode_modal_field">
-														<input type="text" placeholder="password" required>
-													</div>
-													<div class="kode_model_btn">
-														<button>login</button>
-														<a href="#">forget password?</a>
-													</div>
-												</form>
-											</div>
-										</div>
-									  </div>
-									</div>
-								</li>
-								<li>
-									<!-- Large modal -->
-									<a type="button" class="btn btn-primary" data-toggle="modal" data-target=".media02">Register</a>
-									
-									<div class="modal fade bs-example-modal-lg media02" tabindex="-1" role="Register" aria-labelledby="Register">
-									  <div class="modal-dialog modal-lg" role="document">
-										<div class="modal-content">
-											<div class="kode_modal_body">
-												<a href="#"><i class="fa fa-user"></i></a>
-												<h2>Register</h2>
-												<form>
-													<div class="kode_modal_field">
-														<input type="text" placeholder="username" required>
-													</div>
-													<div class="kode_modal_field">
-														<input type="text" placeholder="password" required>
-													</div>
-													<div class="kode_modal_field">
-														<input type="text" placeholder="confirm password" required>
-													</div>
-													<div class="kode_model_btn">
-														<button>register</button>
-														<a href="#">member  login</a>
-													</div>
-												</form>
-											</div>
-										</div>
-									  </div>
-									</div>
-									
-								</li>
-							  <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-							  <li><a id="ftb_btn_link" ><i class="fa fa-search"></i></a></li>
+							
+							  <li><input type="text"  /></li>
+							  <li style=" padding: 0px 5px;"><a ><i class="fa fa-search">&nbsp;&nbsp;</i></a></li>
+								
+								
+							  <li style=" padding: 0px 15px;"><a><i class="fa fa-user"> 请登录 | 免费注册 &nbsp;&nbsp; </i></a></li>
+							  
 							</ul>
 						  <div id="show-class"><form><input type="text" placeholder="your key word"></form></div>
 						  <ul class="social-style3">
-							  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-							  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-							  <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-							  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+								<li><h7>财富</h7><li>
+							  <li><a href="${ctx}/resources/new/#" style="color: #ADFF2F">70000</a></li>
+							  <li><h7>宇币</h7><li>
+							  <li><a href="${ctx}/resources/new/#" style="color: #ADFF2F">充值</a></li>
 						  </ul>
 					  </div>
 					</div>
@@ -128,32 +79,16 @@
 				<div class="logo-wrap2">
 				  <div class="container">
 					<div class="logo logo-3">
-					  <a href="#"><img src="${ctx}/resources/new/images/logo2.png" alt=""></a>
+					  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/logo2.png" alt=""></a>
 					</div>
-					<!--// SPB TICKER //-->
-					<div class="spb-ticker spb-ticker2">
-					  <span>New:</span>
-					  <ul class="top_slider_bxslider">
-						<li>
-						  <div class="ticker-dec">
-							<a href="#">春季联赛即将开幕，本网站、微信公众号、新浪微博均可报名哦！</a>
-						  </div>
-						</li>
-						<li>
-						  <div class="ticker-dec">
-							<a href="#">春季联赛即将开幕，本网站、微信公众号、新浪微博均可报名哦！</a>
-						  </div>
-						</li>
-					  </ul>
-					</div>
-					<!--// SPB TICKER //-->
+
 				  </div>
 				</div>
 
 				<div class="nav4">
-				  <div class="container">
-					<ul class="kode_nave">
-						<li><a href="#">首  页</a>
+				  <div class="container" style="width: 100%">
+					<ul class="kode_nave" style="margin-left: 15%">
+						<li><a href="${ctx}/resources/new/#">首  页</a>
 
 						</li>
 						<li><a href="${ctx}/resources/new/about-us.html">宇币夺宝</a></li>
@@ -164,7 +99,7 @@
 								  <li><a href="${ctx}/resources/new/ticket-single.html">球员竞拍 </a></li>
 							</ul>	  
 						</li>
-						<li><a href="#">俱乐部</a>
+						<li><a href="${ctx}/resources/new/#">俱乐部</a>
 
 						</li>
 						<li><a href="${ctx}/resources/new/shop.html">球员库</a></li>
@@ -177,7 +112,7 @@
 					<div id="kode-responsive-navigation" class="dl-menuwrapper">
 					<button class="dl-trigger">Open Menu</button>
 						<ul class="dl-menu">
-							<li class="active"><a class="active" href="#">Home</a>
+							<li class="active"><a class="active" href="${ctx}/resources/new/#">Home</a>
 								<ul class="dl-submenu">	
 									<li><a href="${ctx}/resources/new/index.html">home</a></li>
 									<li><a href="${ctx}/resources/new/tennis.html">tennis </a></li>
@@ -192,7 +127,7 @@
 									<li><a href="${ctx}/resources/new/ticket-single.html">ticket single</a></li>
 								</ul>
 							</li>
-							<li class="menu-item kode-parent-menu"><a href="#">Team & Player</a>
+							<li class="menu-item kode-parent-menu"><a href="${ctx}/resources/new/#">Team & Player</a>
 								<ul class="dl-submenu">
 									<li><a href="${ctx}/resources/new/our-team.html">our team</a></li>
 									<li><a href="${ctx}/resources/new/our-team-2.html">our team 2</a></li>
@@ -201,7 +136,7 @@
 								</ul>
 							</li>
 							<li class="menu-item kode-parent-menu"><a href="${ctx}/resources/new/shop.html">shop</a></li>
-							<li class="menu-item kode-parent-menu"><a href="#">blog</a>
+							<li class="menu-item kode-parent-menu"><a href="${ctx}/resources/new/#">blog</a>
 								<ul class="dl-submenu">
 									<li><a href="${ctx}/resources/new/blog.html">blog</a></li>
 									<li><a href="${ctx}/resources/new/blog2.html">blog 02</a></li>
@@ -209,7 +144,7 @@
 									<li><a href="${ctx}/resources/new/blog-sidebar.html">blog sidebar</a></li>
 								</ul>
 							</li>
-							<li class="menu-item kode-parent-menu"><a href="#">page</a>
+							<li class="menu-item kode-parent-menu"><a href="${ctx}/resources/new/#">page</a>
 								<ul class="dl-submenu">
 									<li><a href="${ctx}/resources/new/404.html">404</a></li>
 									<li><a href="${ctx}/resources/new/404-2.html">404 02</a></li>
@@ -221,12 +156,25 @@
 						</ul>
 					</div>
 					<!--DL Menu END-->
-					<div class="ticket-wrap">
-					  <a class="book-now" href="${ctx}/resources/new/tickets.html"><i class="fa fa-info"></i>此处改成翻板式消息提醒--带类型</a>
+					<div class="ticket-wrap" style="width: 30%; margin-top: 10px; ">
+					  		<div id="nt-title-container" >
+			    				<ul id="nt-title" >
+				    				<li style="color: white; ">
+				    					<span class="icon-cup" style="color: #FF1493">&nbsp;&nbsp;</span><span>夺宝--用户用宇贝购买了商品</span>
+				    				</li>
+				    				<li style="color: white">
+				    					<span class="icon-football" style="color: #ADFF2F">&nbsp;&nbsp;</span><span>战报--比赛赛况信息</span>
+				    				</li>
+				    				<li style="color: white">
+				    					<span class="icon-soccer" style="color: #CDCD00">&nbsp;&nbsp;</span><span>转会--球员转会信息</span>
+				    				</li>
+				    				
+			    				</ul>
+			    			</div>
 					  <div class="lung-link">
 					  <!--  
-						<a href="#">en</a>
-						<a href="#">fr</a>
+						<a href="${ctx}/resources/new/#">en</a>
+						<a href="${ctx}/resources/new/#">fr</a>
 						-->
 					  </div>
 					</div>
@@ -251,7 +199,7 @@
 							  <h8>3月15日开始报名，网上报名更优惠哦！</h8>
 							</div>
 							<div class="clearfix"></div>        
-							<p><a class="btn-4" href="#">马上报名<i class="fa fa-angle-right"></i></a></p>
+							<p><a class="btn-4" href="${ctx}/resources/new/#">马上报名<i class="fa fa-angle-right"></i></a></p>
 							<div class="clearfix"></div>
 						  </div>
 						</div>
@@ -271,7 +219,7 @@
 							  <h8>3月15日开始报名，网上报名更优惠哦！</h8>
 							</div>
 							<div class="clearfix"></div>        
-							<p><a class="btn-4" href="#">马上报名<i class="fa fa-angle-right"></i></a></p>
+							<p><a class="btn-4" href="${ctx}/resources/new/#">马上报名<i class="fa fa-angle-right"></i></a></p>
 							<div class="clearfix"></div>
 						  </div>
 						</div>
@@ -291,7 +239,7 @@
 							  <h8>3月15日开始报名，网上报名更优惠哦！</h8>
 							</div>
 							<div class="clearfix"></div>        
-							<p><a class="btn-4" href="#">马上报名<i class="fa fa-angle-left"></i></a></p>
+							<p><a class="btn-4" href="${ctx}/resources/new/#">马上报名<i class="fa fa-angle-left"></i></a></p>
 							<div class="clearfix"></div>
 						  </div>
 						</div>
@@ -311,13 +259,13 @@
 						  <span>23 June 2016</span>
 						  <div class="ft-match-teams">
 							<div class="ft-team-1">
-							  <h5><a href="#">Iceland</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Iceland</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
 							</div>
 							<span>21 : 00</span>
 							<div class="ft-team-1 ft-team-2">
-							  <h5><a href="#">Poland</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag6.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Poland</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag6.png" alt=""></a>
 							</div>
 						  </div>
 					  </div>
@@ -327,13 +275,13 @@
 						  <span>23 June 2016</span>
 						  <div class="ft-match-teams">
 							<div class="ft-team-1">
-							  <h5><a href="#">England</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag2.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">England</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag2.png" alt=""></a>
 							</div>
 							<span>21 : 00</span>
 							<div class="ft-team-1 ft-team-2">
-							  <h5><a href="#">Germany</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag3.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Germany</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag3.png" alt=""></a>
 							</div>
 						  </div>
 					  </div>
@@ -343,13 +291,13 @@
 						  <span>23 June 2016</span>
 						  <div class="ft-match-teams">
 							<div class="ft-team-1">
-							  <h5><a href="#">Turkey</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag4.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Turkey</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag4.png" alt=""></a>
 							</div>
 							<span>21 : 00</span>
 							<div class="ft-team-1 ft-team-2">
-							  <h5><a href="#">Africa</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag5.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Africa</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag5.png" alt=""></a>
 							</div>
 						  </div>
 					  </div>
@@ -359,13 +307,13 @@
 						  <span>23 June 2016</span>
 						  <div class="ft-match-teams">
 							<div class="ft-team-1">
-							  <h5><a href="#">Iceland</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Iceland</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
 							</div>
 							<span>21 : 00</span>
 							<div class="ft-team-1 ft-team-2">
-							  <h5><a href="#">Poland</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag6.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Poland</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag6.png" alt=""></a>
 							</div>
 						  </div>
 					  </div>
@@ -375,13 +323,13 @@
 						  <span>23 June 2016</span>
 						  <div class="ft-match-teams">
 							<div class="ft-team-1">
-							  <h5><a href="#">Iceland</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Iceland</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
 							</div>
 							<span>21 : 00</span>
 							<div class="ft-team-1 ft-team-2">
-							  <h5><a href="#">Poland</a></h5>
-							  <a href="#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
+							  <h5><a href="${ctx}/resources/new/#">Poland</a></h5>
+							  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/flag.png" alt=""></a>
 							</div>
 						  </div>
 					  </div>
@@ -400,13 +348,13 @@
 					<!--// HEADING 5 //-->
 					<div class="row">
 					  <!--// COUNTER //-->
-					  <div class="col-md-3 col-sm-3">
-					  <a href="#">
+					  <div class="col-md-3 col-sm-3" >
+					  <a href="${ctx}/resources/new/#">
 						<div class="counterup-dec">
-						  <span class="icon-football"></span>
+						  <span class="icon-football" ></span>
 						  <div class="text">
-							<h3 class="word-count">250</h3>
-							<p>场比赛</p>
+							<h3 class="word-count" >250</h3>
+							<p >场比赛</p>
 						  </div>
 						</div>
 						</a>
@@ -414,7 +362,7 @@
 					  <!--// COUNTER //-->
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3">
-					  	<a href="#">
+					  	<a href="${ctx}/resources/new/#">
 						<div class="counterup-dec">
 						  <span class="icon-soccer"></span>
 						  <div class="text" >
@@ -426,7 +374,7 @@
 					  </div>
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3">
-					  	<a href="#">
+					  	<a href="${ctx}/resources/new/#">
 						<div class="counterup-dec">
 						  <span class="icon-symbol"></span>
 						  <div class="text">
@@ -439,7 +387,7 @@
 					  <!--// COUNTER //-->
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3">
-					  	<a href="#">
+					  	<a href="${ctx}/resources/new/#">
 						<div class="counterup-dec">
 						  <span class="icon-cup"></span>
 						  <div class="text">
@@ -465,67 +413,255 @@
 					  <h4>球员  <span>库</span></h4>
 					</div>
 					<!--// HEADING 5 //-->
+					<style>
+						.playercart1{
+							height: 350px;
+							border:2px solid #8A2BE2;
+							margin-top: 10px;
+							width: 95%;
+							border-radius:5px 5px 5px 5px;
+						}
+						.playercart2{
+							width: 180px;
+							height: 50px;
+							border-top: 50px solid #8A2BE2;
+							border-right: 30px solid transparent;
+							border-bottom: 30px solid transparent;
+							border-left: 30px solid transparent;
+							margin-left: 40px
+						}
+						.playercart3{
+							color: white;
+							margin-top: -60px;
+							margin-left: 100px
+						}
+						
+						.circle_bot{  
+						    width: 100px;  
+						    height: 100px;  
+						    margin: 25px 10px 0 80px;  
+						    border-radius: 50%;  
+						    border:2px solid #8A2BE2;
+						}  
+						.circle_mid {  
+						    width: 80px;  
+						    height: 80px;  
+						    margin: -90px 0 0 89px;  
+						    border-radius: 50%;
+						    border:1px solid #8A2BE2;  
+						}  
+						.circle_mid img{
+						border-radius:5px
+						} 
+						.playercart4{
+							margin-top: -10px;
+							margin-left: 10px;
+						}
+						.playercart4 span{
+							color: #8A2BE2
+						}
+						.playercart5{
+							margin-left: 90px;
+						}
+						.playercart5 span{
+							color: #FF0000
+						}
+						.playercart6{
+							margin-left: 90px;
+							margin-top: 10px
+						}
+						.playercart6 span{
+							color: #FF0000
+						}
+						.playercart7{
+							width: 100%;
+							height: 25px;
+						}
+						.playercart8{
+							float: left;
+							display: inline;
+							background:#8A2BE2 ;
+							width:70px;
+							height: 25px
+						}
+						.playercart9{
+							float: right;
+							display: inline;
+							background:#8A2BE2 ;
+							width:70px;
+							height: 25px
+						}
+						.playercart7 span{
+							color: white;
+						}
+						
+						
+						
+						.circle_mid figure div{
+						display:inline-block;
+						margin:10px auto;
+						width:70px;
+						height:70px;
+						border-radius:100px;
+						overflow:hidden;
+						-webkit-box-shadow:0 0 3px #ccc;
+						box-shadow:0 0 3px #ccc;
+						}
+						.circle_mid img{
+							width:50px;
+							min-height:50px; 
+							text-align:center;
+							margin-left: 15px;
+							margin-top: 8px;
+						}
+						
+					</style>
 					<div class="row">
 					  <!--// FOOTBALL TEAM //-->
-					  <div class="col-md-3 col-sm-6">
-						<div class="ftb-team-thumb">
-						  <figure><img src="${ctx}/resources/new/extra-images/ftb-teamone.png" alt=""></figure>
-						  <div class="ftb-team-dec">
-							<span>07</span>
-							<div class="text">
-							  <a href="#">Leo Adam</a>
-							  <p>Defender</p>
-							</div>
-							<a class="arrow-iconbtn" href="#"><i class="fa fa-arrow-right "></i></a>
-						  </div>
+					  	<div class="col-md-3 col-sm-6" style="height: 370px;">
+						  	<div class="playercart1">
+						  		<div class="playercart2" ></div>
+						  		 <div class="playercart3">徐祖翼</div>
+						  		 
+						  		  <div class="circle_bot">  
+								    </div>  
+								    <div class="circle_mid">  
+												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
+								    </div>  
+								     <div class="playercart4" >  
+									     <div><span>19</span>&nbsp;&nbsp;岁</div>
+									     <div><span>175</span>&nbsp;&nbsp;CM</div>
+									     <div><span>65</span>&nbsp;&nbsp;KG</div>
+								    </div> 
+								     <div class="playercart5" >  
+									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
+									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
+									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
+								    </div> 
+								     <div class="playercart6" style="">  
+									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
+								    </div> 
+								      <div  style="height: 35px;">  
+								     	
+								     	
+								    </div> 
+								     <div class="playercart7" >  
+								     	
+								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
+								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
+								    </div> 
+						  	</div>
 						</div>
-					  </div>
-					  <!--// FOOTBALL TEAM //-->
-					  <!--// FOOTBALL TEAM //-->
-					  <div class="col-md-3 col-sm-6">
-						<div class="ftb-team-thumb">
-						  <figure><img src="${ctx}/resources/new/extra-images/ftb-teamtwo.png" alt=""></figure>
-						  <div class="ftb-team-dec">
-							<span>07</span>
-							<div class="text">
-							  <a href="#">Leo Adam</a>
-							  <p>Defender</p>
-							</div>
-							<a class="arrow-iconbtn" href="#"><i class="fa fa-arrow-right "></i></a>
-						  </div>
+						<div class="col-md-3 col-sm-6" style="height: 370px;">
+						  	<div class="playercart1">
+						  		<div class="playercart2" ></div>
+						  		 <div class="playercart3">徐祖翼</div>
+						  		 
+						  		  <div class="circle_bot">  
+								    </div>  
+								    <div class="circle_mid">  
+												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
+								    </div>  
+								     <div class="playercart4" >  
+									     <div><span>19</span>&nbsp;&nbsp;岁</div>
+									     <div><span>175</span>&nbsp;&nbsp;CM</div>
+									     <div><span>65</span>&nbsp;&nbsp;KG</div>
+								    </div> 
+								     <div class="playercart5" >  
+									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
+									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
+									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
+								    </div> 
+								     <div class="playercart6" style="">  
+									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
+								    </div> 
+								      <div  style="height: 35px;">  
+								     	
+								     	
+								    </div> 
+								     <div class="playercart7" >  
+								     	
+								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
+								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
+								    </div> 
+						  	</div>
+					
 						</div>
-					  </div>
-					  <!--// FOOTBALL TEAM //-->
-					  <!--// FOOTBALL TEAM //-->
-					  <div class="col-md-3 col-sm-6">
-						<div class="ftb-team-thumb">
-						  <figure><img src="${ctx}/resources/new/extra-images/ftb-three.png" alt=""></figure>
-						  <div class="ftb-team-dec">
-							<span>07</span>
-							<div class="text">
-							  <a href="#">Leo Adam</a>
-							  <p>Defender</p>
-							</div>
-							<a class="arrow-iconbtn" href="#"><i class="fa fa-arrow-right "></i></a>
-						  </div>
+						<div class="col-md-3 col-sm-6" style="height: 370px;">
+						  	<div class="playercart1">
+						  		<div class="playercart2" ></div>
+						  		 <div class="playercart3">徐祖翼</div>
+						  		 
+						  		  <div class="circle_bot">  
+								    </div>  
+								    <div class="circle_mid">  
+												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
+								    </div>  
+								     <div class="playercart4" >  
+									     <div><span>19</span>&nbsp;&nbsp;岁</div>
+									     <div><span>175</span>&nbsp;&nbsp;CM</div>
+									     <div><span>65</span>&nbsp;&nbsp;KG</div>
+								    </div> 
+								     <div class="playercart5" >  
+									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
+									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
+									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
+								    </div> 
+								     <div class="playercart6" style="">  
+									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
+								    </div> 
+								      <div  style="height: 35px;">  
+								     	
+								     	
+								    </div> 
+								     <div class="playercart7" >  
+								     	
+								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
+								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
+								    </div> 
+						  	</div>
+					
 						</div>
-					  </div>
-					  <!--// FOOTBALL TEAM //-->
-					  <!--// FOOTBALL TEAM //-->
-					  <div class="col-md-3 col-sm-6">
-						<div class="ftb-team-thumb">
-						  <figure><img src="${ctx}/resources/new/extra-images/ftb-teamfour.png" alt=""></figure>
-						  <div class="ftb-team-dec">
-							<span>07</span>
-							<div class="text">
-							  <a href="#">Leo Adam</a>
-							  <p>Defender</p>
-							</div>
-							<a class="arrow-iconbtn" href="#"><i class="fa fa-arrow-right "></i></a>
-						  </div>
+						<div class="col-md-3 col-sm-6" style="height: 370px;">
+						  	<div class="playercart1">
+						  		<div class="playercart2" ></div>
+						  		 <div class="playercart3">徐祖翼</div>
+						  		 
+						  		  <div class="circle_bot">  
+								    </div>  
+								    <div class="circle_mid">  
+												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
+								    </div>  
+								     <div class="playercart4" >  
+									     <div><span>19</span>&nbsp;&nbsp;岁</div>
+									     <div><span>175</span>&nbsp;&nbsp;CM</div>
+									     <div><span>65</span>&nbsp;&nbsp;KG</div>
+								    </div> 
+								     <div class="playercart5" >  
+									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
+									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
+									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
+								    </div> 
+								     <div class="playercart6" style="">  
+									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
+								    </div> 
+								      <div  style="height: 35px;">  
+								     	
+								     	
+								    </div> 
+								     <div class="playercart7" >  
+								     	
+								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
+								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
+								    </div> 
+						  	</div>
+					
 						</div>
+						
 					  </div>
-					  <!--// FOOTBALL TEAM //-->
+				
+					
+					 
 					</div>
 				  </div>
 				</section>
@@ -545,28 +681,28 @@
 						  <ul class="bxslider">
 							<li>
 							  <div class="ftb-post-thumb">
-								<a href="#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
+								<a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
 								<div class="text">
 								  <h6>成都史上最佳球员</h6>
-								  <a class="btn-4" href="#">Read More</a>
+								  <a class="btn-4" href="${ctx}/resources/new/#">Read More</a>
 								</div>
 							  </div>
 							</li>
 							<li>
 							  <div class="ftb-post-thumb">
-								<a href="#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
+								<a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
 								<div class="text">
 								  <h6>成都史上最佳球员</h6>
-								  <a class="btn-4" href="#">Read More</a>
+								  <a class="btn-4" href="${ctx}/resources/new/#">Read More</a>
 								</div>
 							  </div>
 							</li>
 							<li>
 							  <div class="ftb-post-thumb">
-								<a href="#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
+								<a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
 								<div class="text">
 								  <h6>成都史上最佳球员</h6>
-								  <a class="btn-4" href="#">Read More</a>
+								  <a class="btn-4" href="${ctx}/resources/new/#">Read More</a>
 								</div>
 							  </div>
 							</li>
@@ -583,8 +719,8 @@
 						<!--// HEADING 6 //-->
 						<!--// POST //-->
 						<div class="ftb-post-thumb">
-						  <a href="#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider2.jpg" alt=""></a>
-						  <a class="spb-play" href="#"><i class="fa fa-play-circle"></i></a>
+						  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider2.jpg" alt=""></a>
+						  <a class="spb-play" href="${ctx}/resources/new/#"><i class="fa fa-play-circle"></i></a>
 						  <div class="text">
 							<h6>Highlights OF Euro Cup 2nd Mtach</h6>
 						  </div>
@@ -592,8 +728,8 @@
 						<!--// POST //-->
 						<!--// POST //-->
 						<div class="ftb-post-thumb">
-						  <a href="#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider3.jpg" alt=""></a>
-						  <a class="spb-play" href="#"><i class="fa fa-play-circle"></i></a>
+						  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider3.jpg" alt=""></a>
+						  <a class="spb-play" href="${ctx}/resources/new/#"><i class="fa fa-play-circle"></i></a>
 						  <div class="text">
 							<h6>A Single Fan In Stadium</h6>
 						  </div>
@@ -615,7 +751,7 @@
 							</div>
 							<div class="ftb-team-name">
 							  <img src="${ctx}/resources/new/images/short-logo2.png" alt="">
-							  <a href="#">Lore Ipsum Dolor</a>
+							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
 							</div>
 							<div class="ftb-team-points">
 							  20
@@ -627,7 +763,7 @@
 							</div>
 							<div class="ftb-team-name">
 							  <img src="${ctx}/resources/new/images/short-logo3.png" alt="">
-							  <a href="#">Lore Ipsum Dolor</a>
+							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
 							</div>
 							<div class="ftb-team-points">
 							  25
@@ -639,7 +775,7 @@
 							</div>
 							<div class="ftb-team-name">
 							  <img src="${ctx}/resources/new/images/short-logo4.png" alt="">
-							  <a href="#">Lore Ipsum Dolor</a>
+							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
 							</div>
 							<div class="ftb-team-points">
 							  30
@@ -651,7 +787,7 @@
 							</div>
 							<div class="ftb-team-name">
 							  <img src="${ctx}/resources/new/images/short-logo1.png" alt="">
-							  <a href="#">Lore Ipsum Dolor</a>
+							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
 							</div>
 							<div class="ftb-team-points">
 							  45
@@ -663,7 +799,7 @@
 							</div>
 							<div class="ftb-team-name">
 							  <img src="${ctx}/resources/new/images/short-logo6.png" alt="">
-							  <a href="#">Lore Ipsum Dolor</a>
+							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
 							</div>
 							<div class="ftb-team-points">
 							  29
@@ -675,7 +811,7 @@
 							</div>
 							<div class="ftb-team-name">
 							  <img src="${ctx}/resources/new/images/short-logo7.png" alt="">
-							  <a href="#">Lore Ipsum Dolor</a>
+							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
 							</div>
 							<div class="ftb-team-points">
 							  03
@@ -702,123 +838,60 @@
 			<!--// Main Content //-->
 			
 		  <!--// Contact Footer //-->
-		  <footer class="football-footer">
-			<div class="container">
+		  <footer class="football-footer" style="height: 250px">
+			<div class="container" style="width: 90%;margin-top: 50px">
 			  <div class="row">
 				<!--// TEXT WIDGET //-->
 				<div class="col-md-4">
-				  <div class="widget spb-widget spb-text-widget">
+				  <div class="widget spb-widget spb-text-widget" style="margin-top: -20px;margin-left: 10%">
 					<div class="ft-logo">
-					  <a href="#"><img src="${ctx}/resources/new/images/logo2.png" alt=""></a>
+					  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/images/logo2.png" alt=""></a>
 					</div>
 					<p>Copyright © 2017-2018 成都宇任拓</p>
 					<p>蜀ICP备14020910号-2</p>
-					<ul class="spb-social2">
-					  <li><a href="#"> <i class="fa fa-facebook"></i></a></li>
-					  <li><a href="#"> <i class="fa fa-twitter"></i></a></li>
-					  <li><a href="#"> <i class="fa fa-linkedin"></i></a></li>
-					  <li><a href="#"> <i class="fa fa-rss"></i></a></li>
-					  <li><a href="#"> <i class="fa fa-google-plus"></i></a></li>
-					  <li><a href="#"> <i class="fa fa-linkedin"></i></a></li>
-					</ul>
 				  </div>
 				</div>
 				<!--// TEXT WIDGET //-->
 				<!--// POPULAR WIDGET //-->
 				<div class="col-md-4">
-				  <div class="widget spb-widget spb-popular">
+				  <div class="widget spb-widget spb-popular" style="display: inline;width: 35%">
 					<h4>夺宝指南</h4>
-					<div class="spb-popular-dec">
-					  <figure>
-						<img src="${ctx}/resources/new/extra-images/popular-ft1.jpg" alt="">
-						<a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/popular-ft1.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-					  </figure>
-					  <div class="text">
-						<a href="#">Lorem ipsum dolor amet, conse-ctetur adipiscing elit. Donec st.</a>
-						<ul class="spb-meta2">
-						  <li><a href="#"><i class="fa fa-heart"></i>13 like</a></li>
-						  <li><a href="#"><i class="fa fa-comment"></i>14 comment</a></li>
-						</ul>
-					  </div>
-					</div>
-					<div class="spb-popular-dec">
-					  <figure>
-						<img src="${ctx}/resources/new/extra-images/popular-ft2.jpg" alt="">
-						<a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/popular-ft2.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-					  </figure>
-					  <div class="text">
-						<a href="#">Lorem ipsum dolor amet, conse-ctetur adipiscing elit. Donec st.</a>
-						<ul class="spb-meta2">
-						  <li><a href="#"><i class="fa fa-heart"></i>13 like</a></li>
-						  <li><a href="#"><i class="fa fa-comment"></i>14 comment</a></li>
-						</ul>
-					  </div>
-					</div>
-					<div class="spb-popular-dec">
-					  <figure>
-						<img src="${ctx}/resources/new/extra-images/popular-ft3.jpg" alt="">
-						<a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/popular-ft3.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-					  </figure>
-					  <div class="text">
-						<a href="#">Lorem ipsum dolor amet, conse-ctetur adipiscing elit. Donec st.</a>
-						<ul class="spb-meta2">
-						  <li><a href="#"><i class="fa fa-heart"></i>13 like</a></li>
-						  <li><a href="#"><i class="fa fa-comment"></i>14 comment</a></li>
-						</ul>
-					  </div>
-					</div>
-				  </div>
+					<p style="font-size: 18px">夺宝流程</p>
+					<p style="font-size: 18px">夺宝协议</p>
+					<p style="font-size: 18px">常见问题</p>
+				 </div>
+				  <div class="widget spb-widget spb-popular" style="display: inline;width: 35%">
+					<h4>常见问题</h4>
+					<p style="font-size: 18px">常见问题</p>
+					<p style="font-size: 18px">支付帮助</p>
+					<p style="font-size: 18px">联系我们</p>
+				 </div>
+				  <div class="widget spb-widget spb-popular" style="display: inline;width: 30%">
+					<h4>关于宇任拓</h4>
+					<p style="font-size: 18px">关于我们</p>
+					<p style="font-size: 18px">商务合作</p>
+					<p style="font-size: 18px">加入我们</p>
+				 </div>
+				</div>
+				<div class="col-md-4">
+				  <div class="widget spb-widget spb-popular " style="display: inline;width: 40%;height: 120px">
+					<h4>宇任拓微博</h4>
+					<img src="${ctx}/resources/new/images/weibo.png" alt="" style="width: 100px;height: 100px">
+				 </div>
+				 <div class="widget spb-widget spb-popular" style="display: inline;width: 60%;height: 120px">
+					<h4>宇任拓微信</h4>
+					<img src="${ctx}/resources/new/images/weixin.png" alt="" style="width: 100px;height: 100px">
+				 </div>
+				 <div><p style="text-transform:none">联系邮箱：yutuoscore@sina.cn</p></div>
+				 
 				</div>
 				<!--// POPULAR WIDGET //-->
 				<!--// FLICKER WIDGET //-->
-				<div class="col-md-4">
-				  <div class="widget spb-widget spb-flicker">
-					<h4>Flicker Widgets</h4>
-					<ul>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft1.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft1.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft2.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft2.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft3.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft3.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft4.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft4.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft5.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft5.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft6.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft6.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft7.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft7.jpg" alt="">
-					  </li>
-					  <li>
-						  <a data-rel="prettyPhoto[]" href="${ctx}/resources/new/extra-images/flicker-ft8.jpg" class="spb-play"><i class="fa fa-plus"></i></a>
-						  <img src="${ctx}/resources/new/extra-images/flicker-ft8.jpg" alt="">
-					  </li>
-					</ul>
-					<a class="spb-btn3" href="#">Load More</a>
-				  </div>
+				<div class="col-md-4" style="float: right;">
+				  
 				</div>
-				<!--// FLICKER WIDGET //-->
-			  </div>
+			 </div>
 			  <!--// COPY RIGHT //-->
-			  <div class="spb-copyright">
-
-				<p>All Rights Reserved</p>
-				<a id="kode-topbtn" href="#"><i class="fa fa-angle-double-up"></i></a>
-			  </div>
 			  <!--// COPY RIGHT //-->
 			</div>
 		  </footer>
@@ -837,7 +910,7 @@
 					<p><span>User Name</span> <input type="text" placeholder="User Name"></p>
 					<p><span>Password</span> <input type="password" placeholder="Password"></p>
 					<p><label><input type="checkbox"><span>Remember Me</span></label></p>
-					<p class="kode-submit"><a href="#">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign in"></p>
+					<p class="kode-submit"><a href="${ctx}/resources/new/#">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign in"></p>
 				  </form>
 				</div>
 			  </div>
@@ -857,7 +930,7 @@
 					  <p><span>Password</span> <input type="password" placeholder="Password"></p>
 					  <p><span>Retype Password</span> <input type="password" placeholder="Retype Password"></p>
 					  <p><label><input type="checkbox"><span>Remember Me</span></label></p>
-					  <p class="kode-submit"><a href="#">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
+					  <p class="kode-submit"><a href="${ctx}/resources/new/#">Lost Your Password</a> <input class="thbg-colortwo" type="submit" value="Sign Up"></p>
 					</form>
 				  </div>
 				</div>
@@ -893,5 +966,28 @@
 			<script src='${ctx}/resources/new/js/fullcalendar.min.js'></script>
 			<!--CUSTOM JavaScript-->
 			<script src="${ctx}/resources/new/js/functions.js"></script>
+			
+			<script src='${ctx}/resources/new/js/jquery.newsTicker.min.js'></script>
+			<script type="text/javascript">
+			var nt_title = $('#nt-title').newsTicker({
+                row_height: 28,
+                max_rows: 1,
+                duration: 3000,
+                pauseOnHover: 0
+            });
+			$(".counterup-dec").mousemove(function(e){
+				$(this).find("span").css("color","yellow");
+				$(this).find("h3").css("color","yellow");
+				$(this).find("p").css("color","yellow");
+				
+			});
+			$(".counterup-dec").mouseout(function(e){
+				$(this).find("span").css("color","white");
+				$(this).find("h3").css("color","white");
+				$(this).find("p").css("color","white");
+			});
+			
+			
+			</script>
 		</body>
 	</html>

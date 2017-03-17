@@ -179,7 +179,7 @@ header{
          FOOTBALL PAGE CSS START
       ============================================================
 */
-/*2017-3-12 header与logo一起的背景颜色设置
+/*2017-3-12 header涓巐ogo涓�璧风殑鑳屾櫙棰滆壊璁剧疆
 */
 .football-header{
     background-color: rgba(33, 72, 140, 0.95);
@@ -219,19 +219,17 @@ header{
 .login-meta{
     float:left;
     width:auto;
-    padding: 15px 23px 16px 0;
+    margin-top: 10px
 }
 .login-meta li{
     float:left;
     width:auto;
     position: relative;
-    padding: 0px 15px;
+    height: 20px
 }
 .login-meta li:before{
     position: absolute;
-    right: -2px;
     width: 5px;
-    height: 1px;
     background: #fff;
     bottom:0;
     content: "";
@@ -244,7 +242,7 @@ header{
     width:100%;
     font-size: 13px;
     color: #fff;
-    line-height: 13px;
+    line-height: 22px;
     text-transform: uppercase;
     font-weight: normal;
 	cursor:pointer;
@@ -273,7 +271,7 @@ header{
 	background-color:#fff;
 }
 
-/*导航 红色斜条右侧的消息提示、购买提示栏（与功能栏背景一致）*/
+/*2017-3-12 right side of login: social is changed to Caifu & Yubi*/
 .social-style3{
     float:right;
     width:auto;
@@ -314,6 +312,20 @@ header{
             -ms-transform: skewX(-45deg);
                 -o-transform: skewX(-45deg);
                     transform: skewX(-45deg);
+}
+.social-style3 h7{
+	    float:left;
+    width: 45px;
+	height: 45px;
+
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+    display: block;
+
+    line-height: 45px;
+    margin: 0;
+    -webkit-transform: skewX(-45deg);
 }
 .logo-wrap2{
     float: left;
@@ -387,7 +399,7 @@ header{
     background-color: transparent;
 	width:auto !important;
 }
-/*NAVIGATION  nav4:功能栏（首页、宇币夺宝等。。。）所在的底板颜色*/
+/*NAVIGATION  nav4:鍔熻兘鏍忥紙棣栭〉銆佸畤甯佸ず瀹濈瓑銆傘�傘�傦級鎵�鍦ㄧ殑搴曟澘棰滆壊*/
 .nav4{
     float: left;
     width: 100%;
@@ -395,7 +407,7 @@ header{
     position: relative;
 }
 
-/*nav4:before:功能栏右边buy tickets区域颜色*/
+/*nav4:before:鍔熻兘鏍忓彸杈筨uy tickets鍖哄煙棰滆壊*/
 .nav4:before{
     position: absolute;
     right: 0;
@@ -457,7 +469,7 @@ header{
 	padding:0px;
 }
 
-/*17-03-12 首页导航子菜单颜色等属性设备在此*/
+/*17-03-12 棣栭〉瀵艰埅瀛愯彍鍗曢鑹茬瓑灞炴�ц澶囧湪姝�*/
 .tennis-nav .navigation li ul li a,
 .nav4 .kode_nave li ul li  a{
 	background-color:#264580;
@@ -496,8 +508,24 @@ header{
     float: right;
     width: auto;
     position: relative;
-    padding: 27px 0;
+    padding: 10px 0;
 }
+
+.ticket-wrap h7{
+	float:left;
+    width: 45px;
+	height: 45px;
+
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+
+
+    line-height: 45px;
+    margin: 0;
+    -webkit-transform: skewX(-45deg);
+}
+
 .book-now{
     float: left;
     width: auto;
@@ -536,8 +564,8 @@ header{
 */
 /*
       ============================================================
-         BANNER CSS START-----这里控制sliders图片和文字 2017-3-12
-         h4: margin: <上间距>  <左> <下> <右>
+         BANNER CSS START-----杩欓噷鎺у埗sliders鍥剧墖鍜屾枃瀛� 2017-3-12
+         h4: margin: <涓婇棿璺�>  <宸�> <涓�> <鍙�>
       ============================================================
 */
 /*BANNER*/
@@ -953,7 +981,7 @@ header{
         MATCH RESULT SECTION START
       ============================================================
 */
-/*MATCH RESULT SECTION::用来展示重要统计数据-->背景和字体*/
+/*MATCH RESULT SECTION::鐢ㄦ潵灞曠ず閲嶈缁熻鏁版嵁-->鑳屾櫙鍜屽瓧浣�*/
 .ftb-resultbg{
     background-image: url(images/imp-staticbg.png);
     background-size: cover;
@@ -977,7 +1005,7 @@ header{
     margin-bottom: -30px;
 }
 .heading5 h4{
-	margin-top: -50px;  /*因空隙太加，加上此顶部边距负增50，原来无此参数*/
+	margin-top: -50px;  /*鍥犵┖闅欏お鍔狅紝鍔犱笂姝ら《閮ㄨ竟璺濊礋澧�50锛屽師鏉ユ棤姝ゅ弬鏁�*/
     font-size: 20px;
     line-height: 20px;
     font-weight: bold;
@@ -1967,7 +1995,6 @@ header{
     position: relative;
     float: left;
     width: 100%;
-    padding: 70px 0 0;
 }
 .football-footer:before{
     position: absolute;
@@ -6731,7 +6758,7 @@ ul.tns-tags{
 }
 .rating > span:hover::before, .rating > span:hover ~ span::before {
     color: #ffc501;
-    content: "★";
+    content: "鈽�";
     left: 0;
     position: absolute;
 }
