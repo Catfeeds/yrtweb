@@ -43,7 +43,7 @@
 			<style type="text/css">
 			
 			#nt-title li {
-				font-size: 20px;
+				font-size: 16px;
 			}
 			</style>
 		</head>
@@ -159,12 +159,22 @@
 					<div class="ticket-wrap" style="width: 30%; margin-top: 10px; ">
 					  		<div id="nt-title-container" >
 			    				<ul id="nt-title" >
-				    				<li style="color: white; ">
-				    					<span class="icon-cup" style="color: #FF1493">&nbsp;&nbsp;</span><span>夺宝--用户用宇贝购买了商品</span>
+			    				<c:if test="${!empty win_users}">
+								   <c:forEach items="${win_users}" var="user" begin="0">
+					    				<li style="color: white; ">
+					    					<span class="icon-cup" style="color: #FF1493">&nbsp;&nbsp;</span><span class="nt-title-span">${user.usernick}夺得${user.product_title}</span>
+					    				</li>
+				    				</c:forEach>
+								  </c:if>
+								  <c:if test="${!empty leagueList}">
+								    <c:forEach items="${leagueList}" var="league">
+								    <li style="color: white">
+				    					<span class="icon-football" style="color: #ADFF2F">&nbsp;&nbsp;</span><span class="nt-title-span">战报--比赛赛况信息</span>
 				    				</li>
-				    				<li style="color: white">
-				    					<span class="icon-football" style="color: #ADFF2F">&nbsp;&nbsp;</span><span>战报--比赛赛况信息</span>
-				    				</li>
+		                            <a href="javascript:;" onclick="load_hot_news(this,'#news_list','','${league.id}')">${league.simple_name}|</a>
+		                       		 </c:forEach> 
+		                        </c:if>
+				    				
 				    				<li style="color: white">
 				    					<span class="icon-soccer" style="color: #CDCD00">&nbsp;&nbsp;</span><span>转会--球员转会信息</span>
 				    				</li>
@@ -855,22 +865,22 @@
 				<!--// POPULAR WIDGET //-->
 				<div class="col-md-4">
 				  <div class="widget spb-widget spb-popular" style="display: inline;width: 35%">
-					<h4>夺宝指南</h4>
-					<p style="font-size: 18px">夺宝流程</p>
-					<p style="font-size: 18px">夺宝协议</p>
-					<p style="font-size: 18px">常见问题</p>
+					<h4 style="cursor: pointer;" onclick="window.open('${ctx}/about/questions')" >夺宝指南</h4>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/process')" >夺宝流程</p>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/agreement')" >夺宝协议</p>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/doubt')" >常见问题</p>
 				 </div>
 				  <div class="widget spb-widget spb-popular" style="display: inline;width: 35%">
-					<h4>常见问题</h4>
-					<p style="font-size: 18px">常见问题</p>
-					<p style="font-size: 18px">支付帮助</p>
-					<p style="font-size: 18px">联系我们</p>
+					<h4 style="cursor: pointer;" onclick="window.open('${ctx}/about/questions')">常见问题</h4>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/questions')">常见问题</p>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/payhelp')">支付帮助</p>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/contact_us')" >联系我们</p>
 				 </div>
 				  <div class="widget spb-widget spb-popular" style="display: inline;width: 30%">
-					<h4>关于宇任拓</h4>
-					<p style="font-size: 18px">关于我们</p>
-					<p style="font-size: 18px">商务合作</p>
-					<p style="font-size: 18px">加入我们</p>
+					<h4 style="cursor: pointer;" onclick="window.open('${ctx}/about/about_us')">关于宇任拓</h4>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/about_us')">关于我们</p>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/cooperation')">商务合作</p>
+					<p style="cursor: pointer;font-size: 18px" onclick="window.open('${ctx}/about/join_us')">加入我们</p>
 				 </div>
 				</div>
 				<div class="col-md-4">
@@ -970,11 +980,19 @@
 			<script src='${ctx}/resources/new/js/jquery.newsTicker.min.js'></script>
 			<script type="text/javascript">
 			var nt_title = $('#nt-title').newsTicker({
-                row_height: 28,
+                row_height: 18,
                 max_rows: 1,
                 duration: 3000,
                 pauseOnHover: 0
             });
+			
+		   $(".nt-title-span").each(function () {
+	            var maxwidth = 30;
+	            if ($(this).text().length > maxwidth) {
+	                $(this).text($(this).text().substring(0, maxwidth));
+	                $(this).html($(this).html() + '...');
+	            }
+	        });
 			$(".counterup-dec").mousemove(function(e){
 				$(this).find("span").css("color","yellow");
 				$(this).find("h3").css("color","yellow");
@@ -986,7 +1004,7 @@
 				$(this).find("h3").css("color","white");
 				$(this).find("p").css("color","white");
 			});
-			
+
 			
 			</script>
 		</body>

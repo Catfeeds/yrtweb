@@ -32,6 +32,7 @@ import com.yt.framework.service.IndexService;
 import com.yt.framework.service.LeagueService;
 import com.yt.framework.service.MessageRecordsService;
 import com.yt.framework.service.TeamInviteService;
+import com.yt.framework.service.UserProductService;
 import com.yt.framework.utils.AjaxMsg;
 import com.yt.framework.utils.BeanUtils;
 import com.yt.framework.utils.Common;
@@ -51,6 +52,8 @@ public class HomeController extends BaseController{
 	private DynamicService dynamicService;
 	@Autowired
 	private MessageRecordsService messageRecordsService;
+	@Autowired
+	private UserProductService userProductService;
 	@Autowired
 	private TeamInviteService teamInviteService;
 	@Autowired
@@ -80,9 +83,12 @@ public class HomeController extends BaseController{
 		Map<String, Object> params = new HashMap<String,Object>();
 		params.put("if_use", "1");
 		List<Map<String, Object>> banners = indexService.queryIndexBanners(params);
+		//中奖列表
+		List<Map<String, Object>> win_users = userProductService.queryWinUsers();
 		request.setAttribute("leagueList", leagueList);
 		request.setAttribute("user_img", user_img);
 		request.setAttribute("banners", banners);
+		request.setAttribute("win_users", win_users);
 		return "index";
 	}
 	/**
