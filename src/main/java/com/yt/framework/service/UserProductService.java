@@ -89,5 +89,10 @@ public interface UserProductService extends BaseService<UserProduct> {
 	 * @return
 	 */
 	public List<Map<String, Object>> queryConsumeTop();
+	/**
+	 * 商品总数
+	 * @return
+	 */
+	public int queryProductRecords();
 	
 }

@@ -24,6 +24,7 @@ import com.yt.framework.persistent.entity.ImageVideo;
 import com.yt.framework.persistent.entity.League;
 import com.yt.framework.persistent.entity.News;
 import com.yt.framework.persistent.entity.Role;
+import com.yt.framework.persistent.entity.UserAmount;
 import com.yt.framework.persistent.entity.UserRole;
 import com.yt.framework.service.BabyService;
 import com.yt.framework.service.DynamicService;
@@ -31,12 +32,16 @@ import com.yt.framework.service.ImageVideoService;
 import com.yt.framework.service.IndexService;
 import com.yt.framework.service.LeagueService;
 import com.yt.framework.service.MessageRecordsService;
+import com.yt.framework.service.PlayerInfoService;
+import com.yt.framework.service.TeamInfoService;
 import com.yt.framework.service.TeamInviteService;
+import com.yt.framework.service.UserAmountService;
 import com.yt.framework.service.UserProductService;
 import com.yt.framework.utils.AjaxMsg;
 import com.yt.framework.utils.BeanUtils;
 import com.yt.framework.utils.Common;
 import com.yt.framework.utils.PageModel;
+import com.yt.framework.utils.tag.FileUtilsTag;
 
 /**
  *
@@ -66,6 +71,13 @@ public class HomeController extends BaseController{
 	
 	@Autowired
 	private ImageVideoService imageVideoService;
+	@Autowired
+	private UserAmountService userAmountService;
+	@Autowired
+	private TeamInfoService teamInfoService;
+	@Autowired
+	private PlayerInfoService playerInfoService;
+	
 	
 	/**
 	 * 首页
@@ -85,11 +97,52 @@ public class HomeController extends BaseController{
 		List<Map<String, Object>> banners = indexService.queryIndexBanners(params);
 		//中奖列表
 		List<Map<String, Object>> win_users = userProductService.queryWinUsers();
+		//账号宇贝
+		String user_id = (String) Common.getCurrentSessionValue(request, "session_user_id");
+		logger.info("user_id-----"+user_id);
+		if(user_id==null||user_id.length()==0){
+			request.setAttribute("real_amount", 0);
+		}else{
+			UserAmount uas = userAmountService.getUserAmountByUserId(user_id);
+			request.setAttribute("real_amount", uas.getReal_amount().longValue());
+		}
+		//总比赛场数
+		int leagueRecords = leagueService.queryLeagueRecords();
+		//总比赛场数
+		int teamRecords = teamInfoService.queryTeamRecords();
+		//球员人数
+		int playerRecords = playerInfoService.queryPlayerRecords();
+		//商品人数
+		int productRecords = userProductService.queryProductRecords();
+		//首页视频list
+		List<ImageVideo> imageVideoList= imageVideoService.queryIndexVideo();
+		for(ImageVideo imageVideo : imageVideoList){
+			imageVideo.setF_src(FileUtilsTag.headPath()+imageVideo.getF_src());
+			imageVideo.setV_cover(FileUtilsTag.headPath()+imageVideo.getV_cover());
+		}
+		request.setAttribute("leagueRecords", leagueRecords);
+		request.setAttribute("teamRecords", teamRecords);
+		request.setAttribute("playerRecords", playerRecords);
+		request.setAttribute("productRecords", productRecords);
+		request.setAttribute("imageVideoList", imageVideoList);
 		request.setAttribute("leagueList", leagueList);
 		request.setAttribute("user_img", user_img);
 		request.setAttribute("banners", banners);
 		request.setAttribute("win_users", win_users);
 		return "index";
+	}
+	/**
+	 * 登出操作
+	 *@param request
+	 *@return 回到首页
+	 *@autor bo.xie
+	 *@date2015-7-23下午6:22:56
+	 */
+	@RequestMapping(value="/loginOut")
+	public String loginOut(HttpServletRequest request){
+		Common.removeSessionValue("session_user_id");
+		Common.removeSessionValue("session_usernick");
+		return "redirect:/"; //update by gl
 	}
 	/**
 	 * <p>Description: 首页精彩图片</p>

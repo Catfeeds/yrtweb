@@ -494,6 +494,18 @@
 		) cot_t)
 	</select>
 	
+	<select id="queryLeagueRecords"  resultType="int">
+		SELECT COUNT(1) FROM( (
+			SELECT mt.name mname,gt.name gname,mt.logo mlogo,gt.logo glogo,e.* 
+			FROM a_event_record e 
+			LEFT JOIN a_league_group AS lg ON lg.id = e.group_id
+			LEFT JOIN t_team_info mt ON mt.id=e.m_teaminfo_id 
+			LEFT JOIN t_team_info gt ON gt.id=e.g_teaminfo_id 
+		) cot_t)
+	</select>
+	
+	
+	
 	<select id="loadIntegral" resultType="hashmap">
 	SELECT ti.*,t.`name` FROM a_team_integral AS ti
 		LEFT JOIN t_team_info AS t ON t.id = ti.teaminfo_id

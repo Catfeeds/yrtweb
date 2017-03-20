@@ -550,6 +550,11 @@ public interface LeagueMapper extends BaseMapper<League>{
 	 * @return
 	 */
 	public ActiveCode getActiveCodeByLidAndTid(@Param(value="league_id")String league_id,@Param(value="team_id")String team_id);
+	/**
+	 * 查找总比赛场数
+	 * @return
+	 */
+	public int queryLeagueRecords();
 
 	
 	

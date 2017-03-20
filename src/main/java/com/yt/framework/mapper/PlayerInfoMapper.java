@@ -275,5 +275,10 @@ public interface PlayerInfoMapper extends BaseMapper<PlayerInfo>{
 	 * @return
 	 */
 	public SuspendPlayer getSuspendPlayerByUserId(@Param(value="user_id")String user_id);
+	/**
+	 * 总球员人数
+	 * @return
+	 */
+	public int queryPlayerRecords();
 	
 }

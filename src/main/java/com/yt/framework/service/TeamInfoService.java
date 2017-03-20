@@ -590,5 +590,10 @@ public interface TeamInfoService extends BaseService<TeamInfo>{
 	 * @return
 	 */
 	public List<TeamActiveCode> getTeamActiveCodeByLeague(String teaminfo_id, String league_id);
+	/**
+	 * 总比赛场数
+	 * @return
+	 */
+	public int queryTeamRecords();
 
 }

@@ -310,6 +310,9 @@
 	<select id="trialCount" resultType="int">
 		SELECT count(1) FROM m_trial WHERE user_id=#{userId}
 	</select>
+	<select id="queryPlayerRecords" resultType="int">
+		SELECT count(1) FROM p_player_info
+	</select>
 	
 	<select id="count" resultType="int">
 		SELECT count(p.id)

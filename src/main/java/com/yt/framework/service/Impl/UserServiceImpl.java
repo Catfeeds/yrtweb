@@ -544,4 +544,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		System.out.println(aa);*/
 		return a;
 	}
+	
+	public static void main(String args[]){
+		System.out.println(Md5Encrypt.md5("123456"));
+	}
 }

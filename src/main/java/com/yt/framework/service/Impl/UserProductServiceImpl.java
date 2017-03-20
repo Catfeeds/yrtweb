@@ -160,6 +160,11 @@ public class UserProductServiceImpl extends BaseServiceImpl<UserProduct>implemen
 	public List<Map<String, Object>> queryConsumeTop() {
 		return userProductMapper.queryConsumeTop();
 	}
+
+	@Override
+	public int queryProductRecords() {
+		return userProductMapper.queryProductRecords();
+	}
 	
 	
 }

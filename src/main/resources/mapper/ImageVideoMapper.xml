@@ -131,6 +131,9 @@
 		<select id="getImageById" resultType="com.yt.framework.persistent.entity.ImageVideo">
 			SELECT * FROM m_images WHERE id = #{id}
 		</select>
+		<select id="queryIndexVideo" resultType="com.yt.framework.persistent.entity.ImageVideo">
+			select *  from m_videos where if_show =1 and user_id =1 order by create_time desc  limit 2
+		</select>
 		<select id="getVideoById" resultType="com.yt.framework.persistent.entity.ImageVideo">
 			SELECT * FROM m_videos WHERE id = #{id}
 		</select>

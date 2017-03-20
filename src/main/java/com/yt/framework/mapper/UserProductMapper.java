@@ -40,4 +40,6 @@ public interface UserProductMapper extends BaseMapper<UserProduct>{
 
 	public List<Map<String, Object>> queryConsumeTop();
 
+	public int queryProductRecords();
+
 }

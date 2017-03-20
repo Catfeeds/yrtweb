@@ -1026,4 +1026,9 @@ public class LeagueServiceImpl extends BaseServiceImpl<League> implements League
 		return AjaxMsg.newSuccess().addData("page", pageModel);
 	}
 
+	@Override
+	public int queryLeagueRecords() {
+		return leagueMapper.queryLeagueRecords();
+	}
+
 }

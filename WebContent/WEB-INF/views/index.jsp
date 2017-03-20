@@ -61,16 +61,52 @@
 							  <li><input type="text"  /></li>
 							  <li style=" padding: 0px 5px;"><a ><i class="fa fa-search">&nbsp;&nbsp;</i></a></li>
 								
-								
-							  <li style=" padding: 0px 15px;"><a><i class="fa fa-user"> 请登录 | 免费注册 &nbsp;&nbsp; </i></a></li>
+							<c:choose>
+        					<c:when test="${empty session_user_id}">
+								  <li style=" padding: 0px 15px;">
+								  <a  data-toggle="modal" data-target=".media01"><i class="fa fa-user"> 请登录 |&nbsp;&nbsp; </i></a>
+								  		<div class="modal fade bs-example-modal-lg media01" tabindex="-1" role="login" aria-labelledby="login">
+										  <div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content">
+												<div class="kode_modal_body">
+													<a href="#"><i class="fa fa-user"></i></a>
+													<h2>登录</h2>
+													<form id="loginForm" action="${ctx}/doLogin" method="post">
+														<div class="kode_modal_field">
+															<input type="text" name="username" placeholder="用户名" required>
+														</div>
+														<div class="kode_modal_field">
+															<input type="password" name="password" placeholder="密码" required>
+														</div>
+														<div class="kode_model_btn">
+															<button onclick="$.submitLogin('#loginForm','#loginForm',errorMsg);getCookie();">登录</button>
+															<a href="${ctx}/find/way">忘记密码</a>
+															<a >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+															<a href="javascript:window.location='${ctx}/register/registerAccount'">注册</a>
+														</div>
+													</form>
+												</div>
+											</div>
+										  </div>
+										</div>
+								  <a href="javascript:window.location='${ctx}/register/registerAccount'"><i class="fa fa-user"> 免费注册 </i></a>
+								  </li>
+							  </c:when>
+			        		<c:otherwise>
+			        			<li style=" padding: 0px 15px;">
+								  <a  href="javascript:window.location='${ctx}/center'"><i class="fa fa-user"> ${session_usernick} |&nbsp;&nbsp; </i></a>
+								  <a href="javascript:window.location='${ctx}/loginOut'"><i class="fa fa-user"> [退出]</i></a>
+								 </li>
+			        		</c:otherwise>
+			        	</c:choose>
 							  
-							</ul>
+						</ul>
 						  <div id="show-class"><form><input type="text" placeholder="your key word"></form></div>
 						  <ul class="social-style3">
 								<li><h7>财富</h7><li>
-							  <li><a href="${ctx}/resources/new/#" style="color: #ADFF2F">70000</a></li>
+							  <li><a id="amountUser" style="color: #ADFF2F">${real_amount}</a></li>
 							  <li><h7>宇币</h7><li>
-							  <li><a href="${ctx}/resources/new/#" style="color: #ADFF2F">充值</a></li>
+							  <li><a href="${ctx}/raccount/recharge" style="color: #ADFF2F">充值</a></li>
 						  </ul>
 					  </div>
 					</div>
@@ -88,25 +124,25 @@
 				<div class="nav4">
 				  <div class="container" style="width: 100%">
 					<ul class="kode_nave" style="margin-left: 15%">
-						<li><a href="${ctx}/resources/new/#">首  页</a>
+						<li><a href="${ctx}/">首  页</a>
 
 						</li>
-						<li><a href="${ctx}/resources/new/about-us.html">宇币夺宝</a></li>
-						<li><a href="${ctx}/resources/new/fixtures.html">联   赛</a>
+						<li><a href="${ctx}/shop/index">宇币夺宝</a></li>
+						<li><a href="${ctx}/league/index" >联   赛</a>
 							<ul>
-								<li><a href="${ctx}/resources/new/result.html">赛事报名</a></li>
-								 <li><a href="${ctx}/resources/new/tickets.html">转会交易</a></li>
-								  <li><a href="${ctx}/resources/new/ticket-single.html">球员竞拍 </a></li>
+								<li><a href="javascript:window.location='${ctx}/league/selectArea'">赛事报名</a></li>
+								 <li><a href="javascript:window.location='${ctx}/league/turnTeamChoose'">转会交易</a></li>
+								  <li><a  href="javascript:window.location='${ctx}/league/toAuction'" >球员竞拍 </a></li>
 							</ul>	  
 						</li>
-						<li><a href="${ctx}/resources/new/#">俱乐部</a>
+						<li><a href="${ctx}/team/list">俱乐部</a>
 
 						</li>
-						<li><a href="${ctx}/resources/new/shop.html">球员库</a></li>
-						<li><a href="${ctx}/resources/new/blog.html">个人中心</a>
+						<li><a href="${ctx}/player/searchPlayer">球员库</a></li>
+						<li><a href="${ctx}/center">个人中心</a>
 
 						</li>
-						<li><a href="${ctx}/resources/new/contact-us.html">联系我们</a></li>
+						<li><a href="${ctx}/about/contact_us">联系我们</a></li>
 					</ul>
 					<!--DL Menu Start-->
 					<div id="kode-responsive-navigation" class="dl-menuwrapper">
@@ -359,11 +395,11 @@
 					<div class="row">
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3" >
-					  <a href="${ctx}/resources/new/#">
+					  <a href="${ctx}/record/toRecord">
 						<div class="counterup-dec">
 						  <span class="icon-football" ></span>
 						  <div class="text">
-							<h3 class="word-count" >250</h3>
+							<h3 class="word-count" >${leagueRecords}</h3>
 							<p >场比赛</p>
 						  </div>
 						</div>
@@ -372,11 +408,11 @@
 					  <!--// COUNTER //-->
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3">
-					  	<a href="${ctx}/resources/new/#">
+					  	<a href="${ctx}/team/list">
 						<div class="counterup-dec">
 						  <span class="icon-soccer"></span>
 						  <div class="text" >
-							<h3 class="word-count">18</h3>
+							<h3 class="word-count">${teamRecords}</h3>
 							<p>家俱乐部</p>
 						  </div>
 						</div>
@@ -384,11 +420,11 @@
 					  </div>
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3">
-					  	<a href="${ctx}/resources/new/#">
+					  	<a href="${ctx}/player/searchPlayer">
 						<div class="counterup-dec">
 						  <span class="icon-symbol"></span>
 						  <div class="text">
-							<h3 class="word-count">128</h3>
+							<h3 class="word-count">${playerRecords}</h3>
 							<p>明星球员</p>
 						  </div>
 						</div>
@@ -397,11 +433,11 @@
 					  <!--// COUNTER //-->
 					  <!--// COUNTER //-->
 					  <div class="col-md-3 col-sm-3">
-					  	<a href="${ctx}/resources/new/#">
+					  	<a href="${ctx}/shop/index">
 						<div class="counterup-dec">
 						  <span class="icon-cup"></span>
 						  <div class="text">
-							<h3 class="word-count">78</h3>
+							<h3 class="word-count">${productRecords}</h3>
 							<p>商品&服务</p>
 						  </div>
 						</div>
@@ -735,6 +771,7 @@
 							<h6>Highlights OF Euro Cup 2nd Mtach</h6>
 						  </div>
 						</div>
+						
 						<!--// POST //-->
 						<!--// POST //-->
 						<div class="ftb-post-thumb">
@@ -980,7 +1017,7 @@
 			<script src='${ctx}/resources/new/js/jquery.newsTicker.min.js'></script>
 			<script type="text/javascript">
 			var nt_title = $('#nt-title').newsTicker({
-                row_height: 18,
+                row_height: 20,
                 max_rows: 1,
                 duration: 3000,
                 pauseOnHover: 0
@@ -1004,6 +1041,7 @@
 				$(this).find("h3").css("color","white");
 				$(this).find("p").css("color","white");
 			});
+			
 
 			
 			</script>

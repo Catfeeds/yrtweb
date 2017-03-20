@@ -824,4 +824,9 @@ public class PlayerInfoServiceImpl extends BaseServiceImpl<PlayerInfo> implement
 		return playerInfoMapper.getSuspendPlayerByUserId(user_id);
 	}
 
+	@Override
+	public int queryPlayerRecords() {
+		return playerInfoMapper.queryPlayerRecords();
+	}
+
 }

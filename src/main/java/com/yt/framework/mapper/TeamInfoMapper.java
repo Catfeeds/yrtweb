@@ -535,5 +535,10 @@ public interface TeamInfoMapper extends BaseMapper<TeamInfo> {
 	 */
 	public List<TeamActiveCode> getTeamActiveCodeByLeague(@Param(value="teaminfo_id")String teaminfo_id,
 			@Param(value="league_id")String league_id);
+	/**
+	 * 总比赛场数
+	 * @return
+	 */
+	public int queryTeamRecords();
 	
 }

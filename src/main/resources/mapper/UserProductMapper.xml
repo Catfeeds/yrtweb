@@ -193,6 +193,10 @@
 		) cot_t)
 	</select>
 	
+	<select id="queryProductRecords"  resultType="int">
+		select count(*) from product where product_status=1 and product_ifopen=1 and product_ifdel=0
+	</select>
+	
 	<!-- 夺宝号码查询 -->
 	<select id="queryOrderNumData" parameterType="hashmap" resultType="com.yt.framework.persistent.entity.OrderNumData">
 		SELECT * FROM order_num 

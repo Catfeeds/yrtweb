@@ -1457,4 +1457,9 @@ public class TeamInfoServiceImpl extends BaseServiceImpl<TeamInfo> implements Te
 	public List<TeamActiveCode> getTeamActiveCodeByLeague(String teaminfo_id, String league_id) {
 		return teamInfoMapper.getTeamActiveCodeByLeague(teaminfo_id,league_id);
 	}
+
+	@Override
+	public int queryTeamRecords() {
+		return teamInfoMapper.queryTeamRecords();
+	}
 }

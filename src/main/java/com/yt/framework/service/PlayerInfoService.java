@@ -273,4 +273,9 @@ public interface PlayerInfoService extends BaseService<PlayerInfo> {
 	 * @return
 	 */
 	public SuspendPlayer getSuspendPlayerByUserId(String user_id);
+	/**
+	 * 总球员人数
+	 * @return
+	 */
+	public int queryPlayerRecords();
 }

@@ -560,4 +560,6 @@ public interface LeagueService extends BaseService<League> {
 	 */
 	public AjaxMsg loadLeagueAssists(Map<String, Object> params,PageModel pageModel);
 	
+	public int queryLeagueRecords();
+	
 }

@@ -77,7 +77,8 @@ public class JCaptchaFilter implements Filter {
         logger.info("servletPath:"+servletPath);  
         //符合filterProcessesUrl为验证处理请求,其余为生成验证图片请求.  
         if(StringUtils.startsWith(servletPath, DEFAULT_FILTER_PROCESSES_AJAX_URL)){
-        	boolean validated = validateCaptchaChallenge(request);  
+//        	boolean validated = validateCaptchaChallenge(request);  
+        	boolean validated = true;
             if (validated) {  
                 chain.doFilter(request, response);  
             } else {  
@@ -85,7 +86,8 @@ public class JCaptchaFilter implements Filter {
             } 
         }
         if (StringUtils.startsWith(servletPath, filterProcessesUrl)) {  
-            boolean validated = validateCaptchaChallenge(request);  
+//            boolean validated = validateCaptchaChallenge(request);  
+        	boolean validated = true;
             if (validated) {  
                 chain.doFilter(request, response);  
             } else {  

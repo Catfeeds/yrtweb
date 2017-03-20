@@ -182,4 +182,10 @@ public interface ImageVideoService extends BaseService<ImageVideo>{
 
 
 	public void updateImgOrVideo2OSS(String ivId, String type,File uploadFile);
+
+	/**
+	 * 首页视频list
+	 * @return
+	 */
+	public List<ImageVideo> queryIndexVideo();
 }

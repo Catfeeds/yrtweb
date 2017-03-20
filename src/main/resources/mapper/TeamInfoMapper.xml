@@ -910,6 +910,11 @@
 			</if>	
 		</select>
 		
+		
+		<select id="queryTeamRecords" resultType="int">
+			SELECT count(*) FROM t_team_info WHERE is_exist=1
+		</select>
+		
 		<select id="loadAllTeamMsgCount" resultType="int">
 			SELECT COUNT(*) FROM a_salary_msg AS sm
 				LEFT JOIN a_event_record AS er ON er.id = sm.event_id

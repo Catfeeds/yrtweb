@@ -39,12 +39,12 @@ public class LoginController {
 		String errorMsg = "";
 		String username = BeanUtils.nullToString(request.getSession().getAttribute("username"));
 		if(StringUtils.isNotBlank(username)){
-			errorMsg = "请先退出同一浏览器登陆的用户";
+//			errorMsg = "请先退出同一浏览器登陆的用户";
 		}
 		if(StringUtils.isNotBlank(flag)){
 			errorMsg = "用户名或密码错误";
 		}else if(StringUtils.isNotBlank(captcha)){
-			errorMsg = "验证码错误";
+//			errorMsg = "验证码错误";
 		}else{
 			request.getSession().removeAttribute("username");
 		}

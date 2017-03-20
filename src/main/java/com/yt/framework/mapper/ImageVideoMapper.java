@@ -206,4 +206,9 @@ public interface ImageVideoMapper extends BaseMapper<ImageVideo> {
 	public void deleteAllComment(@Param(value="ivid")String id);
 
 	public void updateImgOrVideo2OSS(@Param(value="ivId")String ivId, @Param(value="type")String type);
+	/**
+	 * 首页视频list
+	 * @return
+	 */
+	public List<ImageVideo> queryIndexVideo();
 }
