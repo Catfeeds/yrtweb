@@ -130,7 +130,7 @@
                 <div class="index_video">
                     <div class="index_videoTitle">
                         <span class="f20 ml20">
-                            <a class="text-white">精彩视频11111111111</a>
+                            <a class="text-white">精彩视频</a>
                         </span>
                         <span>
                             <a href="${ctx}/indexIvList?type=videolist" class="index_more">更多</a>

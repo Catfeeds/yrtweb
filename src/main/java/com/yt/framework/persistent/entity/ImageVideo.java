@@ -28,6 +28,7 @@ public class ImageVideo implements Serializable {
 	private String not_role_type;
 	private Integer if_show;
 	private Date create_time;
+	private String create_timeS;
 	private String type;
 	private String ivname;
 	private String orderby;
@@ -166,4 +167,11 @@ public class ImageVideo implements Serializable {
 	public void setTo_oss(Integer to_oss) {
 		this.to_oss = to_oss;
 	}
+	public String getCreate_timeS() {
+		return create_timeS;
+	}
+	public void setCreate_timeS(String create_timeS) {
+		this.create_timeS = create_timeS;
+	}
+	
 }

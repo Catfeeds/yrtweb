@@ -40,6 +40,7 @@
 			<link rel="stylesheet" href="${ctx}/resources/new/css/color.css">
 			<!--RESPONCIVE CSS-->
 			<link rel="stylesheet" href="${ctx}/resources/new/css/responsive.css">
+			
 			<style type="text/css">
 			
 			#nt-title li {
@@ -764,23 +765,70 @@
 						</div>
 						<!--// HEADING 6 //-->
 						<!--// POST //-->
-						<div class="ftb-post-thumb">
-						  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider2.jpg" alt=""></a>
-						  <a class="spb-play" href="${ctx}/resources/new/#"><i class="fa fa-play-circle"></i></a>
-						  <div class="text">
-							<h6>Highlights OF Euro Cup 2nd Mtach</h6>
-						  </div>
-						</div>
 						
-						<!--// POST //-->
-						<!--// POST //-->
-						<div class="ftb-post-thumb">
-						  <a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider3.jpg" alt=""></a>
-						  <a class="spb-play" href="${ctx}/resources/new/#"><i class="fa fa-play-circle"></i></a>
-						  <div class="text">
-							<h6>A Single Fan In Stadium</h6>
-						  </div>
-						</div>
+						
+						<c:forEach items="${imageVideoList}" var="imageVideo" begin="0">
+							<div class="ftb-post-thumb">
+							
+							  <a onclick='show_video("${imageVideo.f_src}","${imageVideo.create_timeS}","${imageVideo.id}","${imageVideo.role_type}")'><img src="${imageVideo.v_cover}" alt=""></a>
+							  <a class="spb-play" onclick='show_video("${imageVideo.f_src}","${imageVideo.create_timeS}","${imageVideo.id}","${imageVideo.role_type}")'><i class="fa fa-play-circle"></i></a>
+							  <div class="text">
+								<h6>${imageVideo.title}</h6>
+							  </div>
+							</div>
+					    			
+				    	</c:forEach>
+				    	
+				    	  <div class="video_detail" id="video_detail" style="display: none;">
+                	<div class="closeVideoDeatail"></div>
+                	<!-- <div class="videoTitle">
+                		<span class="text-white f20">广州俱乐部VS杭州俱乐部</span>
+                	</div> -->
+                	<div class="commentIcon">
+                		<span>
+                			<a class="goodComment" flag="1" title="赞" data-id="goodbtn" onclick="do_praise(1,this,'video')" style="cursor: pointer;"></a>
+                		</span>
+                		<span class="text-white ml20" data-id="good">0</span>
+                		<span class="ml15">
+                			<a class="badComment" flag="1" title="踩" data-id="badbtn" onclick="do_praise(2,this,'video')" style="cursor: pointer;"></a>
+                		</span>
+                		<span class="text-white ml25" data-id="bad">0</span>
+                	</div>
+                	<div id="a1" class="videoplay pull-left">
+                	</div>
+                	<div class="comment pull-left">
+                		
+                		<div class="load">
+                			<a id="load_more"></a>
+                		</div>
+                		<div id="commentList" class="commentBox">
+	                		<div id="commentModel" class="ml10 mt10" style="display: none;">
+	                			<div class="pull-left">
+	                				<img src="${el:headPath()}{{head_icon}}" class="other"/>
+	                			</div>
+	                			<div class="pull-left ml15">
+	                				<p>
+	                					<span class="text-gray" style="cursor: pointer;" data-id="usernick"></span>
+	                					<span data-id="create_time" class="text-gray ml10"></span>
+	                				</p>
+	                				<p class="text-white mt5 w225">{{content}}</p>
+	                			</div>
+	                			<div class="clearfix"></div>
+	                		</div>
+                		</div>
+                		<form id="commentsForm" errorType="2" action="${ctx}/imageVideo/saveComments">
+          				<input type="hidden" id="iv_id" name="iv_id" value=""/>
+          				<input type="hidden" id="roleType" name="roleType" value=""/>
+                		<div class="publishComment">
+                			<img src="${el:headPath()}${user_img}" class="publishHead"/>
+                			<textarea valid="require len(0,200)" data-text="评论" id="msg_content" name="content"></textarea>
+                			<input type="button" onclick="send_comments()" value="发表" class="publisBtn"/>
+                		</div>
+                		</form>
+                	</div>
+                </div>
+						
+					
 						<!--// POST //-->
 					  </div>
 					  <!--// BLOG SLIDER //-->
@@ -1013,6 +1061,8 @@
 			<script src='${ctx}/resources/new/js/fullcalendar.min.js'></script>
 			<!--CUSTOM JavaScript-->
 			<script src="${ctx}/resources/new/js/functions.js"></script>
+			<script src="${ctx}/resources/js/yt.ext.js"></script>
+			
 			
 			<script src='${ctx}/resources/new/js/jquery.newsTicker.min.js'></script>
 			<script type="text/javascript">
@@ -1043,7 +1093,204 @@
 			});
 			
 
-			
 			</script>
+			
+			
+		<!--以下都播放视频部分copy 的js代码，参考的videolist.jsp整合有问题-->
+			
+		<script src="${ctx}/resources/js/jquery-1.10.2.min.js"></script> 
+		<script src="${ctx}/resources/layer/layer.js"></script>
+		<script src="${ctx}/resources/js/base.js"></script>
+		<script src="${ctx}/resources/js/validation.js"></script>
+		<script type="text/javascript" src="${ctx}/resources/js/yt.ext.js"></script>
+		<script src="${ctx}/resources/js/jQuery.md5.js"></script>
+		<script type="text/javascript" src="${ctx }/resources/fileupload/webuploader/webuploader.js"></script>
+		<script type="text/javascript" src="${ctx }/resources/fileupload/fileUploader.js"></script>
+		<script src="${ctx}/resources/js/own/playeropt.js"></script>
+					
+		<script src="${ctx}/resources/vmodel/List.js" type="text/javascript"></script>
+		<script src="${ctx}/resources/vmodel/Filter.js" type="text/javascript"></script>
+		<script src="${ctx}/resources/ckplayer/ckplayer.js"></script>
+		<script type="text/javascript">
+
+
+			//鼠标悬浮
+			function showBtn(dom){
+				$(dom).children().find(".video_play").css("display","block");
+			}
+			
+			//鼠标移开
+			function hideBtn(){
+				$(".video_play").css("display","none");
+			}
+			
+			$(".closeVideoDeatail").click(function () {
+			    $("#a1").html("");
+			    $(".masker").hide();
+			    $("#msg_content").val("");
+			    $('#video_detail').hide();
+			});
+			
+			var commontList = new List({
+				url:'${ctx}/imageVideo/queryVideoComments',
+				sendData:{
+					currentPage:1,
+					pageSize :10
+			      },
+			   	listDataModel:$('#commentModel').get(0).outerHTML,
+			   	listContainer:'#commentList',
+			   	dynamicVMHandler:function(one){
+			   		var vm = $(commontList.options.listDataModel);
+			   		vm.css('display','block');
+			   		var nick = one.usernick;
+			   		if(nick&&nick.length>5){
+			   			nick = nick.substring(0,4);
+			   			vm.find('[data-id=usernick]').text(nick+"**").attr("title",one.usernick);
+			   		}else{
+			   			vm.find('[data-id=usernick]').text(one.usernick);
+			   		}
+			   		if(one.create_time){
+			   			gap(one.create_time,vm.find('[data-id=create_time]'));
+			   			//vm.find('[data-id=create_time]').text(Filter.formatDate(one.create_time,'yyyy-MM-dd hh:mm:ss'));
+			   		}
+			   		return vm.get(0).outerHTML;
+			   	}
+			});
+			
+			function queryComments(vid,rtype){
+				$("#iv_id").val(vid);
+				$("#roleType").val(rtype);
+				commontList.options.sendData = {
+					currentPage:1,
+					pageSize :10,
+					id:vid,
+					type:rtype
+				}
+				commontList.loadListData().done(function(data){
+					isPageEnd(data.data.page);
+					commontList.renderList(data.data.page.items,'reloaded','desc');
+					$(".commentBox").scrollTop($(".commentBox")[0].scrollHeight);
+				});
+			}
+			
+			function loadMore(btn){
+				commontList.options.sendData.currentPage++;
+				commontList.loadListData().done(function(data){
+					isPageEnd(data.data.page);
+					if(data.data.page.items&&data.data.page.items.length!=0){
+						commontList.renderList(data.data.page.items,'prepend');
+					}else{
+						$(btn).removeAttr("onclick").text("没有更多了");
+					}
+				});
+			}
+			
+			function isPageEnd(page){
+				if(page.currentPage*page.pageSize>page.totalCount){
+					$('#load_more').removeAttr("onclick").text("没有更多了");
+				}else{
+					$('#load_more').attr("onclick","loadMore(this)").text("加载更多");
+				}
+			}
+			
+			function save_click_count(vid,type){
+				$.post(base+'/imageVideo/updateClickCount',{iv_id:vid,roleType:type},function (data){
+					if(data.data.praiseCount){
+						$(".commentIcon").find("[data-id=good]").text(data.data.praiseCount.praise);
+						$(".commentIcon").find("[data-id=bad]").text(data.data.praiseCount.cai);
+					}
+					if(data.data.ispra){
+						$(".goodComment").attr("title","取消点赞")
+					}else if(data.data.iscai){
+						$(".badComment").attr("title","取消点踩")
+					}
+				});
+			}
+			
+			function show_video(video,ctime,vid,type){
+				if(check_create_time(ctime,15)){
+					layer.msg('视频审核周期约15分钟，审核通过后可播放该视频',{icon: 4,area:'400px'});
+					return;
+				}
+				var flashvars = {
+			        f: filePath+'/'+video,
+			        c: 0,
+			        b: 1
+			    };
+			    CKobject.embed('/resources/ckplayer/ckplayer.swf', 'a1', 'ckplayer_a1', '662', '522', false, flashvars);
+			    $(".masker").height($(document).height()).fadeIn();
+				$(".masker").show();
+				$("#video_detail").show();
+				queryComments(vid,type);
+				//save_click_count(vid,type);
+			}
+			function resHandler(result){
+				if(result.state=='success'){
+					$("#msg_content").val("");
+					queryComments($("#iv_id").val(),$("#roleType").val());
+				}else{
+					layer.msg("发送失败",{icon: 2});
+				}
+			}
+			function send_comments(){
+				$.ajaxSubmit('#commentsForm','#commentsForm',resHandler,not_login)
+			}
+			var gap = function(date,div){
+			    var now = new Date;
+			    var that = new Date (date);
+			    var ms = Math.floor((now-that)/1000/60/60);
+			    var fz = Math.floor((now - that)/1000/60);
+			    if (ms > 24 && ms < 48){
+			        div.text ('昨天 ' + that.toLocaleTimeString ());
+			    }
+			    else if (ms > 48){
+			        div.text (Filter.formatDate(date,'yyyy-MM-dd hh:mm:ss'));
+			    }
+			    else{
+			    	if(fz>=60){
+			        	div.text(ms + ' 小时前');
+			    	}else if(fz>0&&fz<60){
+			    		div.text(fz + ' 分钟前');
+			    	}else{
+			    		//div.text("刚刚");
+			    	}
+			    }
+			}
+			
+			function do_praise(state,dom){
+				var flag = $(dom).attr("flag");
+				if(flag==1){
+					$(dom).attr("flag",0);
+			  		$.ajaxSec({
+						type: 'POST',
+						url: '${ctx}/imageVideo/praise',
+						data: {iv_id:$("#iv_id").val(),p_state: state,p_type:$("#roleType").val()},
+						success: function(data){
+							if(data.state == 'success'){
+								var str = state==1?'赞':'踩';
+								var type = state==1?'good':'bad';
+								var pras = $(".commentIcon").find("[data-id="+type+"]");
+								pras.text(data.data.praiseCount);
+								if(data.data.flag==1){
+									$(dom).attr('title','取消点'+str);
+								}else{
+									$(dom).attr('title',str);
+								}
+							}else{
+								layer.msg("操作失败",{icon: 2});
+							}
+							$(dom).attr("flag",1);
+						},
+						error: $.ajaxError
+					},not_login);
+				}
+			}
+			function not_login(){
+				$("#a1").html("");
+			    $(".masker").hide();
+			    $("#msg_content").val("");
+			    $('#video_detail').hide();
+			}
+			</script> 
 		</body>
 	</html>

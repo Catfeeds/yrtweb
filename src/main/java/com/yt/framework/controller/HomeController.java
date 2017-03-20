@@ -1,5 +1,8 @@
 package com.yt.framework.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,9 +119,11 @@ public class HomeController extends BaseController{
 		int productRecords = userProductService.queryProductRecords();
 		//首页视频list
 		List<ImageVideo> imageVideoList= imageVideoService.queryIndexVideo();
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for(ImageVideo imageVideo : imageVideoList){
 			imageVideo.setF_src(FileUtilsTag.headPath()+imageVideo.getF_src());
 			imageVideo.setV_cover(FileUtilsTag.headPath()+imageVideo.getV_cover());
+			imageVideo.setCreate_timeS(df.format(imageVideo.getCreate_time()));
 		}
 		request.setAttribute("leagueRecords", leagueRecords);
 		request.setAttribute("teamRecords", teamRecords);
