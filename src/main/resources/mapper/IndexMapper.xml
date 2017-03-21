@@ -168,6 +168,10 @@
 			</if> 
 		</select>
 		
+		<select id="queryIndexNews" resultType="com.yt.framework.persistent.entity.News">	
+			 SELECT * FROM m_news where 1=1 AND n_state=1 and type=1 ORDER BY create_time desc limit 8
+		</select>
+		
 		<select id="playersCount" parameterType="hashmap" resultType="int">
 			SELECT COUNT(1) FROM( (
 				SELECT i.id iid,i.sort,i.type,p.id,p.user_id,p.current_price,p.position,p.height,p.weight,u.usernick,u.phone FROM m_index i      

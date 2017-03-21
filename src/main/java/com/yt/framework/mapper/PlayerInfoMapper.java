@@ -280,5 +280,10 @@ public interface PlayerInfoMapper extends BaseMapper<PlayerInfo>{
 	 * @return
 	 */
 	public int queryPlayerRecords();
+	/**
+	 * 首页球员list
+	 * @return
+	 */
+	public List<PlayerInfo> queryIndexPlayer();
 	
 }

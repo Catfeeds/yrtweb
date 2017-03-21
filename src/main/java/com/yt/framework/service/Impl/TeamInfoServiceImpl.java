@@ -1462,4 +1462,9 @@ public class TeamInfoServiceImpl extends BaseServiceImpl<TeamInfo> implements Te
 	public int queryTeamRecords() {
 		return teamInfoMapper.queryTeamRecords();
 	}
+
+	@Override
+	public List<TeamInfo> queryIndexTeam() {
+		return teamInfoMapper.queryIndexTeam();
+	}
 }

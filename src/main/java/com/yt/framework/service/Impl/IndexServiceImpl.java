@@ -320,4 +320,10 @@ public class IndexServiceImpl implements IndexService {
 		return indexMapper.getIndexBannerById(id);
 	}
 
+
+	@Override
+	public List<News> queryIndexNews() {
+		return indexMapper.queryIndexNews();
+	}
+
 }

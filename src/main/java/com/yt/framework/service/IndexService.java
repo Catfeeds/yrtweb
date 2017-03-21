@@ -120,6 +120,11 @@ public interface IndexService {
 	public AjaxMsg updateIndexBanner(IndexBanner indexBanner) throws Exception;
 	public AjaxMsg deleteIndexBanner(String id);
 	public IndexBanner getIndexBannerById(String id);
+	/**
+	 * 首页新闻list
+	 * @return
+	 */
+	public List<News> queryIndexNews();
 
 
 }

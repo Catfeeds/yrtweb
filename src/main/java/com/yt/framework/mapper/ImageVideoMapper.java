@@ -211,4 +211,9 @@ public interface ImageVideoMapper extends BaseMapper<ImageVideo> {
 	 * @return
 	 */
 	public List<ImageVideo> queryIndexVideo();
+	/**
+	 * 首页图片list
+	 * @return
+	 */
+	public List<ImageVideo> queryIndexImage();
 }

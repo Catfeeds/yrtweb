@@ -314,6 +314,26 @@
 		SELECT count(1) FROM p_player_info
 	</select>
 	
+	<select id="queryIndexPlayer" resultType="com.yt.framework.persistent.entity.PlayerInfo">
+	    <![CDATA[
+		select t2.username,t2.head_icon,t1.pass_ability,t1.power, 
+		t1.shot, t1.header, t1.speed, t1.height,t1.weight,
+		t3.dict_value_desc as position, t1.current_price, t1.explosive,t1.score
+		,(SELECT DATE_FORMAT(NOW(), '%Y') FROM DUAL)-left(t2.borndate, 4) as age
+		from p_player_info t1 
+		LEFT JOIN m_user t2 on t1.user_id=t2.id
+		left JOIN  m_dict t3 on t1.position=t3.dict_value
+		
+		where t1.if_league=1 and t2.username is not null  and t1.current_price is not null
+		and t1.position not like '%,%'
+		and head_icon !='headImg/headimg.png' 
+		and t2.borndate<'2000-09-24'
+		order by  score desc LIMIT 8
+        ]]>
+	</select>
+	
+	
+	
 	<select id="count" resultType="int">
 		SELECT count(p.id)
 			FROM p_player_info p

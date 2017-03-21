@@ -188,4 +188,10 @@ public interface ImageVideoService extends BaseService<ImageVideo>{
 	 * @return
 	 */
 	public List<ImageVideo> queryIndexVideo();
+
+	/**
+	 * 首页图片list
+	 * @return
+	 */
+	public List<ImageVideo> queryIndexImage();
 }

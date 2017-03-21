@@ -504,6 +504,10 @@
 		) cot_t)
 	</select>
 	
+	<select id="queryEventRecord"  resultType="com.yt.framework.persistent.entity.EventRecord">
+		SELECT e.* 	FROM a_event_record e order by play_time desc limit 10
+	</select>
+	
 	
 	
 	<select id="loadIntegral" resultType="hashmap">

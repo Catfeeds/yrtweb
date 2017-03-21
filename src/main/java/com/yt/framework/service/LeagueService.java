@@ -561,5 +561,10 @@ public interface LeagueService extends BaseService<League> {
 	public AjaxMsg loadLeagueAssists(Map<String, Object> params,PageModel pageModel);
 	
 	public int queryLeagueRecords();
+	/**
+	 * 最近10场比赛结果
+	 * @return
+	 */
+	public List<EventRecord> queryEventRecord();
 	
 }

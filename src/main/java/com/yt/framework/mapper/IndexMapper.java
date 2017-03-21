@@ -84,4 +84,6 @@ public interface IndexMapper {
 	public void updateIndexBanner(IndexBanner indexBanner);
 	public void deleteIndexBanner(@Param(value="id")String id);
 	public IndexBanner getIndexBannerById(@Param(value="id")String id);
+
+	public List<News> queryIndexNews();
 }

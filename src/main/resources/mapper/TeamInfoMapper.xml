@@ -914,6 +914,10 @@
 		<select id="queryTeamRecords" resultType="int">
 			SELECT count(*) FROM t_team_info WHERE is_exist=1
 		</select>
+		<select id="queryIndexTeam" resultType="com.yt.framework.persistent.entity.TeamInfo">
+			SELECT * FROM t_team_info WHERE is_exist=1 order by score desc   LIMIT 6
+		</select>
+		
 		
 		<select id="loadAllTeamMsgCount" resultType="int">
 			SELECT COUNT(*) FROM a_salary_msg AS sm

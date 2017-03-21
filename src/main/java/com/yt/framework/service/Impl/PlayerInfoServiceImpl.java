@@ -829,4 +829,9 @@ public class PlayerInfoServiceImpl extends BaseServiceImpl<PlayerInfo> implement
 		return playerInfoMapper.queryPlayerRecords();
 	}
 
+	@Override
+	public List<PlayerInfo> queryIndexPlayer() {
+		return playerInfoMapper.queryIndexPlayer();
+	}
+
 }

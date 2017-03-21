@@ -555,6 +555,11 @@ public interface LeagueMapper extends BaseMapper<League>{
 	 * @return
 	 */
 	public int queryLeagueRecords();
+	/**
+	 * 最近10场比赛结果
+	 * @return
+	 */
+	public List<EventRecord> queryEventRecord();
 
 	
 	

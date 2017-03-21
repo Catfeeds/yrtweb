@@ -64,6 +64,10 @@ public class PlayerInfo implements Serializable {
 	private Integer level;//认证级别
 	private Integer if_daji;//是否妖人
 	
+	private String username;//用户
+	private String head_icon;//头像
+	private Integer age;//年龄
+	
 	public String getLove_num() {
 		return love_num;
 	}
@@ -423,5 +427,30 @@ public class PlayerInfo implements Serializable {
 	public void setIf_daji(Integer if_daji) {
 		this.if_daji = if_daji;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getHead_icon() {
+		return head_icon;
+	}
+
+	public void setHead_icon(String head_icon) {
+		this.head_icon = head_icon;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+	
 
 }

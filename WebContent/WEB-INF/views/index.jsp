@@ -40,6 +40,7 @@
 			<link rel="stylesheet" href="${ctx}/resources/new/css/color.css">
 			<!--RESPONCIVE CSS-->
 			<link rel="stylesheet" href="${ctx}/resources/new/css/responsive.css">
+			<link rel="stylesheet" href="${ctx}/resources/css/videoList.css">
 			
 			<style type="text/css">
 			
@@ -203,12 +204,11 @@
 					    				</li>
 				    				</c:forEach>
 								  </c:if>
-								  <c:if test="${!empty leagueList}">
-								    <c:forEach items="${leagueList}" var="league">
+								  <c:if test="${!empty eventRecordList}">
+								    <c:forEach items="${eventRecordList}" var="eventRecord">
 								    <li style="color: white">
-				    					<span class="icon-football" style="color: #ADFF2F">&nbsp;&nbsp;</span><span class="nt-title-span">战报--比赛赛况信息</span>
+				    					<span class="icon-football" style="color: #ADFF2F">&nbsp;&nbsp;</span><span class="nt-title-span">${eventRecord.m_team_name}&nbsp;&nbsp;${eventRecord.m_score}:${eventRecord.g_score}&nbsp;&nbsp;${eventRecord.g_team_name}</span>
 				    				</li>
-		                            <a href="javascript:;" onclick="load_hot_news(this,'#news_list','','${league.id}')">${league.simple_name}|</a>
 		                       		 </c:forEach> 
 		                        </c:if>
 				    				
@@ -563,151 +563,89 @@
 						}
 						
 					</style>
-					<div class="row">
+					
+				<div class="row" id="playerdiv1">
 					  <!--// FOOTBALL TEAM //-->
-					  	<div class="col-md-3 col-sm-6" style="height: 370px;">
-						  	<div class="playercart1">
-						  		<div class="playercart2" ></div>
-						  		 <div class="playercart3">徐祖翼</div>
-						  		 
-						  		  <div class="circle_bot">  
-								    </div>  
-								    <div class="circle_mid">  
-												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
-								    </div>  
-								     <div class="playercart4" >  
-									     <div><span>19</span>&nbsp;&nbsp;岁</div>
-									     <div><span>175</span>&nbsp;&nbsp;CM</div>
-									     <div><span>65</span>&nbsp;&nbsp;KG</div>
-								    </div> 
-								     <div class="playercart5" >  
-									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
-									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
-									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
-								    </div> 
-								     <div class="playercart6" style="">  
-									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
-								    </div> 
-								      <div  style="height: 35px;">  
-								     	
-								     	
-								    </div> 
-								     <div class="playercart7" >  
-								     	
-								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
-								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
-								    </div> 
-						  	</div>
-						</div>
-						<div class="col-md-3 col-sm-6" style="height: 370px;">
-						  	<div class="playercart1">
-						  		<div class="playercart2" ></div>
-						  		 <div class="playercart3">徐祖翼</div>
-						  		 
-						  		  <div class="circle_bot">  
-								    </div>  
-								    <div class="circle_mid">  
-												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
-								    </div>  
-								     <div class="playercart4" >  
-									     <div><span>19</span>&nbsp;&nbsp;岁</div>
-									     <div><span>175</span>&nbsp;&nbsp;CM</div>
-									     <div><span>65</span>&nbsp;&nbsp;KG</div>
-								    </div> 
-								     <div class="playercart5" >  
-									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
-									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
-									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
-								    </div> 
-								     <div class="playercart6" style="">  
-									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
-								    </div> 
-								      <div  style="height: 35px;">  
-								     	
-								     	
-								    </div> 
-								     <div class="playercart7" >  
-								     	
-								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
-								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
-								    </div> 
-						  	</div>
-					
-						</div>
-						<div class="col-md-3 col-sm-6" style="height: 370px;">
-						  	<div class="playercart1">
-						  		<div class="playercart2" ></div>
-						  		 <div class="playercart3">徐祖翼</div>
-						  		 
-						  		  <div class="circle_bot">  
-								    </div>  
-								    <div class="circle_mid">  
-												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
-								    </div>  
-								     <div class="playercart4" >  
-									     <div><span>19</span>&nbsp;&nbsp;岁</div>
-									     <div><span>175</span>&nbsp;&nbsp;CM</div>
-									     <div><span>65</span>&nbsp;&nbsp;KG</div>
-								    </div> 
-								     <div class="playercart5" >  
-									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
-									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
-									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
-								    </div> 
-								     <div class="playercart6" style="">  
-									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
-								    </div> 
-								      <div  style="height: 35px;">  
-								     	
-								     	
-								    </div> 
-								     <div class="playercart7" >  
-								     	
-								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
-								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
-								    </div> 
-						  	</div>
-					
-						</div>
-						<div class="col-md-3 col-sm-6" style="height: 370px;">
-						  	<div class="playercart1">
-						  		<div class="playercart2" ></div>
-						  		 <div class="playercart3">徐祖翼</div>
-						  		 
-						  		  <div class="circle_bot">  
-								    </div>  
-								    <div class="circle_mid">  
-												<img alt="" src="${ctx}/resources/new/images/touxiang.png">
-								    </div>  
-								     <div class="playercart4" >  
-									     <div><span>19</span>&nbsp;&nbsp;岁</div>
-									     <div><span>175</span>&nbsp;&nbsp;CM</div>
-									     <div><span>65</span>&nbsp;&nbsp;KG</div>
-								    </div> 
-								     <div class="playercart5" >  
-									     <div>传&nbsp;&nbsp;<span>85</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>50</span></div>
-									     <div>射&nbsp;&nbsp;<span>75</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>50</span></div>
-									     <div>速&nbsp;&nbsp;<span>50</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>50</span></div>
-								    </div> 
-								     <div class="playercart6" style="">  
-									     <div>身价&nbsp;&nbsp;<span>70000</span>&nbsp;&nbsp;宇币</div>
-								    </div> 
-								      <div  style="height: 35px;">  
-								     	
-								     	
-								    </div> 
-								     <div class="playercart7" >  
-								     	
-								     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
-								     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;中锋</span></div>
-								    </div> 
-						  	</div>
-					
-						</div>
-						
+					  <c:forEach items="${playerList1}" var="player1">
+						  	<div class="col-md-3 col-sm-6" style="height: 370px;">
+							  	<div class="playercart1">
+							  		<div class="playercart2" ></div>
+							  		 <div class="playercart3">${player1.username}</div>
+							  		 
+							  		  <div class="circle_bot">  
+									    </div>  
+									    <div class="circle_mid">  
+													<img alt="" src="${headpath}${player1.head_icon}">
+									    </div>  
+									     <div class="playercart4" >  
+										     <div><span>${player1.age}</span>&nbsp;&nbsp;岁</div>
+										     <div><span>${player1.height}</span>&nbsp;&nbsp;CM</div>
+										     <div><span>${player1.weight}</span>&nbsp;&nbsp;KG</div>
+									    </div> 
+									     <div class="playercart5" >  
+										     <div>传&nbsp;&nbsp;<span>${player1.pass_ability}</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>${player1.power}</span></div>
+										     <div>射&nbsp;&nbsp;<span>${player1.shot}</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>${player1.header}</span></div>
+										     <div>速&nbsp;&nbsp;<span>${player1.speed}</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>${player1.explosive}</span></div>
+									    </div> 
+									     <div class="playercart6" style="">  
+										     <div>身价&nbsp;&nbsp;<span>${player1.current_price}</span>&nbsp;&nbsp;宇币</div>
+									    </div> 
+									      <div  style="height: 35px;">  
+									     	
+									     	
+									    </div> 
+									     <div class="playercart7" >  
+									     	
+									     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
+									     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;${player1.position}</span></div>
+									    </div> 
+							  	</div>
+							</div>
+						</c:forEach>
+			
+					  </div>
+					  
+					  <div class="row" id="playerdiv2" style="display: none;">
+					  <!--// FOOTBALL TEAM //-->
+					  	<c:forEach items="${playerList2}" var="player2">
+						  	<div class="col-md-3 col-sm-6" style="height: 370px;">
+							  	<div class="playercart1">
+							  		<div class="playercart2" ></div>
+							  		 <div class="playercart3">${player2.username}</div>
+							  		 
+							  		  <div class="circle_bot">  
+									    </div>  
+									    <div class="circle_mid">  
+													<img alt="" src="${headpath}${player2.head_icon}">
+									    </div>  
+									     <div class="playercart4" >  
+										     <div><span>${player2.age}</span>&nbsp;&nbsp;岁</div>
+										     <div><span>${player2.height}</span>&nbsp;&nbsp;CM</div>
+										     <div><span>${player2.weight}</span>&nbsp;&nbsp;KG</div>
+									    </div> 
+									     <div class="playercart5" >  
+										     <div>传&nbsp;&nbsp;<span>${player2.pass_ability}</span>&nbsp;&nbsp;&nbsp;&nbsp;力&nbsp;&nbsp;<span>${player2.power}</span></div>
+										     <div>射&nbsp;&nbsp;<span>${player2.shot}</span>&nbsp;&nbsp;&nbsp;&nbsp;头&nbsp;&nbsp;<span>${player2.header}</span></div>
+										     <div>速&nbsp;&nbsp;<span>${player2.speed}</span>&nbsp;&nbsp;&nbsp;&nbsp;爆&nbsp;&nbsp;<span>${player2.explosive}</span></div>
+									    </div> 
+									     <div class="playercart6" style="">  
+										     <div>身价&nbsp;&nbsp;<span>${player2.current_price}</span>&nbsp;&nbsp;宇币</div>
+									    </div> 
+									      <div  style="height: 35px;">  
+									     	
+									     	
+									    </div> 
+									     <div class="playercart7" >  
+									     	
+									     	<div class="playercart8" ><span>&nbsp;&nbsp;&nbsp;&nbsp;妖人</span></div>
+									     	<div class="playercart9" ><span>&nbsp;&nbsp;&nbsp;&nbsp;${player2.position}</span></div>
+									    </div> 
+							  	</div>
+							</div>
+						</c:forEach>
+			
 					  </div>
 				
-					
 					 
 					</div>
 				  </div>
@@ -722,37 +660,21 @@
 					  <!--// BLOG SLIDER //-->
 					  <div class="col-md-4">
 						<div class="heading6">
-						  <h4>最新<span>新闻</span></h4>
+						  <h4>精彩<span>图片</span></h4>
 						</div>
 						<div class="ftb-bx-slider">
 						  <ul class="bxslider">
-							<li>
-							  <div class="ftb-post-thumb">
-								<a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
-								<div class="text">
-								  <h6>成都史上最佳球员</h6>
-								  <a class="btn-4" href="${ctx}/resources/new/#">Read More</a>
-								</div>
-							  </div>
-							</li>
-							<li>
-							  <div class="ftb-post-thumb">
-								<a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
-								<div class="text">
-								  <h6>成都史上最佳球员</h6>
-								  <a class="btn-4" href="${ctx}/resources/new/#">Read More</a>
-								</div>
-							  </div>
-							</li>
-							<li>
-							  <div class="ftb-post-thumb">
-								<a href="${ctx}/resources/new/#"><img src="${ctx}/resources/new/extra-images/ftb-post-slider.jpg" alt=""></a>
-								<div class="text">
-								  <h6>成都史上最佳球员</h6>
-								  <a class="btn-4" href="${ctx}/resources/new/#">Read More</a>
-								</div>
-							  </div>
-							</li>
+							  <c:forEach items="${imageList}" var="image">
+								  <li>
+									  <div class="ftb-post-thumb">
+										<img src="${headpath }${image.f_src}" alt="">
+										<div class="text">
+										  <h6>${image.title}</h6>
+										  <a class="btn-4" href="${ctx}/indexIvList?type=imagelist">更多</a>
+										</div>
+									  </div>
+									</li>
+							  </c:forEach>
 						  </ul>
 						</div>
 					  </div>
@@ -767,13 +689,13 @@
 						<!--// POST //-->
 						
 						
-						<c:forEach items="${imageVideoList}" var="imageVideo" begin="0">
+						<c:forEach items="${videoList}" var="video" begin="0">
 							<div class="ftb-post-thumb">
 							
-							  <a onclick='show_video("${imageVideo.f_src}","${imageVideo.create_timeS}","${imageVideo.id}","${imageVideo.role_type}")'><img src="${imageVideo.v_cover}" alt=""></a>
-							  <a class="spb-play" onclick='show_video("${imageVideo.f_src}","${imageVideo.create_timeS}","${imageVideo.id}","${imageVideo.role_type}")'><i class="fa fa-play-circle"></i></a>
+							  <a onclick='show_video("${headpath}${video.f_src}","${video.create_timeS}","${video.id}","${video.role_type}")'><img src="${headpath}${video.v_cover}" alt=""></a>
+							  <a class="spb-play" onclick='show_video("${headpath}${video.f_src}","${video.create_timeS}","${video.id}","${video.role_type}")'><i class="fa fa-play-circle"></i></a>
 							  <div class="text">
-								<h6>${imageVideo.title}</h6>
+								<h6>${video.title}</h6>
 							  </div>
 							</div>
 					    			
@@ -835,83 +757,22 @@
 					  <div class="col-md-4">
 						<!--// HEADING 6 //-->
 						<div class="heading6">
-						  <h4>俱乐部<span>排名</span></h4>
+						  <h4>最新<span>新闻</span></h4>
 						</div>
 						<!--// HEADING 6 //-->
 						<!--// RATING TABLE //-->
 						<ul class="ftb-rating-table">
-						  <li>
-							<div class="ftb-position">
-							  1 . 
-							</div>
-							<div class="ftb-team-name">
-							  <img src="${ctx}/resources/new/images/short-logo2.png" alt="">
-							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
-							</div>
-							<div class="ftb-team-points">
-							  20
-							</div>
-						  </li>
-						  <li>
-							<div class="ftb-position">
-							  2 . 
-							</div>
-							<div class="ftb-team-name">
-							  <img src="${ctx}/resources/new/images/short-logo3.png" alt="">
-							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
-							</div>
-							<div class="ftb-team-points">
-							  25
-							</div>
-						  </li>
-						  <li>
-							<div class="ftb-position">
-							  3 . 
-							</div>
-							<div class="ftb-team-name">
-							  <img src="${ctx}/resources/new/images/short-logo4.png" alt="">
-							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
-							</div>
-							<div class="ftb-team-points">
-							  30
-							</div>
-						  </li>
-						  <li>
-							<div class="ftb-position">
-							  4 . 
-							</div>
-							<div class="ftb-team-name">
-							  <img src="${ctx}/resources/new/images/short-logo1.png" alt="">
-							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
-							</div>
-							<div class="ftb-team-points">
-							  45
-							</div>
-						  </li>
-						  <li>
-							<div class="ftb-position">
-							  5 . 
-							</div>
-							<div class="ftb-team-name">
-							  <img src="${ctx}/resources/new/images/short-logo6.png" alt="">
-							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
-							</div>
-							<div class="ftb-team-points">
-							  29
-							</div>
-						  </li>
-						  <li>
-							<div class="ftb-position">
-							  6 . 
-							</div>
-							<div class="ftb-team-name">
-							  <img src="${ctx}/resources/new/images/short-logo7.png" alt="">
-							  <a href="${ctx}/resources/new/#">Lore Ipsum Dolor</a>
-							</div>
-							<div class="ftb-team-points">
-							  03
-							</div>
-						  </li>
+						  <c:forEach items="${indexNewsList}" var="news"  varStatus="status">
+								<li>
+									<div class="ftb-position">
+									  ${status.index+1} 
+									</div>
+									<div class="ftb-team-name">
+									  <a href="javascript:window.location='${ctx}/news/${news.id}'"> ${news.title}</a>
+									</div>
+									
+							  	</li>
+		                  </c:forEach>
 						</ul>
 						<!--// RATING TABLE //-->
 					  </div>
@@ -1057,42 +918,55 @@
 			<script src="${ctx}/resources/new/js/jquery.downCount.js"></script>
 			<script src="${ctx}/resources/new/js/modernizr.custom.js"></script>
 			<script src="${ctx}/resources/new/js/jquery.dlmenu.js"></script>
+			<script src="${ctx}/resources/new/js/jquery-ui.js"></script>
 			<script src="${ctx}/resources/new/js/waypoints-min.js"></script>
 			<script src='${ctx}/resources/new/js/fullcalendar.min.js'></script>
 			<!--CUSTOM JavaScript-->
-			<script src="${ctx}/resources/new/js/functions.js"></script>
+			
 			<script src="${ctx}/resources/js/yt.ext.js"></script>
+			<script src="${ctx}/resources/new/slick/slick.min.js"></script>
+			<script src="${ctx}/resources/new/js/functions.js"></script>
 			
 			
 			<script src='${ctx}/resources/new/js/jquery.newsTicker.min.js'></script>
 			<script type="text/javascript">
-			var nt_title = $('#nt-title').newsTicker({
-                row_height: 20,
-                max_rows: 1,
-                duration: 3000,
-                pauseOnHover: 0
-            });
-			
-		   $(".nt-title-span").each(function () {
-	            var maxwidth = 30;
-	            if ($(this).text().length > maxwidth) {
-	                $(this).text($(this).text().substring(0, maxwidth));
-	                $(this).html($(this).html() + '...');
-	            }
-	        });
-			$(".counterup-dec").mousemove(function(e){
-				$(this).find("span").css("color","yellow");
-				$(this).find("h3").css("color","yellow");
-				$(this).find("p").css("color","yellow");
+				var nt_title = $('#nt-title').newsTicker({
+	                row_height: 20,
+	                max_rows: 1,
+	                duration: 3000,
+	                pauseOnHover: 0
+	            });
 				
-			});
-			$(".counterup-dec").mouseout(function(e){
-				$(this).find("span").css("color","white");
-				$(this).find("h3").css("color","white");
-				$(this).find("p").css("color","white");
-			});
-			
-
+			   $(".nt-title-span").each(function () {
+		            var maxwidth = 30;
+		            if ($(this).text().length > maxwidth) {
+		                $(this).text($(this).text().substring(0, maxwidth));
+		                $(this).html($(this).html() + '...');
+		            }
+		        });
+				$(".counterup-dec").mousemove(function(e){
+					$(this).find("span").css("color","yellow");
+					$(this).find("h3").css("color","yellow");
+					$(this).find("p").css("color","yellow");
+					
+				});
+				$(".counterup-dec").mouseout(function(e){
+					$(this).find("span").css("color","white");
+					$(this).find("h3").css("color","white");
+					$(this).find("p").css("color","white");
+				});
+				window.setInterval(function(){ 
+					if($("#playerdiv1").is(":hidden")){
+				        $("#playerdiv1").show(1000);    //如果元素为隐藏,则将它显现
+					}else{
+					       $("#playerdiv1").hide(1000);     //如果元素为显现,则将其隐藏
+					}
+					if($("#playerdiv2").is(":hidden")){
+				        $("#playerdiv2").show(1000);    //如果元素为隐藏,则将它显现
+					}else{
+					       $("#playerdiv2").hide(1000);     //如果元素为显现,则将其隐藏
+					}
+				}, 5000); //5s进行一次循环
 			</script>
 			
 			

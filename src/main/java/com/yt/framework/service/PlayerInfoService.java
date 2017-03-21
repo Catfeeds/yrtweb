@@ -278,4 +278,9 @@ public interface PlayerInfoService extends BaseService<PlayerInfo> {
 	 * @return
 	 */
 	public int queryPlayerRecords();
+	/**
+	 * 首页球员list
+	 * @return
+	 */
+	public List<PlayerInfo> queryIndexPlayer();
 }

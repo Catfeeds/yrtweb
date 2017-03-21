@@ -540,5 +540,10 @@ public interface TeamInfoMapper extends BaseMapper<TeamInfo> {
 	 * @return
 	 */
 	public int queryTeamRecords();
+	/**
+	 * 首页总球list
+	 * @return
+	 */
+	public List<TeamInfo> queryIndexTeam();
 	
 }

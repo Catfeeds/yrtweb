@@ -499,4 +499,9 @@ public class ImageVideoServiceImpl extends BaseServiceImpl<ImageVideo> implement
 		return imageVideoMapper.queryIndexVideo();
 	}
 
+	@Override
+	public List<ImageVideo> queryIndexImage() {
+		return imageVideoMapper.queryIndexImage();
+	}
+
 }

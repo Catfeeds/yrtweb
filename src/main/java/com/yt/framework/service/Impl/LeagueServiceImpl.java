@@ -1031,4 +1031,9 @@ public class LeagueServiceImpl extends BaseServiceImpl<League> implements League
 		return leagueMapper.queryLeagueRecords();
 	}
 
+	@Override
+	public List<EventRecord> queryEventRecord() {
+		return leagueMapper.queryEventRecord();
+	}
+
 }

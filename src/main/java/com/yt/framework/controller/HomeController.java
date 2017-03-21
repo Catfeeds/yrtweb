@@ -2,7 +2,6 @@ package com.yt.framework.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yt.framework.persistent.entity.EventRecord;
 import com.yt.framework.persistent.entity.ImageVideo;
 import com.yt.framework.persistent.entity.League;
 import com.yt.framework.persistent.entity.News;
+import com.yt.framework.persistent.entity.PlayerInfo;
 import com.yt.framework.persistent.entity.Role;
 import com.yt.framework.persistent.entity.UserAmount;
 import com.yt.framework.persistent.entity.UserRole;
@@ -111,25 +112,44 @@ public class HomeController extends BaseController{
 		}
 		//总比赛场数
 		int leagueRecords = leagueService.queryLeagueRecords();
-		//总比赛场数
+		//总球队数
 		int teamRecords = teamInfoService.queryTeamRecords();
+		//首页球队排名list
+//		List<TeamInfo> teamList = teamInfoService.queryIndexTeam();
 		//球员人数
 		int playerRecords = playerInfoService.queryPlayerRecords();
+		//首页球员list
+		List<PlayerInfo> playerList= playerInfoService.queryIndexPlayer();
+		//首页球员list1
+		List<PlayerInfo> playerList1 = playerList.subList(0, 4);
+		//首页球员list2
+		List<PlayerInfo> playerList2 = playerList.subList(4, 8);
 		//商品人数
 		int productRecords = userProductService.queryProductRecords();
 		//首页视频list
-		List<ImageVideo> imageVideoList= imageVideoService.queryIndexVideo();
+		List<ImageVideo> videoList= imageVideoService.queryIndexVideo();
+		//首页图片list
+		List<ImageVideo> imageList= imageVideoService.queryIndexImage();
+		//首页新闻list
+		List<News> indexNewsList= indexService.queryIndexNews();		
+		//最近10场比赛结果
+		List<EventRecord> eventRecordList = leagueService.queryEventRecord();
 		DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		for(ImageVideo imageVideo : imageVideoList){
-			imageVideo.setF_src(FileUtilsTag.headPath()+imageVideo.getF_src());
-			imageVideo.setV_cover(FileUtilsTag.headPath()+imageVideo.getV_cover());
-			imageVideo.setCreate_timeS(df.format(imageVideo.getCreate_time()));
+		for(ImageVideo video : videoList){
+			video.setCreate_timeS(df.format(video.getCreate_time()));
 		}
 		request.setAttribute("leagueRecords", leagueRecords);
 		request.setAttribute("teamRecords", teamRecords);
 		request.setAttribute("playerRecords", playerRecords);
 		request.setAttribute("productRecords", productRecords);
-		request.setAttribute("imageVideoList", imageVideoList);
+		request.setAttribute("videoList", videoList);
+		request.setAttribute("playerList1", playerList1);
+		request.setAttribute("playerList2", playerList1);
+		request.setAttribute("imageList", imageList);
+		request.setAttribute("eventRecordList", eventRecordList);
+		request.setAttribute("headpath", FileUtilsTag.headPath());
+//		request.setAttribute("teamList", teamList);
+		request.setAttribute("indexNewsList", indexNewsList);
 		request.setAttribute("leagueList", leagueList);
 		request.setAttribute("user_img", user_img);
 		request.setAttribute("banners", banners);
